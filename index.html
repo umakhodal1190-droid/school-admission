@@ -9,19 +9,16 @@
         :root { --primary: #0e1e60; --golden: #d4af37; --bg: #f8fafc; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
         
-        /* Titles & UI Elements */
         .info-title { width: 100%; max-width: 900px; color: var(--primary); font-size: 18px; font-weight: 700; margin: 15px 0 10px 0; border-left: 5px solid var(--golden); padding-left: 10px; text-align: left; }
         .pdf-box { width: 100%; max-width: 900px; height: 350px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 20px; background: white; }
         
         .btn-main { width: 100%; max-width: 900px; padding: 20px; background: linear-gradient(135deg, var(--primary), #1a3c8e); color: white; border: none; border-radius: 50px; font-size: 20px; font-weight: 800; cursor: pointer; margin: 20px 0; box-shadow: 0 8px 20px rgba(14, 30, 96, 0.2); transition: 0.3s; display: block; }
         
-        /* Status Box for Submitted Form */
         #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; margin: 40px 0; border: 2px solid #e2e8f0; }
         .btn-action { color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 10px; font-size: 16px; }
         .btn-download { background: #10b981; }
         .btn-cancel { background: #ef4444; }
 
-        /* Form Layout */
         #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); overflow: hidden; margin-bottom: 50px; border: 1px solid #e2e8f0; }
         .header-img { width: 100%; height: auto; display: block; border-bottom: 4px solid var(--golden); }
         .form-main-title { color: var(--primary); text-align: center; font-size: 28px; margin-top: 20px; font-weight: 800; }
@@ -34,7 +31,6 @@
         label { font-size: 14px; font-weight: 700; color: #475569; margin-bottom: 5px; }
         input, select, textarea { padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 15px; width: 100%; box-sizing: border-box; }
         
-        /* Photo Container */
         .photo-upload-container { grid-column: span 1; display: flex; flex-direction: column; align-items: center; background: #f8fafc; padding: 15px; border-radius: 12px; border: 2px dashed #cbd5e1; }
         #preview { width: 110px; height: 130px; background: #fff; border: 1px solid #ddd; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         #preview img { width: 100%; height: 100%; object-fit: cover; }
@@ -82,37 +78,11 @@
                 <div class="section-bar">૧. પ્રવેશ વિગતો</div>
                 <div class="grid">
                     <div class="field"><label>ધોરણ</label><input type="text" id="uGrade" required></div>
-                    <div class="field">
-                        <label>લિંગ</label>
-                        <select id="uGender" required>
-                            <option value="Male">કુમાર</option>
-                            <option value="Female">કન્યા</option>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label>જ્ઞાતિ</label>
-                        <select id="uCaste" required>
-                            <option value="Open">Open</option>
-                            <option value="Baxi">Baxi</option>
-                            <option value="SC">SC</option>
-                            <option value="ST">ST</option>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label>પ્રકાર (Type)</label>
-                        <select id="uType" required>
-                            <option value="Local">Local (લોકલ)</option>
-                            <option value="Up-Down">Up-Down (અપડાઉન)</option>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label>જન્મ તારીખ</label>
-                        <input type="date" id="uDob" required>
-                    </div>
-                    <div class="field">
-                        <label>આધાર કાર્ડ નંબર</label>
-                        <input type="text" id="uAadhar" maxlength="12" required>
-                    </div>
+                    <div class="field"><label>લિંગ</label><select id="uGender" required><option value="Male">કુમાર</option><option value="Female">કન્યા</option></select></div>
+                    <div class="field"><label>જ્ઞાતિ</label><select id="uCaste" required><option value="Open">Open</option><option value="Baxi">Baxi</option><option value="SC">SC</option><option value="ST">ST</option></select></div>
+                    <div class="field"><label>પ્રકાર (Local/Up-Down)</label><select id="uType" required><option value="Local">Local (લોકલ)</option><option value="Up-Down">Up-Down (અપડાઉન)</option></select></div>
+                    <div class="field"><label>જન્મ તારીખ</label><input type="date" id="uDob" required></div>
+                    <div class="field"><label>આધાર કાર્ડ નંબર</label><input type="text" id="uAadhar" maxlength="12" required></div>
                 </div>
 
                 <div class="section-bar">૨. વાલીની વિગત</div>
@@ -129,7 +99,7 @@
 
 <script>
     // તમારી Google Apps Script URL અહીં નાખો
-    const scriptURL = 'તમારી_નવી_APPS_SCRIPT_URL_અહીં_નાખો';
+    const scriptURL = 'તમારી_APPS_SCRIPT_URL_અહીં_નાખો';
 
     window.onload = function() {
         if (localStorage.getItem("formSubmitted") === "true") {
@@ -149,55 +119,57 @@
         }
     }
 
-    // ફોર્મ સબમિટ ફંક્શન
     document.getElementById('admissionForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
         btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે...";
 
         const photo = document.getElementById('savedPhoto');
-        if(!photo) { alert("ફોટો અપલોડ કરો"); btn.disabled = false; return; }
-
         const canvas = document.createElement('canvas');
         canvas.width = 150; canvas.height = 180;
-        canvas.getContext('2d').drawImage(photo, 0, 0, 150, 180);
+        if(photo) canvas.getContext('2d').drawImage(photo, 0, 0, 150, 180);
         const photoBase64 = canvas.toDataURL('image/jpeg');
 
-        // JSON પેલોડ તૈયાર કરો
-        const payload = {
-            action: "add",
-            studentName: document.getElementById('uName').value,
-            grade: document.getElementById('uGrade').value,
-            gender: document.getElementById('uGender').value,
-            caste: document.getElementById('uCaste').value,
-            studentType: document.getElementById('uType').value,
-            dob: document.getElementById('uDob').value,
-            aadhar: document.getElementById('uAadhar').value,
-            fatherName: document.getElementById('uFather').value,
-            mobile: document.getElementById('uMobile').value,
-            address: document.getElementById('uAddress').value
-        };
+        // FormData નો ઉપયોગ (Apps Script માટે બેસ્ટ)
+        const formData = new FormData();
+        formData.append("action", "add");
+        formData.append("studentName", document.getElementById('uName').value);
+        formData.append("grade", document.getElementById('uGrade').value);
+        formData.append("gender", document.getElementById('uGender').value);
+        formData.append("caste", document.getElementById('uCaste').value);
+        formData.append("studentType", document.getElementById('uType').value);
+        formData.append("dob", document.getElementById('uDob').value);
+        formData.append("aadhar", document.getElementById('uAadhar').value);
+        formData.append("fatherName", document.getElementById('uFather').value);
+        formData.append("mobile", document.getElementById('uMobile').value);
+        formData.append("address", document.getElementById('uAddress').value);
 
-        fetch(scriptURL, {
-            method: 'POST',
-            mode: 'no-cors',
-            cache: 'no-cache',
-            body: JSON.stringify(payload)
-        })
+        fetch(scriptURL, { method: 'POST', body: formData })
         .then(() => {
+            const dataForLocal = {
+                studentName: document.getElementById('uName').value,
+                grade: document.getElementById('uGrade').value,
+                gender: document.getElementById('uGender').value,
+                caste: document.getElementById('uCaste').value,
+                studentType: document.getElementById('uType').value,
+                dob: document.getElementById('uDob').value,
+                aadhar: document.getElementById('uAadhar').value,
+                fatherName: document.getElementById('uFather').value,
+                mobile: document.getElementById('uMobile').value,
+                address: document.getElementById('uAddress').value,
+                photo: photoBase64
+            };
             localStorage.setItem("formSubmitted", "true");
-            localStorage.setItem("studentData", JSON.stringify({...payload, photo: photoBase64}));
+            localStorage.setItem("studentData", JSON.stringify(dataForLocal));
             alert("ફોર્મ સફળતાપૂર્વક સબમિટ થઈ ગયું!");
             location.reload();
         })
         .catch(err => {
-            alert("Error: " + err);
-            btn.disabled = false;
-            btn.innerHTML = "સબમિટ કરો";
+            alert("ભૂલ આવી: " + err);
+            btn.disabled = false; btn.innerHTML = "સબમિટ કરો";
         });
     });
 
-    // PDF ડાઉનલોડ ફંક્શન
     function downloadReceipt() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
@@ -205,8 +177,6 @@
 
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 40, 'F');
         doc.setTextColor(212, 175, 55); doc.setFontSize(22); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 20, { align: "center" });
-        doc.setTextColor(255, 255, 255); doc.setFontSize(10); doc.text("Admission Receipt 2026-27", 105, 30, { align: "center" });
-
         doc.setDrawColor(0); doc.rect(10, 45, 190, 230);
         if(data.photo) doc.addImage(data.photo, 'JPEG', 160, 50, 30, 35);
 
@@ -220,27 +190,26 @@
         ];
 
         items.forEach(item => {
-            doc.setFont("", "bold"); doc.text(item[0] + " :", 20, y);
-            doc.setFont("", "normal"); doc.text(item[1], 60, y);
+            doc.setFont(undefined, 'bold'); doc.text(item[0] + " :", 20, y);
+            doc.setFont(undefined, 'normal'); doc.text(item[1], 60, y);
             y += 11;
         });
 
-        doc.setFont("", "bold");
         doc.text("Principal Signature", 160, 250);
         doc.save(`Receipt_${data.studentName}.pdf`);
     }
 
-    // કેન્સલ ફંક્શન
     function handleCancel() {
         if(confirm("શું તમે ખરેખર એડમિશન કેન્સલ કરવા માંગો છો?")) {
             const localData = JSON.parse(localStorage.getItem("studentData"));
-            fetch(scriptURL, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify({ action: "cancel", aadhar: localData.aadhar })
-            }).then(() => {
+            const cancelData = new FormData();
+            cancelData.append("action", "cancel");
+            cancelData.append("aadhar", localData.aadhar);
+
+            fetch(scriptURL, { method: 'POST', body: cancelData })
+            .then(() => {
                 localStorage.clear();
-                alert("તમારું એડમિશન સફળતાપૂર્વક કેન્સલ કરવામાં આવ્યું છે.");
+                alert("તમારું એડમિશન કેન્સલ થઈ ગયું છે.");
                 location.reload();
             });
         }
