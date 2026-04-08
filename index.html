@@ -7,24 +7,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root { --primary: #0e1e60; --secondary: #a31d24; --bg: #f8fafc; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
         
-        /* PDF અને ટાઈટલ સેક્શન */
         .info-title { width: 100%; max-width: 900px; color: var(--primary); font-size: 18px; font-weight: 700; margin: 15px 0 10px 0; border-left: 5px solid var(--secondary); padding-left: 10px; text-align: left; }
         .pdf-box { width: 100%; max-width: 900px; height: 350px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 20px; background: white; }
         
         /* મુખ્ય બટન */
         .btn-main { width: 100%; max-width: 900px; padding: 20px; background: var(--secondary); color: white; border: none; border-radius: 50px; font-size: 20px; font-weight: 800; cursor: pointer; margin: 20px 0; box-shadow: 0 8px 20px rgba(163,29,36,0.3); display: block; }
         
-        /* ફોર્મ ભરાઈ ગયા પછીનું બોક્સ */
         #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; margin: 40px 0; border: 2px solid #e2e8f0; }
-        .btn-download { background: #10b981; color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 10px; }
-        .btn-cancel { background: #64748b; color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 10px; }
+        .btn-green { background: #10b981; color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 10px; }
+        .btn-gray { background: #64748b; color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 10px; }
 
-        /* ફોર્મ સેક્શન */
-        #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); overflow: hidden; margin-bottom: 50px; border: 1px solid #e2e8f0; animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        
+        #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); overflow: hidden; margin-bottom: 50px; border: 1px solid #e2e8f0; }
         .header-img { width: 100%; height: auto; display: block; border-bottom: 4px solid var(--secondary); }
         .p-content { padding: 25px; }
         .section-bar { background: var(--primary); color: white; padding: 12px; border-radius: 8px; margin: 25px 0 15px 0; font-weight: 600; text-align: left; }
@@ -34,7 +29,6 @@
         label { font-size: 14px; font-weight: 700; color: #475569; margin-bottom: 5px; }
         input, select, textarea { padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 15px; width: 100%; box-sizing: border-box; }
         
-        /* ફોટો અપલોડ */
         .photo-container { grid-column: span 1; display: flex; flex-direction: column; align-items: center; background: #f8fafc; padding: 15px; border-radius: 12px; border: 2px dashed #cbd5e1; }
         #preview { width: 110px; height: 130px; background: #fff; border: 1px solid #ddd; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; color: #94a3b8; font-size: 12px; }
         #preview img { width: 100%; height: 100%; object-fit: cover; }
@@ -55,9 +49,8 @@
 
     <div id="statusBox">
         <h2 style="color: var(--primary);">તમારું એડમિશન ફોર્મ ભરાઈ ગયું છે! ✅</h2>
-        <p>તમારી વિગતો ડાઉનલોડ કરવા માટે નીચે ક્લિક કરો.</p>
-        <button class="btn-download" onclick="downloadReceipt()">📄 Receipt PDF ડાઉનલોડ કરો</button>
-        <button class="btn-cancel" onclick="cancelAdmission()">❌ કેન્સલ કરો</button>
+        <button class="btn-green" onclick="downloadReceipt()">📄 Receipt PDF ડાઉનલોડ કરો</button>
+        <button class="btn-gray" onclick="cancelAdmission()">❌ કેન્સલ કરો</button>
     </div>
 
     <div id="formSection">
@@ -84,7 +77,7 @@
                     <div class="field"><label>ધોરણ</label><input type="text" id="uGrade" name="grade" required></div>
                     <div class="field">
                         <label>લિંગ (Gender)</label>
-                        <select name="gender" id="uGender" required>
+                        <select name="gender" required>
                             <option value="">પસંદ કરો</option>
                             <option value="Male">કુમાર (Male)</option>
                             <option value="Female">કન્યા (Female)</option>
@@ -92,22 +85,22 @@
                     </div>
                     <div class="field">
                         <label>જ્ઞાતિ (Caste)</label>
-                        <select name="caste" id="uCaste" required>
+                        <select name="caste" required>
                             <option value="Open">Open</option>
                             <option value="Baxi">Baxi</option>
                             <option value="SC">SC</option>
                             <option value="ST">ST</option>
                         </select>
                     </div>
-                    <div class="field"><label>જન્મ તારીખ</label><input type="date" id="uDob" name="dob" required></div>
-                    <div class="field span-2"><label>આધાર કાર્ડ નંબર (૧૨ આંકડા)</label><input type="text" id="uAadhar" name="aadhar" maxlength="12" pattern="\d{12}" required></div>
+                    <div class="field"><label>જન્મ તારીખ</label><input type="date" name="dob" required></div>
+                    <div class="field span-2"><label>આધાર કાર્ડ નંબર</label><input type="text" id="uAadhar" name="aadhar" maxlength="12" pattern="\d{12}" required></div>
                 </div>
 
                 <div class="section-bar">૨. વાલીની વિગત અને સરનામું</div>
                 <div class="grid">
-                    <div class="field span-2"><label>પિતાનું પૂરું નામ</label><input type="text" id="uFather" name="fatherName" required></div>
+                    <div class="field span-2"><label>પિતાનું પૂરું નામ</label><input type="text" name="fatherName" required></div>
                     <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" id="uMobile" name="mobile" maxlength="10" pattern="[0-9]{10}" required></div>
-                    <div class="field span-3"><label>પૂરું સરનામું</label><textarea id="uAddress" name="address" rows="3" required></textarea></div>
+                    <div class="field span-3"><label>પૂરું સરનામું</label><textarea name="address" rows="3" required></textarea></div>
                 </div>
 
                 <button type="submit" id="submitBtn" class="btn-main" style="border-radius: 12px; margin-top: 20px;">સબમિટ કરો</button>
@@ -118,7 +111,6 @@
 <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbyauyu_OnhiGEhpoWZovKjOQ59eFmN07PGKOrghWPwOgESI600J5uOXcg9FsO79wGRl/exec';
 
-    // પેજ લોડ થાય ત્યારે ચેક કરો કે ફોર્મ પહેલેથી ભરાયેલું છે?
     window.onload = function() {
         if (localStorage.getItem("formSubmitted") === "true") {
             document.getElementById('statusBox').style.display = 'block';
@@ -126,36 +118,25 @@
         }
     };
 
-    // ફોર્મ ખોલવા માટે
     function openAdmissionForm() {
         document.getElementById('formSection').style.display = 'block';
         document.getElementById('mainOpenBtn').style.display = 'none';
         document.getElementById('formSection').scrollIntoView({ behavior: 'smooth' });
     }
 
-    // ફોટો પ્રીવ્યૂ
     function showPreview(e) {
         if(e.target.files[0]) {
-            const preview = document.getElementById('preview');
-            preview.innerHTML = '<img src="' + URL.createObjectURL(e.target.files[0]) + '">';
+            document.getElementById('preview').innerHTML = '<img src="' + URL.createObjectURL(e.target.files[0]) + '">';
         }
     }
 
-    // ફોર્મ સબમિટ કરવા માટે
     document.getElementById('admissionForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        
-        // વેલિડેશન ચેક
-        if (!this.checkValidity()) {
-            this.reportValidity();
-            return;
-        }
+        if (!this.checkValidity()) { this.reportValidity(); return; }
 
         const btn = document.getElementById('submitBtn');
-        btn.disabled = true;
-        btn.innerHTML = "સેવ થઈ રહ્યું છે, મહેરબાની કરીને રાહ જુઓ...";
+        btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે...";
 
-        // PDF માટે ડેટા સેવ કરી લેવો
         const userData = {
             name: document.getElementById('uName').value,
             grade: document.getElementById('uGrade').value,
@@ -167,17 +148,15 @@
             .then(res => {
                 localStorage.setItem("formSubmitted", "true");
                 localStorage.setItem("userData", JSON.stringify(userData));
-                alert('અભિનંદન! તમારું એડમિશન ફોર્મ સફળતાપૂર્વક સબમિટ થઈ ગયું છે.');
+                alert('ફોર્મ સફળતાપૂર્વક સબમિટ થઈ ગયું છે!');
                 location.reload();
             })
             .catch(err => {
-                alert('ભૂલ આવી છે, ફરી પ્રયત્ન કરો.');
-                btn.disabled = false;
-                btn.innerHTML = "સબમિટ કરો";
+                alert('ભૂલ આવી!');
+                btn.disabled = false; btn.innerHTML = "સબમિટ કરો";
             });
     });
 
-    // Receipt PDF ડાઉનલોડ કરવા માટે
     function downloadReceipt() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
@@ -185,34 +164,45 @@
 
         if(!data) return alert("ડેટા મળ્યો નથી!");
 
-        doc.setFontSize(22);
-        doc.setTextColor(14, 30, 96);
-        doc.text("Vrundavandham Khirasara", 105, 20, { align: "center" });
+        // હેડર બ્લુ બોક્સ
+        doc.setFillColor(14, 30, 96);
+        doc.rect(10, 10, 190, 30, 'F');
         
-        doc.setFontSize(16);
-        doc.setTextColor(163, 29, 36);
-        doc.text("Admission Receipt", 105, 32, { align: "center" });
-
-        doc.setLineWidth(0.5);
-        doc.line(20, 38, 190, 38);
-
+        doc.setFontSize(22);
+        doc.setTextColor(255, 255, 255);
+        doc.text("VRUNDAVANDHAM KHIRASARA", 105, 25, { align: "center" });
+        
         doc.setFontSize(12);
+        doc.text("Admission Receipt", 105, 33, { align: "center" });
+
+        // વિગતો
         doc.setTextColor(0, 0, 0);
-        doc.text(`Student Name: ${data.name}`, 20, 55);
-        doc.text(`Grade: ${data.grade}`, 20, 65);
-        doc.text(`Mobile: ${data.mobile}`, 20, 75);
-        doc.text(`Aadhar No: ${data.aadhar}`, 20, 85);
-        doc.text(`Submission Status: Confirmed ✅`, 20, 95);
+        doc.setFontSize(14);
+        doc.setLineWidth(0.5);
+        doc.line(15, 50, 195, 50);
 
+        let y = 65;
+        const details = [
+            ["વિદ્યાર્થીનું નામ", data.name],
+            ["ધોરણ", data.grade],
+            ["મોબાઈલ નંબર", data.mobile],
+            ["આધાર કાર્ડ નંબર", data.aadhar]
+        ];
+
+        details.forEach(item => {
+            doc.text(item[0] + " : " + item[1], 20, y);
+            y += 12;
+        });
+
+        doc.line(15, y, 195, y);
         doc.setFontSize(10);
-        doc.text("Thank you for choosing Vrundavandham Education Trust.", 105, 120, { align: "center" });
+        doc.text("Vrundavandham Education Trust, Khirasara", 105, 280, { align: "center" });
 
-        doc.save(`Admission_${data.name}.pdf`);
+        doc.save(`Receipt_${data.name}.pdf`);
     }
 
-    // કેન્સલ કરવા માટે
     function cancelAdmission() {
-        if(confirm("શું તમે ખરેખર તમારું એડમિશન કેન્સલ કરવા માંગો છો?")) {
+        if(confirm("શું તમે ખરેખર કેન્સલ કરવા માંગો છો?")) {
             localStorage.clear();
             location.reload();
         }
