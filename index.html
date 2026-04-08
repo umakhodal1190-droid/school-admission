@@ -7,166 +7,132 @@
     <style>
         :root { --primary: #0e1e60; --secondary: #a31d24; --bg: #f8fafc; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
-        .info-title { width: 100%; max-width: 900px; color: var(--primary); font-size: 20px; font-weight: 700; margin: 20px 0 10px 0; border-left: 5px solid var(--secondary); padding-left: 10px; text-align: left; }
-        .pdf-box { width: 100%; max-width: 900px; height: 450px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 20px; background: white; }
-        .show-form-btn { width: 100%; max-width: 900px; padding: 20px; background: var(--secondary); color: white; border: none; border-radius: 50px; font-size: 22px; font-weight: 800; cursor: pointer; margin: 20px 0; box-shadow: 0 8px 20px rgba(163, 29, 36, 0.3); transition: 0.3s; }
+        .info-title { width: 100%; max-width: 900px; color: var(--primary); font-size: 18px; font-weight: 700; margin: 15px 0 10px 0; border-left: 5px solid var(--secondary); padding-left: 10px; text-align: left; }
+        .pdf-box { width: 100%; max-width: 900px; height: 350px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 15px; background: white; }
         
-        #formSection, #cancelSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); border: 1px solid #e2e8f0; overflow: hidden; animation: fadeIn 0.5s; margin-bottom: 50px; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* સ્ટેટસ મેસેજ બોક્સ */
+        #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; margin: 40px 0; border: 2px solid #e2e8f0; }
+        .success-icon { font-size: 50px; color: #10b981; margin-bottom: 15px; }
         
+        #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); border: 1px solid #e2e8f0; overflow: hidden; margin-bottom: 50px; }
         .header-img { width: 100%; height: auto; display: block; border-bottom: 4px solid var(--secondary); }
-        .p-content { padding: 30px; }
-        .section-bar { background: var(--primary); color: white; padding: 12px; border-radius: 8px; margin: 25px 0 15px 0; font-weight: 600; text-align: left; }
+        .p-content { padding: 25px; }
+        .section-bar { background: var(--primary); color: white; padding: 12px; border-radius: 8px; margin: 20px 0 15px 0; font-weight: 600; text-align: left; }
         
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: left; }
         .field { display: flex; flex-direction: column; margin-bottom: 10px; }
         label { font-size: 14px; font-weight: 700; color: #475569; margin-bottom: 5px; }
-        input, select, textarea { padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 15px; }
+        input, select, textarea { padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 15px; width: 100%; box-sizing: border-box; }
         
-        .btn-submit { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 20px; font-weight: 800; cursor: pointer; margin-top: 30px; }
-        .btn-cancel-main { background: #64748b; color: white; border: none; padding: 12px 25px; border-radius: 30px; cursor: pointer; font-weight: bold; margin-bottom: 30px; transition: 0.3s; }
-        .btn-cancel-submit { width: 100%; padding: 15px; background: var(--secondary); color: white; border: none; border-radius: 10px; margin-top: 20px; font-weight: bold; cursor: pointer; }
-        
-        .photo-area { grid-column: span 1; display: flex; flex-direction: column; align-items: center; background: #f1f5f9; padding: 15px; border-radius: 12px; border: 2px dashed #cbd5e1; }
-        #preview { width: 110px; height: 130px; background: #fff; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; font-size: 12px; color: #94a3b8; }
-        #preview img { width: 100%; height: 100%; object-fit: cover; }
-        
-        .span-2 { grid-column: span 2; } .span-3 { grid-column: span 3; }
-        @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } .span-2, .span-3 { grid-column: span 1; } }
+        .submit-btn { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 20px; font-weight: 800; cursor: pointer; margin-top: 25px; }
+        .cancel-btn { background: var(--secondary); color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; margin-top: 20px; }
+
+        @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
     <div class="info-title">૧. એડમિશન માહિતી</div>
     <iframe src="Fees.pdf" class="pdf-box"></iframe>
-    <div class="info-title">૨. VSGK માહિતી પત્રક</div>
-    <iframe src="VSGK.pdf" class="pdf-box"></iframe>
 
-    <button class="show-form-btn" onclick="toggleForm()">સ્કૂલ પ્રવેશ ફોર્મ ભરવા માટે અહીં ક્લિક કરો</button>
+    <div id="statusBox">
+        <div class="success-icon">✔</div>
+        <h2 style="color: var(--primary);">તમારું એડમિશન ફોર્મ ભરાઈ ગયું છે!</h2>
+        <p style="color: #64748b;">તમે અત્યારે બીજું નવું ફોર્મ ભરી શકશો નહીં.</p>
+        <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+        <p style="font-size: 14px; color: #a31d24;">જો તમે આ એડમિશન રદ કરવા માંગતા હોવ, તો નીચે ક્લિક કરો:</p>
+        <button class="cancel-btn" onclick="handleCancel()">એડમિશન કેન્સલ કરવા માટે અહીં ક્લિક કરો</button>
+    </div>
 
     <div id="formSection">
         <img src="header.jpeg" class="header-img">
         <div class="p-content">
-            <h2 style="color:var(--secondary); text-align: center; margin-bottom: 25px;">શૈક્ષણિક પ્રવેશ ફોર્મ</h2>
+            <h2 style="color:var(--secondary); text-align: center;">શૈક્ષણિક પ્રવેશ ફોર્મ</h2>
             <form id="admissionForm">
                 <input type="hidden" name="action" value="add">
                 <div class="grid">
-                    <div class="photo-area">
-                        <div id="preview">વિદ્યાર્થી ફોટો</div>
-                        <input type="file" accept="image/*" onchange="loadFile(event)" style="width:100%; font-size:10px;">
-                    </div>
-                    <div class="field span-2">
-                        <label>વિદ્યાર્થીનું પૂરું નામ (અટક-નામ-પિતાનું નામ)</label>
-                        <input type="text" name="studentName" placeholder="નામ લખો" required>
+                    <div class="field span-3">
+                        <label>વિદ્યાર્થીનું પૂરું નામ</label>
+                        <input type="text" name="studentName" id="uName" required>
                     </div>
                 </div>
-
-                <div class="section-bar">૧. પ્રવેશ અને શૈક્ષણિક વિગત</div>
+                <div class="section-bar">વિગતો ભરો</div>
                 <div class="grid">
                     <div class="field"><label>ધોરણ</label><input type="text" name="grade" required></div>
-                    <div class="field"><label>લિંગ</label><select name="gender" required><option value="Male">કુમાર</option><option value="Female">કન્યા</option></select></div>
-                    <div class="field"><label>જ્ઞાતિ</label><select name="caste"><option>Open</option><option>Baxi</option><option>SC</option><option>ST</option></select></div>
-                    <div class="field"><label>પ્રકાર</label><select name="type"><option>Local</option><option>Up-Down</option></select></div>
-                    
-                    <div class="field">
-                        <label>જન્મ તારીખ (DD-MM-YYYY)</label>
-                        <input type="text" name="dob" placeholder="15-05-2015" pattern="\d{2}-\d{2}-\d{4}" title="તારીખ DD-MM-YYYY ફોર્મેટમાં લખો" required>
-                    </div>
-
-                    <div class="field span-2"><label>આધાર કાર્ડ નંબર</label><input type="text" name="aadhar" maxlength="12" pattern="\d{12}" placeholder="૧૨ આંકડાનો નંબર" required></div>
+                    <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" name="mobile" id="uMobile" maxlength="10" required></div>
+                    <div class="field"><label>આધાર કાર્ડ નંબર</label><input type="text" name="aadhar" id="uAadhar" maxlength="12" required></div>
+                    <div class="field"><label>જન્મ તારીખ</label><input type="text" name="dob" placeholder="DD-MM-YYYY" required></div>
                 </div>
-
-                <div class="section-bar">૨. વાલીની વિગત</div>
-                <div class="grid">
-                    <div class="field span-2"><label>પિતાનું પૂરું નામ</label><input type="text" name="fatherName" required></div>
-                    <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" name="mobile" maxlength="10" pattern="[0-9]{10}" placeholder="૧૦ આંકડાનો મોબાઈલ" required></div>
-                    <div class="field span-3"><label>સરનામું</label><textarea name="address" rows="3" placeholder="ગામ, તાલુકો, જિલ્લો"></textarea></div>
-                </div>
-                <button type="submit" id="submitBtn" class="btn-submit">સબમિટ કરો</button>
+                <button type="submit" id="submitBtn" class="submit-btn">ફોર્મ સબમિટ કરો</button>
             </form>
         </div>
     </div>
 
-    <div style="margin: 20px 0;">
-        <button class="btn-cancel-main" onclick="toggleCancel()">એડમિશન કેન્સલ કરવા અહીં ક્લિક કરો</button>
-    </div>
-
-    <div id="cancelSection">
-        <div class="p-content" style="background: #fff5f5;">
-            <h3 style="color:var(--secondary); text-align: center;">એડમિશન કેન્સલ ફોર્મ</h3>
-            <div class="grid" style="grid-template-columns: 1fr;">
-                <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" id="cancelMobile" maxlength="10"></div>
-                <div class="field"><label>આધાર કાર્ડ નંબર</label><input type="text" id="cancelAadhar" maxlength="12"></div>
-            </div>
-            <button onclick="cancelAdmission()" id="cancelBtn" class="btn-cancel-submit">એડમિશન કેન્સલ કરો</button>
-        </div>
-    </div>
-
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzAcBRuBR0x809WL3ZKX39GA7OlATcYZvR3XStnIIorSOZ90El1T3JMEjxRfm5MfQPs/exec';
-    
-    function toggleForm() { 
-        document.getElementById('formSection').style.display = 'block'; 
-        document.getElementById('cancelSection').style.display = 'none';
-        document.getElementById('formSection').scrollIntoView({ behavior: 'smooth' });
-    }
-    
-    function toggleCancel() { 
-        document.getElementById('cancelSection').style.display = 'block'; 
-        document.getElementById('formSection').style.display = 'none'; 
-        document.getElementById('cancelSection').scrollIntoView({ behavior: 'smooth' });
-    }
-    
-    function loadFile(e) { 
-        if(e.target.files[0]) { 
-            document.getElementById('preview').innerHTML = '<img src="' + URL.createObjectURL(e.target.files[0]) + '">'; 
-        } 
-    }
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwayrXM2fif05-jhxT4EczARK39dTmyflCIrouTP63WYYnAs6xZLQeFlj2nrRzazasn/exec';
 
-    // એડમિશન સબમિટ
+    // પેજ લોડ થાય ત્યારે ચેક કરો કે યુઝરે ફોર્મ ભર્યું છે?
+    window.onload = function() {
+        if (localStorage.getItem("formSubmitted") === "true") {
+            document.getElementById('statusBox').style.display = 'block';
+            document.getElementById('formSection').style.display = 'none';
+        } else {
+            document.getElementById('formSection').style.display = 'block';
+        }
+    };
+
+    // ફોર્મ સબમિટ ફંક્શન
     document.getElementById('admissionForm').addEventListener('submit', e => {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
-        btn.disabled = true; 
-        btn.innerHTML = "ફોર્મ સબમિટ થઈ રહ્યું છે...";
-        
+        btn.disabled = true; btn.innerHTML = "સબમિટ થઈ રહ્યું છે...";
+
+        // સબમિટ કરતા પહેલા ડેટા લોકલ સેવ કરો (કેન્સલ કરવા માટે)
+        const mobile = document.getElementById('uMobile').value;
+        const aadhar = document.getElementById('uAadhar').value;
+
         fetch(scriptURL, { method: 'POST', body: new FormData(e.target)})
             .then(res => {
-                alert('અભિનંદન! એડમિશન ફોર્મ સફળતાપૂર્વક સબમિટ થઈ ગયું છે.');
+                localStorage.setItem("formSubmitted", "true");
+                localStorage.setItem("userMobile", mobile);
+                localStorage.setItem("userAadhar", aadhar);
+                alert('અભિનંદન! તમારું ફોર્મ સબમિટ થઈ ગયું છે.');
                 location.reload();
             })
             .catch(err => { 
-                alert('ભૂલ થઈ છે, ફરી પ્રયત્ન કરો.'); 
+                alert('ભૂલ આવી!'); 
                 btn.disabled = false; 
-                btn.innerHTML = "સબમિટ કરો";
+                btn.innerHTML = "ફોર્મ સબમિટ કરો"; 
             });
     });
 
     // કેન્સલ ફંક્શન
-    function cancelAdmission() {
-        const mobile = document.getElementById('cancelMobile').value;
-        const aadhar = document.getElementById('cancelAadhar').value;
-        const btn = document.getElementById('cancelBtn');
+    function handleCancel() {
+        const mobile = localStorage.getItem("userMobile");
+        const aadhar = localStorage.getItem("userAadhar");
 
-        if (!mobile || !aadhar) { alert("મોબાઈલ અને આધાર નંબર લખવો જરૂરી છે."); return; }
-        if (!confirm("શું તમે ખરેખર એડમિશન કેન્સલ કરવા માંગો છો?")) return;
+        if(!confirm("શું તમે ખરેખર આ એડમિશન કેન્સલ કરવા માંગો છો?")) return;
 
-        btn.disabled = true; btn.innerHTML = "ચકાસણી થઈ રહી છે...";
+        const btn = document.querySelector('.cancel-btn');
+        btn.disabled = true; btn.innerHTML = "કેન્સલ થઈ રહ્યું છે...";
 
-        const formData = new FormData();
-        formData.append('action', 'cancel');
-        formData.append('mobile', mobile);
-        formData.append('aadhar', aadhar);
+        const fd = new FormData();
+        fd.append('action', 'cancel');
+        fd.append('mobile', mobile);
+        fd.append('aadhar', aadhar);
 
-        fetch(scriptURL, { method: 'POST', body: formData })
+        fetch(scriptURL, { method: 'POST', body: fd })
             .then(res => res.text())
             .then(result => {
-                if (result.includes("Successfully")) {
-                    alert("એડમિશન કેન્સલ થઈ ગયું છે.");
+                if(result.includes("Successfully")) {
+                    localStorage.removeItem("formSubmitted");
+                    localStorage.removeItem("userMobile");
+                    localStorage.removeItem("userAadhar");
+                    alert("તમારું એડમિશન કેન્સલ થઈ ગયું છે. હવે તમે નવું ફોર્મ ભરી શકશો.");
                     location.reload();
                 } else {
-                    alert("માહિતી મળી નથી. કૃપા કરીને સાચો નંબર નાખો.");
-                    btn.disabled = false; btn.innerHTML = "એડમિશન કેન્સલ કરો";
+                    alert("કેન્સલ કરવામાં ભૂલ થઈ. કદાચ ડેટા મળ્યો નથી.");
+                    btn.disabled = false; btn.innerHTML = "એડમિશન કેન્સલ કરવા માટે અહીં ક્લિક કરો";
                 }
             });
     }
