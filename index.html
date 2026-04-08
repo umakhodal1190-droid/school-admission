@@ -10,7 +10,10 @@
         .info-title { width: 100%; max-width: 900px; color: var(--primary); font-size: 18px; font-weight: 700; margin: 15px 0 10px 0; border-left: 5px solid var(--secondary); padding-left: 10px; text-align: left; }
         .pdf-box { width: 100%; max-width: 900px; height: 350px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 15px; background: white; }
         
-        /* સ્ટેટસ મેસેજ બોક્સ */
+        /* નવું એડમિશન બટન સ્ટાઈલ */
+        .open-form-btn { width: 100%; max-width: 900px; padding: 20px; background: var(--secondary); color: white; border: none; border-radius: 50px; font-size: 22px; font-weight: 800; cursor: pointer; margin: 20px 0; box-shadow: 0 8px 20px rgba(163, 29, 36, 0.3); transition: 0.3s; }
+        .open-form-btn:hover { transform: scale(1.02); }
+
         #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; margin: 40px 0; border: 2px solid #e2e8f0; }
         .success-icon { font-size: 50px; color: #10b981; margin-bottom: 15px; }
         
@@ -33,10 +36,13 @@
 <body>
 
    <div class="info-title">૧. એડમિશન માહિતી</div>
-<iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
+   <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
 
-<div class="info-title">૨. VSGK માહિતી પત્રક</div>
-<iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
+   <div class="info-title">૨. VSGK માહિતી પત્રક</div>
+   <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
+
+    <button id="mainOpenBtn" class="open-form-btn" onclick="showForm()">સ્કૂલ પ્રવેશ ફોર્મ ભરવા માટે અહીં ક્લિક કરો</button>
+
     <div id="statusBox">
         <div class="success-icon">✔</div>
         <h2 style="color: var(--primary);">તમારું એડમિશન ફોર્મ ભરાઈ ગયું છે!</h2>
@@ -52,92 +58,4 @@
             <h2 style="color:var(--secondary); text-align: center;">શૈક્ષણિક પ્રવેશ ફોર્મ</h2>
             <form id="admissionForm">
                 <input type="hidden" name="action" value="add">
-                <div class="grid">
-                    <div class="field span-3">
-                        <label>વિદ્યાર્થીનું પૂરું નામ</label>
-                        <input type="text" name="studentName" id="uName" required>
-                    </div>
-                </div>
-                <div class="section-bar">વિગતો ભરો</div>
-                <div class="grid">
-                    <div class="field"><label>ધોરણ</label><input type="text" name="grade" required></div>
-                    <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" name="mobile" id="uMobile" maxlength="10" required></div>
-                    <div class="field"><label>આધાર કાર્ડ નંબર</label><input type="text" name="aadhar" id="uAadhar" maxlength="12" required></div>
-                    <div class="field"><label>જન્મ તારીખ</label><input type="text" name="dob" placeholder="DD-MM-YYYY" required></div>
-                </div>
-                <button type="submit" id="submitBtn" class="submit-btn">ફોર્મ સબમિટ કરો</button>
-            </form>
-        </div>
-    </div>
-
-<script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwayrXM2fif05-jhxT4EczARK39dTmyflCIrouTP63WYYnAs6xZLQeFlj2nrRzazasn/exec';
-
-    // પેજ લોડ થાય ત્યારે ચેક કરો કે યુઝરે ફોર્મ ભર્યું છે?
-    window.onload = function() {
-        if (localStorage.getItem("formSubmitted") === "true") {
-            document.getElementById('statusBox').style.display = 'block';
-            document.getElementById('formSection').style.display = 'none';
-        } else {
-            document.getElementById('formSection').style.display = 'block';
-        }
-    };
-
-    // ફોર્મ સબમિટ ફંક્શન
-    document.getElementById('admissionForm').addEventListener('submit', e => {
-        e.preventDefault();
-        const btn = document.getElementById('submitBtn');
-        btn.disabled = true; btn.innerHTML = "સબમિટ થઈ રહ્યું છે...";
-
-        // સબમિટ કરતા પહેલા ડેટા લોકલ સેવ કરો (કેન્સલ કરવા માટે)
-        const mobile = document.getElementById('uMobile').value;
-        const aadhar = document.getElementById('uAadhar').value;
-
-        fetch(scriptURL, { method: 'POST', body: new FormData(e.target)})
-            .then(res => {
-                localStorage.setItem("formSubmitted", "true");
-                localStorage.setItem("userMobile", mobile);
-                localStorage.setItem("userAadhar", aadhar);
-                alert('અભિનંદન! તમારું ફોર્મ સબમિટ થઈ ગયું છે.');
-                location.reload();
-            })
-            .catch(err => { 
-                alert('ભૂલ આવી!'); 
-                btn.disabled = false; 
-                btn.innerHTML = "ફોર્મ સબમિટ કરો"; 
-            });
-    });
-
-    // કેન્સલ ફંક્શન
-    function handleCancel() {
-        const mobile = localStorage.getItem("userMobile");
-        const aadhar = localStorage.getItem("userAadhar");
-
-        if(!confirm("શું તમે ખરેખર આ એડમિશન કેન્સલ કરવા માંગો છો?")) return;
-
-        const btn = document.querySelector('.cancel-btn');
-        btn.disabled = true; btn.innerHTML = "કેન્સલ થઈ રહ્યું છે...";
-
-        const fd = new FormData();
-        fd.append('action', 'cancel');
-        fd.append('mobile', mobile);
-        fd.append('aadhar', aadhar);
-
-        fetch(scriptURL, { method: 'POST', body: fd })
-            .then(res => res.text())
-            .then(result => {
-                if(result.includes("Successfully")) {
-                    localStorage.removeItem("formSubmitted");
-                    localStorage.removeItem("userMobile");
-                    localStorage.removeItem("userAadhar");
-                    alert("તમારું એડમિશન કેન્સલ થઈ ગયું છે. હવે તમે નવું ફોર્મ ભરી શકશો.");
-                    location.reload();
-                } else {
-                    alert("કેન્સલ કરવામાં ભૂલ થઈ. કદાચ ડેટા મળ્યો નથી.");
-                    btn.disabled = false; btn.innerHTML = "એડમિશન કેન્સલ કરવા માટે અહીં ક્લિક કરો";
-                }
-            });
-    }
-</script>
-</body>
-</html>
+                <div class
