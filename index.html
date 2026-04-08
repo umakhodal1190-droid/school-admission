@@ -3,105 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vrundavandham Khirasara - Admission</title>
+    <title>School Admission - Vrundavandham</title>
     <style>
-        :root { --primary: #0e1e60; --secondary: #a31d24; --bg: #f0f2f5; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
+        :root { --primary: #0e1e60; --secondary: #a31d24; --bg: #f8fafc; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
+        .info-title { width: 100%; max-width: 900px; color: var(--primary); font-size: 18px; font-weight: 700; margin: 15px 0 10px 0; border-left: 5px solid var(--secondary); padding-left: 10px; text-align: left; }
+        .pdf-box { width: 100%; max-width: 900px; height: 350px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 15px; background: white; }
         
-        .header-main { width: 100%; max-width: 800px; background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        /* સ્ટેટસ મેસેજ બોક્સ */
+        #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; margin: 40px 0; border: 2px solid #e2e8f0; }
+        .success-icon { font-size: 50px; color: #10b981; margin-bottom: 15px; }
+        
+        #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); border: 1px solid #e2e8f0; overflow: hidden; margin-bottom: 50px; }
         .header-img { width: 100%; height: auto; display: block; border-bottom: 4px solid var(--secondary); }
+        .p-content { padding: 25px; }
+        .section-bar { background: var(--primary); color: white; padding: 12px; border-radius: 8px; margin: 20px 0 15px 0; font-weight: 600; text-align: left; }
         
-        .info-title { width: 100%; max-width: 800px; color: var(--primary); font-size: 18px; font-weight: bold; margin: 15px 0 10px 0; border-left: 5px solid var(--secondary); padding-left: 10px; }
-        .pdf-container { width: 100%; max-width: 800px; height: 500px; background: white; border-radius: 12px; overflow: hidden; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .pdf-container iframe { width: 100%; height: 100%; border: none; }
-
-        /* ફોર્મ અને સ્ટેટસ કાર્ડ */
-        .card { width: 100%; max-width: 800px; background: white; border-radius: 15px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); box-sizing: border-box; margin-bottom: 40px; }
-        .section-bar { background: var(--primary); color: white; padding: 10px 15px; border-radius: 8px; margin: 20px 0 15px 0; font-size: 16px; font-weight: 600; }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: left; }
+        .field { display: flex; flex-direction: column; margin-bottom: 10px; }
+        label { font-size: 14px; font-weight: 700; color: #475569; margin-bottom: 5px; }
+        input, select, textarea { padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 15px; width: 100%; box-sizing: border-box; }
         
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .field { display: flex; flex-direction: column; margin-bottom: 12px; }
-        label { font-size: 14px; font-weight: bold; color: #444; margin-bottom: 5px; }
-        input, select, textarea { padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 15px; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--primary); box-shadow: 0 0 5px rgba(14,30,96,0.2); }
-        
-        .btn-submit { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; }
-        .btn-cancel { background: var(--secondary); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 15px; }
+        .submit-btn { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 20px; font-weight: 800; cursor: pointer; margin-top: 25px; }
+        .cancel-btn { background: var(--secondary); color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; margin-top: 20px; }
 
-        #statusBox { display: none; text-align: center; border-top: 5px solid #10b981; }
-        .success-msg { color: #059669; font-size: 22px; font-weight: bold; margin-bottom: 10px; }
-
-        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } .pdf-container { height: 400px; } }
+        @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-    <div class="header-main">
+   <div class="info-title">૧. એડમિશન માહિતી</div>
+<iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
+
+<div class="info-title">૨. VSGK માહિતી પત્રક</div>
+<iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
+    <div id="statusBox">
+        <div class="success-icon">✔</div>
+        <h2 style="color: var(--primary);">તમારું એડમિશન ફોર્મ ભરાઈ ગયું છે!</h2>
+        <p style="color: #64748b;">તમે અત્યારે બીજું નવું ફોર્મ ભરી શકશો નહીં.</p>
+        <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+        <p style="font-size: 14px; color: #a31d24;">જો તમે આ એડમિશન રદ કરવા માંગતા હોવ, તો નીચે ક્લિક કરો:</p>
+        <button class="cancel-btn" onclick="handleCancel()">એડમિશન કેન્સલ કરવા માટે અહીં ક્લિક કરો</button>
+    </div>
+
+    <div id="formSection">
         <img src="header.jpeg" class="header-img">
-    </div>
-
-    <div class="info-title">૧. એડમિશન માહિતી અને ફી સ્ટ્રક્ચર</div>
-    <div class="pdf-container">
-        <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true"></iframe>
-    </div>
-
-    <div id="statusBox" class="card">
-        <div class="success-msg">તમારું ફોર્મ સફળતાપૂર્વક ભરાઈ ગયું છે! ✅</div>
-        <p style="color: #666;">તમે અત્યારે બીજું નવું ફોર્મ ભરી શકશો નહીં.</p>
-        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px dashed #ddd;">
-            <p style="font-size: 14px; color: var(--secondary);">જો તમે આ એડમિશન રદ (Cancel) કરવા માંગતા હોવ:</p>
-            <button class="btn-cancel" onclick="handleCancel()">એડમિશન કેન્સલ કરો</button>
+        <div class="p-content">
+            <h2 style="color:var(--secondary); text-align: center;">શૈક્ષણિક પ્રવેશ ફોર્મ</h2>
+            <form id="admissionForm">
+                <input type="hidden" name="action" value="add">
+                <div class="grid">
+                    <div class="field span-3">
+                        <label>વિદ્યાર્થીનું પૂરું નામ</label>
+                        <input type="text" name="studentName" id="uName" required>
+                    </div>
+                </div>
+                <div class="section-bar">વિગતો ભરો</div>
+                <div class="grid">
+                    <div class="field"><label>ધોરણ</label><input type="text" name="grade" required></div>
+                    <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" name="mobile" id="uMobile" maxlength="10" required></div>
+                    <div class="field"><label>આધાર કાર્ડ નંબર</label><input type="text" name="aadhar" id="uAadhar" maxlength="12" required></div>
+                    <div class="field"><label>જન્મ તારીખ</label><input type="text" name="dob" placeholder="DD-MM-YYYY" required></div>
+                </div>
+                <button type="submit" id="submitBtn" class="submit-btn">ફોર્મ સબમિટ કરો</button>
+            </form>
         </div>
-    </div>
-
-    <div id="formSection" class="card">
-        <h2 style="color: var(--primary); text-align: center; margin-top: 0;">શૈક્ષણિક પ્રવેશ ફોર્મ</h2>
-        <form id="admissionForm">
-            <input type="hidden" name="action" value="add">
-            
-            <div class="field">
-                <label>વિદ્યાર્થીનું પૂરું નામ (અટક-નામ-પિતાનું નામ)</label>
-                <input type="text" name="studentName" id="uName" placeholder="નામ લખો..." required>
-            </div>
-
-            <div class="section-bar">પ્રવેશ વિગતો</div>
-            <div class="grid">
-                <div class="field"><label>ધોરણ</label><input type="text" name="grade" required></div>
-                <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" name="mobile" id="uMobile" maxlength="10" required></div>
-                <div class="field"><label>આધાર કાર્ડ નંબર</label><input type="text" name="aadhar" id="uAadhar" maxlength="12" required></div>
-                <div class="field"><label>જન્મ તારીખ</label><input type="text" name="dob" placeholder="DD-MM-YYYY" required></div>
-            </div>
-
-            <div class="section-bar">વાલીની વિગત</div>
-            <div class="field">
-                <label>સરનામું</label>
-                <textarea name="address" rows="2" placeholder="ગામ, તાલુકો..."></textarea>
-            </div>
-
-            <button type="submit" id="submitBtn" class="btn-submit">ફોર્મ સબમિટ કરો</button>
-        </form>
     </div>
 
 <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbwayrXM2fif05-jhxT4EczARK39dTmyflCIrouTP63WYYnAs6xZLQeFlj2nrRzazasn/exec';
 
-    // પેજ લોડ વખતે ચેક કરો
+    // પેજ લોડ થાય ત્યારે ચેક કરો કે યુઝરે ફોર્મ ભર્યું છે?
     window.onload = function() {
         if (localStorage.getItem("formSubmitted") === "true") {
             document.getElementById('statusBox').style.display = 'block';
             document.getElementById('formSection').style.display = 'none';
         } else {
             document.getElementById('formSection').style.display = 'block';
-            document.getElementById('statusBox').style.display = 'none';
         }
     };
 
-    // ફોર્મ સબમિટ
+    // ફોર્મ સબમિટ ફંક્શન
     document.getElementById('admissionForm').addEventListener('submit', e => {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
-        btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે...";
+        btn.disabled = true; btn.innerHTML = "સબમિટ થઈ રહ્યું છે...";
 
+        // સબમિટ કરતા પહેલા ડેટા લોકલ સેવ કરો (કેન્સલ કરવા માટે)
         const mobile = document.getElementById('uMobile').value;
         const aadhar = document.getElementById('uAadhar').value;
 
@@ -110,12 +98,13 @@
                 localStorage.setItem("formSubmitted", "true");
                 localStorage.setItem("userMobile", mobile);
                 localStorage.setItem("userAadhar", aadhar);
-                alert('અભિનંદન! એડમિશન ફોર્મ સેવ થઈ ગયું છે.');
+                alert('અભિનંદન! તમારું ફોર્મ સબમિટ થઈ ગયું છે.');
                 location.reload();
             })
             .catch(err => { 
-                alert('ભૂલ આવી, ફરી પ્રયત્ન કરો.'); 
-                btn.disabled = false; btn.innerHTML = "ફોર્મ સબમિટ કરો";
+                alert('ભૂલ આવી!'); 
+                btn.disabled = false; 
+                btn.innerHTML = "ફોર્મ સબમિટ કરો"; 
             });
     });
 
@@ -126,7 +115,7 @@
 
         if(!confirm("શું તમે ખરેખર આ એડમિશન કેન્સલ કરવા માંગો છો?")) return;
 
-        const btn = document.querySelector('.btn-cancel');
+        const btn = document.querySelector('.cancel-btn');
         btn.disabled = true; btn.innerHTML = "કેન્સલ થઈ રહ્યું છે...";
 
         const fd = new FormData();
@@ -141,11 +130,11 @@
                     localStorage.removeItem("formSubmitted");
                     localStorage.removeItem("userMobile");
                     localStorage.removeItem("userAadhar");
-                    alert("તમારું એડમિશન કેન્સલ કરવામાં આવ્યું છે.");
+                    alert("તમારું એડમિશન કેન્સલ થઈ ગયું છે. હવે તમે નવું ફોર્મ ભરી શકશો.");
                     location.reload();
                 } else {
-                    alert("માહિતી મળી નથી. કેન્સલ કરવામાં મુશ્કેલી છે.");
-                    btn.disabled = false; btn.innerHTML = "એડમિશન કેન્સલ કરો";
+                    alert("કેન્સલ કરવામાં ભૂલ થઈ. કદાચ ડેટા મળ્યો નથી.");
+                    btn.disabled = false; btn.innerHTML = "એડમિશન કેન્સલ કરવા માટે અહીં ક્લિક કરો";
                 }
             });
     }
