@@ -10,29 +10,29 @@
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
         
         .info-title { width: 100%; max-width: 900px; color: var(--primary); font-size: 18px; font-weight: 700; margin: 15px 0 10px 0; border-left: 5px solid var(--secondary); padding-left: 10px; text-align: left; }
-        .pdf-box { width: 100%; max-width: 900px; height: 400px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 20px; background: white; }
+        .pdf-box { width: 100%; max-width: 900px; height: 350px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 20px; background: white; }
         
-        .btn-main { width: 100%; max-width: 900px; padding: 18px; background: var(--secondary); color: white; border: none; border-radius: 50px; font-size: 20px; font-weight: 800; cursor: pointer; margin: 20px 0; box-shadow: 0 8px 20px rgba(163, 29, 36, 0.3); }
+        /* ફોર્મ ખોલવાનું મુખ્ય લાલ બટન */
+        .btn-main-open { width: 100%; max-width: 900px; padding: 22px; background: var(--secondary); color: white; border: none; border-radius: 50px; font-size: 22px; font-weight: 800; cursor: pointer; margin: 25px 0; box-shadow: 0 8px 25px rgba(163, 29, 36, 0.4); display: block; }
         
-        #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; margin: 40px 0; }
-        .btn-download { background: #10b981; color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 10px; }
-        .btn-cancel { background: #64748b; color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 10px; }
+        #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; margin: 40px 0; border: 2px solid #e2e8f0; }
+        .btn-green { background: #10b981; color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 10px; }
+        .btn-gray { background: #64748b; color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 10px; }
 
-        #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); overflow: hidden; margin-bottom: 50px; }
+        /* ફોર્મ સેક્શન - શરૂઆતમાં છુપાયેલું */
+        #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); overflow: hidden; margin-bottom: 50px; border: 1px solid #e2e8f0; }
         .header-img { width: 100%; height: auto; display: block; border-bottom: 4px solid var(--secondary); }
         .p-content { padding: 25px; }
-        .section-bar { background: var(--primary); color: white; padding: 12px; border-radius: 8px; margin: 25px 0 15px 0; font-weight: 600; text-align: left; }
+        .section-bar { background: var(--primary); color: white; padding: 12px; border-radius: 8px; margin: 25px 0 15px 0; font-weight: 600; }
         
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: left; }
         .field { display: flex; flex-direction: column; margin-bottom: 10px; }
         label { font-size: 14px; font-weight: 700; color: #475569; margin-bottom: 5px; }
         input, select, textarea { padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 15px; width: 100%; box-sizing: border-box; }
         
-        /* ફોટો અપલોડ સેક્શન - નવું સુધારેલું */
-        .photo-upload-container { grid-column: span 1; display: flex; flex-direction: column; align-items: center; background: #f8fafc; padding: 15px; border-radius: 12px; border: 2px dashed #cbd5e1; margin-bottom: 10px; }
-        #preview { width: 120px; height: 140px; background: #fff; border: 1px solid #ddd; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; font-weight: bold; color: #94a3b8; }
+        .photo-upload-box { grid-column: span 1; display: flex; flex-direction: column; align-items: center; background: #f8fafc; padding: 15px; border-radius: 12px; border: 2px dashed #cbd5e1; }
+        #preview { width: 110px; height: 130px; background: #fff; border: 1px solid #ddd; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         #preview img { width: 100%; height: 100%; object-fit: cover; }
-        .file-input-label { background: var(--primary); color: white; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold; }
 
         .span-2 { grid-column: span 2; } .span-3 { grid-column: span 3; }
         @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } .span-2, .span-3 { grid-column: span 1; } }
@@ -41,4 +41,118 @@
 <body>
 
     <div class="info-title">૧. એડમિશન માહિતી</div>
-    <iframe src="
+    <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
+
+    <div class="info-title">૨. VSGK માહિતી પત્રક</div>
+    <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
+
+    <button id="mainOpenBtn" class="btn-main-open" onclick="document.getElementById('formSection').style.display='block'; this.style.display='none'; document.getElementById('formSection').scrollIntoView({behavior:'smooth'});">
+        સ્કૂલ પ્રવેશ ફોર્મ ભરવા માટે અહીં ક્લિક કરો
+    </button>
+
+    <div id="statusBox">
+        <h2 style="color: var(--primary);">તમારું એડમિશન ફોર્મ ભરાઈ ગયું છે! ✅</h2>
+        <button class="btn-green" onclick="downloadPDF()">📄 PDF ડાઉનલોડ કરો</button>
+        <button class="btn-gray" onclick="handleCancel()">❌ એડમિશન કેન્સલ કરો</button>
+    </div>
+
+    <div id="formSection">
+        <img src="header.jpeg" class="header-img">
+        <div class="p-content">
+            <h2 style="color:var(--secondary); text-align: center; margin-bottom: 25px;">શૈક્ષણિક પ્રવેશ ફોર્મ</h2>
+            <form id="admissionForm">
+                <input type="hidden" name="action" value="add">
+                
+                <div class="grid">
+                    <div class="photo-upload-box">
+                        <div id="preview">ફોટો</div>
+                        <input type="file" id="photoInput" accept="image/*" onchange="loadFile(event)" style="font-size: 10px; width: 100%;" required>
+                    </div>
+                    <div class="field span-2">
+                        <label>વિદ્યાર્થીનું પૂરું નામ</label>
+                        <input type="text" id="uName" name="studentName" placeholder="અટક-નામ-પિતાનું નામ" required>
+                    </div>
+                </div>
+
+                <div class="section-bar">૧. પ્રવેશ વિગત</div>
+                <div class="grid">
+                    <div class="field"><label>ધોરણ</label><input type="text" id="uGrade" name="grade" required></div>
+                    <div class="field">
+                        <label>લિંગ</label>
+                        <select name="gender" required><option value="">પસંદ કરો</option><option value="Male">કુમાર</option><option value="Female">કન્યા</option></select>
+                    </div>
+                    <div class="field">
+                        <label>જ્ઞાતિ</label>
+                        <select name="caste" required><option value="Open">Open</option><option value="Baxi">Baxi</option><option value="SC">SC</option><option value="ST">ST</option></select>
+                    </div>
+                    <div class="field"><label>જન્મ તારીખ</label><input type="date" name="dob" required></div>
+                    <div class="field span-2"><label>આધાર નંબર</label><input type="text" id="uAadhar" name="aadhar" maxlength="12" pattern="\d{12}" required></div>
+                </div>
+
+                <div class="section-bar">૨. વાલીની વિગત</div>
+                <div class="grid">
+                    <div class="field span-2"><label>પિતાનું નામ</label><input type="text" name="fatherName" required></div>
+                    <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" id="uMobile" name="mobile" pattern="[0-9]{10}" required></div>
+                    <div class="field span-3"><label>સરનામું</label><textarea name="address" rows="2" required></textarea></div>
+                </div>
+
+                <button type="submit" id="submitBtn" class="btn-main-open" style="border-radius: 10px; margin-top: 20px;">ફોર્મ સબમિટ કરો</button>
+            </form>
+        </div>
+    </div>
+
+<script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyauyu_OnhiGEhpoWZovKjOQ59eFmN07PGKOrghWPwOgESI600J5uOXcg9FsO79wGRl/exec';
+
+    window.onload = function() {
+        if (localStorage.getItem("formSubmitted") === "true") {
+            document.getElementById('statusBox').style.display = 'block';
+            document.getElementById('mainOpenBtn').style.display = 'none';
+        }
+    };
+
+    function loadFile(e) {
+        if(e.target.files[0]) {
+            document.getElementById('preview').innerHTML = '<img src="' + URL.createObjectURL(e.target.files[0]) + '">';
+        }
+    }
+
+    document.getElementById('admissionForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે...";
+
+        const name = document.getElementById('uName').value;
+        const grade = document.getElementById('uGrade').value;
+        const mobile = document.getElementById('uMobile').value;
+
+        fetch(scriptURL, { method: 'POST', body: new FormData(this)})
+            .then(res => {
+                localStorage.setItem("formSubmitted", "true");
+                localStorage.setItem("savedName", name);
+                localStorage.setItem("savedGrade", grade);
+                localStorage.setItem("savedMobile", mobile);
+                alert('અભિનંદન! ફોર્મ સેવ થઈ ગયું છે.');
+                location.reload();
+            })
+            .catch(err => {
+                alert('ભૂલ આવી!');
+                btn.disabled = false; btn.innerHTML = "ફોર્મ સબમિટ કરો";
+            });
+    });
+
+    function downloadPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.text(`Name: ${localStorage.getItem("savedName")}`, 20, 40);
+        doc.text(`Grade: ${localStorage.getItem("savedGrade")}`, 20, 50);
+        doc.text(`Mobile: ${localStorage.getItem("savedMobile")}`, 20, 60);
+        doc.save("Admission_Receipt.pdf");
+    }
+
+    function handleCancel() {
+        if(confirm("કેન્સલ કરવું છે?")) { localStorage.clear(); location.reload(); }
+    }
+</script>
+</body>
+</html>
