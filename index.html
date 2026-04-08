@@ -9,24 +9,25 @@
         :root { --primary: #0e1e60; --secondary: #a31d24; --bg: #f8fafc; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
         .info-title { width: 100%; max-width: 900px; color: var(--primary); font-size: 20px; font-weight: 700; margin: 20px 0 10px 0; border-left: 5px solid var(--secondary); padding-left: 10px; text-align: left; }
-        .pdf-box { width: 100%; max-width: 900px; height: 450px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 20px; background: white; }
-        .show-form-btn { width: 100%; max-width: 900px; padding: 20px; background: var(--secondary); color: white; border: none; border-radius: 50px; font-size: 22px; font-weight: 800; cursor: pointer; margin: 20px 0; box-shadow: 0 8px 20px rgba(163, 29, 36, 0.3); transition: 0.3s; }
+        .pdf-box { width: 100%; max-width: 900px; height: 400px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 20px; background: white; }
+        
+        .btn-main { width: 100%; max-width: 900px; padding: 20px; background: var(--secondary); color: white; border: none; border-radius: 50px; font-size: 20px; font-weight: 800; cursor: pointer; margin: 20px 0; box-shadow: 0 8px 20px rgba(163, 29, 36, 0.3); }
         
         #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; margin: 40px 0; border: 2px solid #e2e8f0; }
-        
-        /* PDF ડાઉનલોડ બટન સ્ટાઈલ */
-        .btn-download { background: #10b981; color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 10px; font-size: 16px; }
-        .btn-cancel { background: var(--secondary); color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 10px; font-size: 16px; }
+        .btn-download { background: #10b981; color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 10px; }
+        .btn-cancel { background: #64748b; color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 10px; }
 
-        #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); border: 1px solid #e2e8f0; overflow: hidden; margin-bottom: 50px; }
-        .header-img { width: 100%; height: auto; display: block; border-bottom: 4px solid var(--secondary); }
+        #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); overflow: hidden; margin-bottom: 50px; }
+        .header-img { width: 100%; height: auto; display: block; }
         .p-content { padding: 30px; }
         .section-bar { background: var(--primary); color: white; padding: 12px; border-radius: 8px; margin: 25px 0 15px 0; font-weight: 600; text-align: left; }
+        
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: left; }
-        .field { display: flex; flex-direction: column; }
+        .field { display: flex; flex-direction: column; margin-bottom: 10px; }
         label { font-size: 14px; font-weight: 700; color: #475569; margin-bottom: 5px; }
         input, select, textarea { padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 15px; }
-        
+        input:invalid { border-color: #ffb1b1; }
+
         @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -38,15 +39,12 @@
     <div class="info-title">૨. VSGK માહિતી પત્રક</div>
     <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
 
-    <button id="mainOpenBtn" class="show-form-btn" onclick="toggleForm()">સ્કૂલ પ્રવેશ ફોર્મ ભરવા માટે અહીં ક્લિક કરો</button>
+    <button id="mainOpenBtn" class="btn-main" onclick="toggleForm()">સ્કૂલ પ્રવેશ ફોર્મ ભરવા માટે અહીં ક્લિક કરો</button>
 
     <div id="statusBox">
-        <h2 style="color: var(--primary);">તમારું એડમિશન ફોર્મ ભરાઈ ગયું છે! ✅</h2>
-        <p style="color: #64748b;">નીચે આપેલા બટન પરથી તમે તમારું ફોર્મ ડાઉનલોડ કરી શકો છો.</p>
-        
-        <button class="btn-download" onclick="downloadPDF()">📄 પ્રવેશ ફોર્મ PDF ડાઉનલોડ કરો</button>
-        <br>
-        <button class="btn-cancel" onclick="handleCancel()">❌ એડમિશન કેન્સલ કરો</button>
+        <h2 style="color: var(--primary);">તમારું ફોર્મ સબમિટ થઈ ગયું છે! ✅</h2>
+        <button class="btn-download" onclick="downloadPDF()">📄 PDF ડાઉનલોડ કરો</button>
+        <button class="btn-cancel" onclick="handleCancel()">❌ કેન્સલ કરો</button>
     </div>
 
     <div id="formSection">
@@ -54,23 +52,34 @@
         <div class="p-content">
             <h2 style="color:var(--secondary); text-align: center;">શૈક્ષણિક પ્રવેશ ફોર્મ</h2>
             <form id="admissionForm">
-                <input type="hidden" name="action" value="add">
                 <div class="grid">
                     <div class="field" style="grid-column: span 3;">
                         <label>વિદ્યાર્થીનું પૂરું નામ</label>
-                        <input type="text" id="uName" name="studentName" required>
+                        <input type="text" id="uName" name="studentName" placeholder="અટક - નામ - પિતાનું નામ" required>
                     </div>
-                    <div class="field"><label>ધોરણ</label><input type="text" id="uGrade" name="grade" required></div>
-                    <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" id="uMobile" name="mobile" required></div>
-                    <div class="field"><label>આધાર કાર્ડ</label><input type="text" id="uAadhar" name="aadhar" required></div>
                 </div>
-                <button type="submit" id="submitBtn" class="show-form-btn" style="margin-top:20px;">સબમિટ કરો</button>
+
+                <div class="section-bar">વિગતો (બધી વિગતો ભરવી ફરજિયાત છે)</div>
+                <div class="grid">
+                    <div class="field"><label>ધોરણ</label><input type="text" id="uGrade" name="grade" required></div>
+                    <div class="field">
+                        <label>મોબાઈલ નંબર</label>
+                        <input type="tel" id="uMobile" name="mobile" pattern="[0-9]{10}" placeholder="૧૦ આંકડાનો નંબર" required>
+                    </div>
+                    <div class="field">
+                        <label>આધાર કાર્ડ</label>
+                        <input type="text" id="uAadhar" name="aadhar" pattern="\d{12}" placeholder="૧૨ આંકડાનો નંબર" required>
+                    </div>
+                </div>
+
+                <button type="submit" id="submitBtn" class="btn-main" style="border-radius: 12px;">ફોર્મ સબમિટ કરો</button>
             </form>
         </div>
     </div>
 
 <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbyauyu_OnhiGEhpoWZovKjOQ59eFmN07PGKOrghWPwOgESI600J5uOXcg9FsO79wGRl/exec';
+    const form = document.getElementById('admissionForm');
 
     window.onload = function() {
         if (localStorage.getItem("formSubmitted") === "true") {
@@ -85,9 +94,15 @@
         document.getElementById('formSection').scrollIntoView({ behavior: 'smooth' });
     }
 
-    // ફોર્મ સબમિટ
-    document.getElementById('admissionForm').addEventListener('submit', function(e) {
+    form.addEventListener('submit', e => {
         e.preventDefault();
+
+        // વેલિડેશન ચેક
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+
         const btn = document.getElementById('submitBtn');
         btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે...";
 
@@ -95,60 +110,46 @@
         const grade = document.getElementById('uGrade').value;
         const mobile = document.getElementById('uMobile').value;
 
-        fetch(scriptURL, { method: 'POST', body: new FormData(this)})
+        fetch(scriptURL, { method: 'POST', body: new FormData(form)})
             .then(res => {
-                // ડેટા લોકલ સેવ કરો જેથી PDF માં વાપરી શકાય
                 localStorage.setItem("formSubmitted", "true");
                 localStorage.setItem("savedName", name);
                 localStorage.setItem("savedGrade", grade);
                 localStorage.setItem("savedMobile", mobile);
-                
-                alert('ફોર્મ સબમિટ થઈ ગયું છે!');
+                alert('અભિનંદન! ફોર્મ સેવ થઈ ગયું છે.');
                 location.reload();
+            })
+            .catch(err => {
+                alert('ભૂલ આવી!');
+                btn.disabled = false; btn.innerHTML = "ફોર્મ સબમિટ કરો";
             });
     });
 
-    // PDF ડાઉનલોડ ફંક્શન
     function downloadPDF() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
+        const name = localStorage.getItem("savedName");
+        const grade = localStorage.getItem("savedGrade");
+        const mobile = localStorage.getItem("savedMobile");
 
-        const name = localStorage.getItem("savedName") || "N/A";
-        const grade = localStorage.getItem("savedGrade") || "N/A";
-        const mobile = localStorage.getItem("savedMobile") || "N/A";
-
-        // PDF ડિઝાઇન
-        doc.setFontSize(22);
-        doc.setTextColor(14, 30, 96);
-        doc.text("Vrundavandham Khirasara", 105, 20, { align: "center" });
+        doc.setFontSize(20);
+        doc.text("Admission Receipt", 105, 20, { align: "center" });
+        doc.setFontSize(14);
+        doc.text(`Name: ${name}`, 20, 40);
+        doc.text(`Grade: ${grade}`, 20, 50);
+        doc.text(`Mobile: ${mobile}`, 20, 60);
+        doc.text("Status: Confirmed", 20, 70);
         
-        doc.setFontSize(16);
-        doc.setTextColor(163, 29, 36);
-        doc.text("Admission Form Receipt", 105, 30, { align: "center" });
-
-        doc.setLineWidth(0.5);
-        doc.line(20, 35, 190, 35);
-
-        doc.setFontSize(12);
-        doc.setTextColor(0, 0, 0);
-        doc.text(`Student Name: ${name}`, 20, 50);
-        doc.text(`Grade: ${grade}`, 20, 60);
-        doc.text(`Mobile Number: ${mobile}`, 20, 70);
-        doc.text(`Status: Successfully Submitted`, 20, 80);
-
-        doc.setFontSize(10);
-        doc.text("This is a computer generated receipt.", 105, 100, { align: "center" });
-
         doc.save(`Admission_${name}.pdf`);
     }
 
     function handleCancel() {
-        if(confirm("શું તમે ખરેખર કેન્સલ કરવા માંગો છો?")) {
+        if(confirm("શું તમે એડમિશન કેન્સલ કરવા માંગો છો?")) {
             localStorage.clear();
-            alert("કેન્સલ થઈ ગયું છે.");
             location.reload();
         }
     }
 </script>
+
 </body>
 </html>
