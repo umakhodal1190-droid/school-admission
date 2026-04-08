@@ -22,22 +22,8 @@
         #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); overflow: hidden; margin-bottom: 50px; border: 1px solid #e2e8f0; }
         .header-img { width: 100%; height: auto; display: block; border-bottom: 4px solid var(--golden); }
         
-        /* જે રંગ બદલવો હતો તે અહીં છે */
-        .form-main-title { 
-            color: var(--primary); 
-            text-align: center; 
-            font-size: 28px; 
-            margin-top: 20px; 
-            margin-bottom: 10px;
-            font-weight: 800;
-        }
-        .title-underline {
-            width: 100px;
-            height: 4px;
-            background: var(--golden);
-            margin: 0 auto 25px auto;
-            border-radius: 2px;
-        }
+        .form-main-title { color: var(--primary); text-align: center; font-size: 28px; margin-top: 20px; margin-bottom: 10px; font-weight: 800; }
+        .title-underline { width: 100px; height: 4px; background: var(--golden); margin: 0 auto 25px auto; border-radius: 2px; }
 
         .p-content { padding: 25px; }
         .section-bar { background: var(--primary); color: white; padding: 12px; border-radius: 8px; margin: 25px 0 15px 0; font-weight: 600; text-align: left; }
@@ -112,8 +98,18 @@
                             <option value="ST">ST</option>
                         </select>
                     </div>
-                    <div class="field"><label>જન્મ તારીખ</label><input type="date" id="uDob" name="dob" required></div>
-                    <div class="field span-2"><label>આધાર કાર્ડ નંબર</label><input type="text" id="uAadhar" name="aadhar" maxlength="12" required></div>
+                    <div class="field">
+                        <label>પ્રકાર (Type)</label>
+                        <select id="uType" name="studentType" required>
+                            <option value="Local">Local (લોકલ)</option>
+                            <option value="Up-Down">Up-Down (અપડાઉન)</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>જન્મ તારીખ</label>
+                        <input type="date" id="uDob" name="dob" required>
+                    </div>
+                    <div class="field"><label>આધાર કાર્ડ નંબર</label><input type="text" id="uAadhar" name="aadhar" maxlength="12" required></div>
                 </div>
 
                 <div class="section-bar">૨. વાલીની વિગત</div>
@@ -155,7 +151,7 @@
         btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે...";
 
         const photo = document.getElementById('savedPhoto');
-        if(!photo) { alert("ફોટો અપલોડ કરો"); btn.disabled = false; return; }
+        if(!photo) { alert("કૃપા કરીને ફોટો અપલોડ કરો"); btn.disabled = false; btn.innerHTML = "સબમિટ કરો"; return; }
         
         const canvas = document.createElement('canvas');
         canvas.width = photo.naturalWidth; canvas.height = photo.naturalHeight;
@@ -167,6 +163,7 @@
             grade: document.getElementById('uGrade').value,
             gender: document.getElementById('uGender').value,
             caste: document.getElementById('uCaste').value,
+            type: document.getElementById('uType').value,
             dob: document.getElementById('uDob').value,
             aadhar: document.getElementById('uAadhar').value,
             father: document.getElementById('uFather').value,
@@ -180,7 +177,8 @@
                 localStorage.setItem("formSubmitted", "true");
                 localStorage.setItem("studentData", JSON.stringify(data));
                 location.reload();
-            });
+            })
+            .catch(err => { alert("ભૂલ આવી!"); btn.disabled = false; btn.innerHTML = "સબમિટ કરો"; });
     });
 
     function downloadReceipt() {
@@ -188,33 +186,40 @@
         const doc = new jsPDF();
         const data = JSON.parse(localStorage.getItem("studentData"));
 
+        // હેડર ડિઝાઇન
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 40, 'F');
         doc.setTextColor(212, 175, 55); doc.setFontSize(22); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 20, { align: "center" });
         doc.setTextColor(255, 255, 255); doc.setFontSize(10); doc.text("Admission Receipt 2026-27", 105, 30, { align: "center" });
 
+        // મેઈન બોર્ડર
         doc.setDrawColor(0); doc.rect(10, 45, 190, 230);
+        
+        // ફોટો
         if(data.photo) doc.addImage(data.photo, 'JPEG', 160, 50, 30, 35);
 
+        // વિગતો
         doc.setTextColor(0); doc.setFontSize(12);
         let y = 60;
         const items = [
             ["નામ", data.name], ["ધોરણ", data.grade], ["લિંગ", data.gender],
-            ["જ્ઞાતિ", data.caste], ["જન્મ તારીખ", data.dob], ["આધાર", data.aadhar],
-            ["પિતાનું નામ", data.father], ["મોબાઈલ", data.mobile], ["સરનામું", data.address]
+            ["જ્ઞાતિ", data.caste], ["પ્રકાર", data.type], ["જન્મ તારીખ", data.dob], 
+            ["આધાર", data.aadhar], ["પિતાનું નામ", data.father], ["મોબાઈલ", data.mobile], 
+            ["સરનામું", data.address]
         ];
 
         items.forEach(item => {
             doc.setFont("", "bold"); doc.text(item[0] + " :", 20, y);
             doc.setFont("", "normal"); doc.text(item[1], 60, y);
-            y += 12;
+            y += 11;
         });
 
+        doc.setFont("", "bold");
         doc.text("Principal Signature", 160, 250);
         doc.save(`Receipt_${data.name}.pdf`);
     }
 
     function handleCancel() {
-        if(confirm("કેન્સલ કરવું છે?")) { localStorage.clear(); location.reload(); }
+        if(confirm("શું તમે ખરેખર એડમિશન કેન્સલ કરવા માંગો છો?")) { localStorage.clear(); location.reload(); }
     }
 </script>
 </body>
