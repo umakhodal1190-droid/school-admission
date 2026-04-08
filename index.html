@@ -7,13 +7,14 @@
     <style>
         :root { --primary: #0e1e60; --secondary: #a31d24; --bg: #f8fafc; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
+        
         .info-title { width: 100%; max-width: 900px; color: var(--primary); font-size: 18px; font-weight: 700; margin: 15px 0 10px 0; border-left: 5px solid var(--secondary); padding-left: 10px; text-align: left; }
         .pdf-box { width: 100%; max-width: 900px; height: 350px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 15px; background: white; }
         
         /* ફોર્મ ખોલવાનું બટન */
-        .open-form-btn { width: 100%; max-width: 900px; padding: 20px; background: var(--secondary); color: white; border: none; border-radius: 50px; font-size: 20px; font-weight: 800; cursor: pointer; margin: 25px 0; box-shadow: 0 8px 20px rgba(163, 29, 36, 0.3); transition: 0.3s; display: block; }
+        .open-form-btn { width: 100%; max-width: 900px; padding: 20px; background: var(--secondary); color: white; border: none; border-radius: 50px; font-size: 20px; font-weight: 800; cursor: pointer; margin: 25px 0; box-shadow: 0 8px 20px rgba(163, 29, 36, 0.3); transition: 0.3s; display: block; text-align: center; }
         
-        /* શરૂઆતમાં ફોર્મ સંતાડેલું રહેશે */
+        /* ફોર્મ કન્ટેનર - શરૂઆતમાં સંતાડેલું */
         #fullFormContainer { display: none; width: 100%; max-width: 900px; animation: fadeIn 0.5s; }
         
         #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; margin: 40px 0; border: 2px solid #e2e8f0; }
@@ -37,18 +38,18 @@
 </head>
 <body>
 
-   <div class="info-title">૧. એડમિશન માહિતી</div>
-   <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
+    <div class="info-title">૧. એડમિશન માહિતી</div>
+    <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
 
-   <div class="info-title">૨. VSGK માહિતી પત્રક</div>
-   <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
+    <div class="info-title">૨. VSGK માહિતી પત્રક</div>
+    <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
 
-    <button id="mainOpenBtn" class="open-form-btn" onclick="showForm()">સ્કૂલ પ્રવેશ ફોર્મ ભરવા માટે અહીં ક્લિક કરો</button>
+    <button id="mainOpenBtn" class="open-form-btn" onclick="showMyForm()">સ્કૂલ પ્રવેશ ફોર્મ ભરવા માટે અહીં ક્લિક કરો</button>
 
     <div id="statusBox">
         <h2 style="color: var(--primary);">તમારું એડમિશન ફોર્મ ભરાઈ ગયું છે! ✅</h2>
         <p style="color: #64748b;">તમે અત્યારે બીજું નવું ફોર્મ ભરી શકશો નહીં.</p>
-        <button class="cancel-btn" onclick="handleCancel()">એડમિશન કેન્સલ કરવા માટે અહીં ક્લિક કરો</button>
+        <button class="cancel-btn" onclick="handleCancel()">એડમિશન રદ (Cancel) કરવા અહીં ક્લિક કરો</button>
     </div>
 
     <div id="fullFormContainer">
@@ -80,21 +81,34 @@
 <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbwayrXM2fif05-jhxT4EczARK39dTmyflCIrouTP63WYYnAs6xZLQeFlj2nrRzazasn/exec';
 
-    window.onload = function() {
+    // પેજ લોડ વખતે ચેક કરો
+    document.addEventListener("DOMContentLoaded", function() {
         if (localStorage.getItem("formSubmitted") === "true") {
             document.getElementById('statusBox').style.display = 'block';
             document.getElementById('mainOpenBtn').style.display = 'none';
             document.getElementById('fullFormContainer').style.display = 'none';
         }
-    };
+    });
 
-    function showForm() {
-        document.getElementById('fullFormContainer').style.display = 'block';
-        document.getElementById('mainOpenBtn').style.display = 'none';
-        document.getElementById('fullFormContainer').scrollIntoView({ behavior: 'smooth' });
+    // બટન ક્લિક ફંક્શન
+    function showMyForm() {
+        var container = document.getElementById('fullFormContainer');
+        var btn = document.getElementById('mainOpenBtn');
+        
+        if (container) {
+            container.style.display = 'block'; // ફોર્મ બતાવશે
+            btn.style.display = 'none'; // બટન છુપાવશે
+            window.scrollTo({
+                top: container.offsetTop - 20,
+                behavior: 'smooth'
+            });
+        } else {
+            console.error("ફોર્મ કન્ટેનર મળ્યું નથી!");
+        }
     }
 
-    document.getElementById('admissionForm').addEventListener('submit', e => {
+    // ફોર્મ સબમિટ
+    document.getElementById('admissionForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
         btn.disabled = true; btn.innerHTML = "સબમિટ થઈ રહ્યું છે...";
@@ -102,12 +116,12 @@
         const mobile = document.getElementById('uMobile').value;
         const aadhar = document.getElementById('uAadhar').value;
 
-        fetch(scriptURL, { method: 'POST', body: new FormData(e.target)})
+        fetch(scriptURL, { method: 'POST', body: new FormData(this)})
             .then(res => {
                 localStorage.setItem("formSubmitted", "true");
                 localStorage.setItem("userMobile", mobile);
                 localStorage.setItem("userAadhar", aadhar);
-                alert('અભિનંદન! તમારું ફોર્મ સબમિટ થઈ ગયું છે.');
+                alert('અભિનંદન! ફોર્મ સબમિટ થઈ ગયું છે.');
                 location.reload();
             })
             .catch(err => { 
@@ -116,6 +130,7 @@
             });
     });
 
+    // કેન્સલ ફંક્શન
     function handleCancel() {
         const mobile = localStorage.getItem("userMobile");
         const aadhar = localStorage.getItem("userAadhar");
@@ -137,8 +152,8 @@
                     alert("એડમિશન કેન્સલ થઈ ગયું છે.");
                     location.reload();
                 } else {
-                    alert("ભૂલ થઈ!");
-                    btn.disabled = false; btn.innerHTML = "એડમિશન કેન્સલ કરવા માટે અહીં ક્લિક કરો";
+                    alert("ભૂલ થઈ અથવા ડેટા ન મળ્યો!");
+                    btn.disabled = false; btn.innerHTML = "એડમિશન રદ કરવા અહીં ક્લિક કરો";
                 }
             });
     }
