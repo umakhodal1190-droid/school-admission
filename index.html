@@ -37,4 +37,261 @@
         input, select, textarea { padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 15px; transition: 0.2s; }
         input:focus { border-color: var(--primary); outline: none; background: #f8fafc; }
         
-        .photo-upload-container { grid-column: span 1; display: flex; flex-direction: column; align-items:
+        .photo-upload-container { grid-column: span 1; display: flex; flex-direction: column; align-items: center; background: #f8fafc; padding: 15px; border-radius: 15px; border: 2px dashed #cbd5e1; }
+        #preview { width: 110px; height: 130px; background: #fff; border: 1px solid #e2e8f0; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 8px; font-size: 12px; color: #94a3b8; }
+        #preview img { width: 100%; height: 100%; object-fit: cover; }
+        .file-label { background: var(--primary); color: white; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; }
+
+        .span-2 { grid-column: span 2; } .span-3 { grid-column: span 3; }
+        
+        @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } .span-2, .span-3 { grid-column: span 1; } }
+    </style>
+</head>
+<body>
+
+    <div class="info-title">૧. VSGK માહિતી પત્રક</div>
+    <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
+
+    <div class="info-title">૨. ફી માળખું (Fees Structure)</div>
+    <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
+
+    <button id="mainOpenBtn" class="btn-main" onclick="toggleForm()">લોકલ અને અપડાઉન પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
+
+    <div id="statusBox">
+        <div style="font-size: 50px; margin-bottom: 10px;">✅</div>
+        <h2 style="color: var(--primary); margin: 0;">ફોર્મ સબમિટ થઈ ગયું છે!</h2>
+        <p style="color: #64748b;">તમારી પ્રવેશ રસીદ નીચેથી ડાઉનલોડ કરો.</p>
+        <button class="btn-action btn-download" onclick="downloadReceipt()">📄 પ્રવેશ રસીદ (PDF)</button>
+        <button class="btn-action btn-cancel" onclick="handleCancel()">❌ એડમિશન રદ કરો</button>
+    </div>
+
+    <div id="formSection">
+        <img src="header.jpeg" class="header-img" alt="Header">
+        <div class="p-content">
+            <div class="form-header-text">
+                <h2 style="margin:0;">લોકલ અને અપડાઉન પ્રવેશ ફોર્મ</h2>
+                <p style="margin:5px 0 0 0; font-weight:600;">શૈક્ષણિક વર્ષ: ૨૦૨૬-૨૭</p>
+            </div>
+
+            <form id="admissionForm">
+                <div class="grid">
+                    <div class="photo-upload-container">
+                        <div id="preview">ફોટો અહીં દેખાશે</div>
+                        <label class="file-label" for="photoFile">ફોટો અપલોડ કરો</label>
+                        <input type="file" id="photoFile" accept="image/*" onchange="loadFile(event)" style="display: none;" required>
+                    </div>
+                    <div class="field span-2">
+                        <label>વિદ્યાર્થીનું પૂરું નામ (અટક પ્રથમ)</label>
+                        <input type="text" id="uName" placeholder="દા.ત. અટક નામ પિતાનું નામ" required>
+                    </div>
+                </div>
+
+                <div class="section-bar">૧. પ્રવેશ વિગતો</div>
+                <div class="grid">
+                    <div class="field"><label>ધોરણ</label><input type="text" id="uGrade" placeholder="દા.ત. ૫" required></div>
+                    <div class="field">
+                        <label>લિંગ</label>
+                        <select id="uGender" required>
+                            <option value="Male">કુમાર (Boy)</option>
+                            <option value="Female">કન્યા (Girl)</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>જ્ઞાતિ</label>
+                        <select id="uCaste" required>
+                            <option value="Open">Open</option>
+                            <option value="OBC">OBC (Baxi)</option>
+                            <option value="SC">SC</option>
+                            <option value="ST">ST</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>પ્રવેશ પ્રકાર</label>
+                        <select id="uType" required>
+                            <option value="Local">Local (લોકલ)</option>
+                            <option value="Up-Down">Up-Down (અપડાઉન)</option>
+                        </select>
+                    </div>
+                    <div class="field"><label>જન્મ તારીખ</label><input type="date" id="uDob" required></div>
+                    <div class="field"><label>આધાર નંબર</label><input type="text" id="uAadhar" maxlength="12" placeholder="૧૨ આંકડાનો નંબર" required></div>
+                </div>
+
+                <div class="section-bar">૨. વાલીની વિગત</div>
+                <div class="grid">
+                    <div class="field span-2"><label>પિતા/વાલીનું પૂરું નામ</label><input type="text" id="uFather" required></div>
+                    <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" id="uMobile" maxlength="10" placeholder="10 આંકડાનો નંબર" required></div>
+                    <div class="field span-3"><label>સરનામું</label><textarea id="uAddress" rows="2" placeholder="ગામ, તાલુકો, જિલ્લો" required></textarea></div>
+                </div>
+
+                <button type="submit" id="submitBtn" class="btn-main">ફોર્મ સબમિટ કરો</button>
+            </form>
+        </div>
+    </div>
+
+<script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbz7AabyxKdLGzAmyh77aMnJO6lLHp7ENPaoiXji3Xxp1aDJ2TSmbB4oIsI5fpi4zZQe/exec';
+
+    window.onload = function() {
+        if (localStorage.getItem("formSubmitted") === "true") {
+            document.getElementById('statusBox').style.display = 'block';
+            document.getElementById('mainOpenBtn').style.display = 'none';
+        }
+    };
+
+    function toggleForm() {
+        document.getElementById('formSection').style.display = 'block';
+        document.getElementById('mainOpenBtn').style.display = 'none';
+        window.scrollTo({ top: document.getElementById('formSection').offsetTop, behavior: 'smooth' });
+    }
+
+    function loadFile(e) {
+        if(e.target.files[0]) {
+            document.getElementById('preview').innerHTML = '<img id="savedPhoto" src="' + URL.createObjectURL(e.target.files[0]) + '">';
+        }
+    }
+
+    document.getElementById('admissionForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે...";
+
+        const photo = document.getElementById('savedPhoto');
+        const canvas = document.createElement('canvas');
+        canvas.width = 150; canvas.height = 180;
+        if(photo) canvas.getContext('2d').drawImage(photo, 0, 0, 150, 180);
+        const photoBase64 = canvas.toDataURL('image/jpeg');
+
+        const formData = new FormData();
+        formData.append("action", "add");
+        formData.append("studentName", document.getElementById('uName').value);
+        formData.append("grade", document.getElementById('uGrade').value);
+        formData.append("gender", document.getElementById('uGender').value);
+        formData.append("caste", document.getElementById('uCaste').value);
+        formData.append("studentType", document.getElementById('uType').value);
+        formData.append("dob", document.getElementById('uDob').value);
+        formData.append("aadhar", document.getElementById('uAadhar').value);
+        formData.append("fatherName", document.getElementById('uFather').value);
+        formData.append("mobile", document.getElementById('uMobile').value);
+        formData.append("address", document.getElementById('uAddress').value);
+
+        fetch(scriptURL, { method: 'POST', body: formData })
+        .then(() => {
+            const data = {
+                name: document.getElementById('uName').value,
+                grade: document.getElementById('uGrade').value,
+                gender: document.getElementById('uGender').value,
+                caste: document.getElementById('uCaste').value,
+                type: document.getElementById('uType').value,
+                dob: document.getElementById('uDob').value,
+                aadhar: document.getElementById('uAadhar').value,
+                father: document.getElementById('uFather').value,
+                mobile: document.getElementById('uMobile').value,
+                address: document.getElementById('uAddress').value,
+                photo: photoBase64
+            };
+            localStorage.setItem("formSubmitted", "true");
+            localStorage.setItem("studentData", JSON.stringify(data));
+            alert("ડેટા સફળતાપૂર્વક સેવ થઈ ગયો!");
+            location.reload();
+        })
+        .catch(err => {
+            alert("ભૂલ આવી, ફરી ટ્રાય કરો.");
+            btn.disabled = false; btn.innerHTML = "સબમિટ કરો";
+        });
+    });
+
+    function downloadReceipt() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        const data = JSON.parse(localStorage.getItem("studentData"));
+        if(!data) return;
+
+        // Header Background
+        doc.setFillColor(14, 30, 96);
+        doc.rect(0, 0, 210, 50, 'F');
+        
+        // School Name
+        doc.setTextColor(212, 175, 55);
+        doc.setFontSize(24);
+        doc.setFont(undefined, 'bold');
+        doc.text("VRUNDAVANDHAM KHIRASARA", 105, 22, { align: "center" });
+        
+        // Receipt Title
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(12);
+        doc.setFont(undefined, 'normal');
+        doc.text("Local & Up-Down Admission Receipt : 2026-27", 105, 35, { align: "center" });
+
+        // Outer Border
+        doc.setDrawColor(14, 30, 96);
+        doc.setLineWidth(1);
+        doc.rect(10, 55, 190, 220);
+
+        // Photo Rendering
+        if(data.photo) {
+            doc.setDrawColor(200);
+            doc.rect(155, 60, 35, 45);
+            doc.addImage(data.photo, 'JPEG', 156, 61, 33, 43);
+        }
+
+        // Student Data Table Look
+        doc.setTextColor(14, 30, 96);
+        doc.setFontSize(16);
+        doc.setFont(undefined, 'bold');
+        doc.text("ADMISSION DETAILS", 20, 75);
+        doc.setDrawColor(212, 175, 55);
+        doc.line(20, 77, 80, 77);
+
+        doc.setTextColor(0, 0, 0);
+        doc.setFontSize(12);
+        let y = 90;
+        const rows = [
+            ["Student Name", data.name],
+            ["Grade", data.grade],
+            ["Gender", data.gender],
+            ["Category", data.caste],
+            ["Admission Type", data.type],
+            ["Date of Birth", data.dob],
+            ["Aadhar Card", data.aadhar],
+            ["Father Name", data.father],
+            ["Contact No", data.mobile],
+            ["Address", data.address]
+        ];
+
+        rows.forEach(row => {
+            doc.setFont(undefined, 'bold');
+            doc.text(row[0] + " :", 25, y);
+            doc.setFont(undefined, 'normal');
+            doc.text(row[1].toString(), 75, y);
+            y += 12;
+            doc.setDrawColor(230);
+            doc.line(25, y-8, 185, y-8);
+        });
+
+        // Footer Section
+        doc.setTextColor(100);
+        doc.setFontSize(10);
+        doc.text("This is a computer-generated receipt for admission process.", 105, 240, { align: "center" });
+        
+        doc.setTextColor(14, 30, 96);
+        doc.setFontSize(14);
+        doc.setFont(undefined, 'bold');
+        doc.text("Principal Signature", 150, 265);
+        doc.line(140, 260, 190, 260);
+
+        doc.save(`VSGK_Receipt_2026_${data.name}.pdf`);
+    }
+
+    function handleCancel() {
+        if(confirm("શું તમે ખરેખર એડમિશન રદ કરવા માંગો છો? આ ડેટા શીટમાંથી પણ નીકળી જશે.")) {
+            const localData = JSON.parse(localStorage.getItem("studentData"));
+            const f = new FormData();
+            f.append("action", "cancel");
+            f.append("aadhar", localData.aadhar);
+            fetch(scriptURL, { method: 'POST', body: f })
+            .then(() => { localStorage.clear(); alert("એડમિશન રદ થઈ ગયું છે."); location.reload(); });
+        }
+    }
+</script>
+</body>
+</html>
