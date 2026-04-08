@@ -7,40 +7,32 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root { --primary: #0e1e60; --golden: #d4af37; --bg: #f1f5f9; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
         
-        /* PDF Preview Section */
-        .info-title { width: 100%; max-width: 900px; color: var(--primary); font-size: 18px; font-weight: 700; margin: 15px 0 10px 0; border-left: 5px solid var(--golden); padding-left: 10px; }
+        .info-title { width: 100%; max-width: 900px; color: var(--primary); font-size: 18px; font-weight: 700; margin: 15px 0 10px 0; border-left: 5px solid var(--golden); padding-left: 10px; text-align: left; }
         .pdf-box { width: 100%; max-width: 900px; height: 380px; border-radius: 12px; border: 1px solid #cbd5e1; margin-bottom: 20px; background: white; }
         
-        /* Main Button */
-        .btn-main { width: 100%; max-width: 900px; padding: 20px; background: linear-gradient(135deg, var(--primary), #1e3a8a); color: white; border: none; border-radius: 12px; font-size: 20px; font-weight: 800; cursor: pointer; margin: 20px 0; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); transition: 0.3s; }
-        .btn-main:hover { transform: translateY(-2px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .btn-main { width: 100%; max-width: 900px; padding: 18px; background: linear-gradient(135deg, var(--primary), #1e3a8a); color: white; border: none; border-radius: 50px; font-size: 19px; font-weight: 800; cursor: pointer; margin: 20px 0; box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
         
-        /* Status Box */
-        #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 40px 20px; border-radius: 24px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); text-align: center; margin: 40px 0; border: 2px solid var(--golden); }
-        .btn-action { color: white; border: none; padding: 14px 30px; border-radius: 12px; cursor: pointer; font-weight: bold; margin: 10px; font-size: 16px; width: 80%; }
-        .btn-download { background: #059669; }
-        .btn-cancel { background: #dc2626; }
+        #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 40px 20px; border-radius: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.1); text-align: center; margin: 40px 0; border: 2px solid var(--golden); }
+        .btn-action { color: white; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 10px; font-size: 16px; width: 85%; }
+        .btn-download { background: #059669; } .btn-cancel { background: #dc2626; }
 
-        /* Form Styling */
-        #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); overflow: hidden; margin-bottom: 50px; }
-        .header-img { width: 100%; height: auto; display: block; }
-        .p-content { padding: 30px; }
-        .form-header-text { text-align: center; color: var(--primary); margin-bottom: 30px; border-bottom: 2px solid var(--golden); padding-bottom: 10px; }
+        #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 50px; }
+        .header-img { width: 100%; height: auto; display: block; border-bottom: 4px solid var(--golden); }
+        .p-content { padding: 25px; }
         
-        .section-bar { background: var(--primary); color: white; padding: 12px 15px; border-radius: 8px; margin: 25px 0 15px 0; font-weight: 600; font-size: 16px; }
+        .section-bar { background: var(--primary); color: white; padding: 12px; border-radius: 8px; margin: 25px 0 15px 0; font-weight: 600; text-align: left; font-size: 15px; }
         
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-        .field { display: flex; flex-direction: column; text-align: left; }
-        label { font-size: 14px; font-weight: 700; color: #334155; margin-bottom: 6px; }
-        input, select, textarea { padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 15px; transition: 0.2s; }
-        input:focus { border-color: var(--primary); outline: none; background: #f8fafc; }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        .field { display: flex; flex-direction: column; text-align: left; margin-bottom: 5px; }
+        label { font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 5px; }
+        input, select, textarea { padding: 11px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 14px; width: 100%; box-sizing: border-box; }
         
-        .photo-upload-container { grid-column: span 1; display: flex; flex-direction: column; align-items: center; background: #f8fafc; padding: 15px; border-radius: 15px; border: 2px dashed #cbd5e1; }
-        #preview { width: 110px; height: 130px; background: #fff; border: 1px solid #e2e8f0; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 8px; font-size: 12px; color: #94a3b8; }
+        .photo-container { grid-column: span 1; display: flex; flex-direction: column; align-items: center; background: #f8fafc; padding: 15px; border-radius: 12px; border: 2px dashed #cbd5e1; }
+        #preview { width: 100px; height: 120px; background: #fff; border: 1px solid #e2e8f0; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 5px; }
         #preview img { width: 100%; height: 100%; object-fit: cover; }
-        .file-label { background: var(--primary); color: white; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; }
+        .file-label { background: var(--primary); color: white; padding: 7px 15px; border-radius: 6px; cursor: pointer; font-size: 12px; }
 
         .span-2 { grid-column: span 2; } .span-3 { grid-column: span 3; }
         
@@ -49,34 +41,30 @@
 </head>
 <body>
 
-    <div class="info-title">૧.ફી માળખું (Fees Structure) </div>
+    <div class="info-title">૧. VSGK માહિતી પત્રક</div>
     <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
 
-    <div class="info-title">૨. VSGK માહિતી પત્રક ફી માળખું (Fees Structure)</div>
+    <div class="info-title">૨. ફી માળખું (Fees Structure)</div>
     <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
 
     <button id="mainOpenBtn" class="btn-main" onclick="toggleForm()">લોકલ અને અપડાઉન પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
 
     <div id="statusBox">
-        <div style="font-size: 50px; margin-bottom: 10px;">✅</div>
-        <h2 style="color: var(--primary); margin: 0;">ફોર્મ સબમિટ થઈ ગયું છે!</h2>
-        <p style="color: #64748b;">તમારી પ્રવેશ રસીદ નીચેથી ડાઉનલોડ કરો.</p>
-        <button class="btn-action btn-download" onclick="downloadReceipt()">📄 પ્રવેશ રસીદ (PDF)</button>
+        <h2 style="color: var(--primary);">ફોર્મ સબમિટ થઈ ગયું છે! ✅</h2>
+        <button class="btn-action btn-download" onclick="downloadReceipt()">📄 પ્રવેશ રસીદ ડાઉનલોડ કરો</button>
         <button class="btn-action btn-cancel" onclick="handleCancel()">❌ એડમિશન રદ કરો</button>
     </div>
 
     <div id="formSection">
-        <img src="header.jpeg" class="header-img" alt="Header">
+        <img src="header.jpeg" class="header-img">
         <div class="p-content">
-            <div class="form-header-text">
-                <h2 style="margin:0;">લોકલ અને અપડાઉન પ્રવેશ ફોર્મ</h2>
-            </div>
-
+            <h2 style="text-align:center; color:var(--primary); margin:0 0 20px 0; border-bottom: 2px solid var(--golden); padding-bottom: 10px;">લોકલ અને અપડાઉન પ્રવેશ ફોર્મ: ૨૦૨૬-૨૭</h2>
+            
             <form id="admissionForm">
                 <div class="grid">
-                    <div class="photo-upload-container">
-                        <div id="preview">ફોટો અહીં દેખાશે</div>
-                        <label class="file-label" for="photoFile">ફોટો અપલોડ કરો</label>
+                    <div class="photo-container">
+                        <div id="preview">ફોટો</div>
+                        <label class="file-label" for="photoFile">ફોટો અપલોડ</label>
                         <input type="file" id="photoFile" accept="image/*" onchange="loadFile(event)" style="display: none;" required>
                     </div>
                     <div class="field span-2">
@@ -87,40 +75,22 @@
 
                 <div class="section-bar">૧. પ્રવેશ વિગતો</div>
                 <div class="grid">
-                    <div class="field"><label>ધોરણ</label><input type="text" id="uGrade" placeholder="દા.ત. ૫" required></div>
-                    <div class="field">
-                        <label>લિંગ</label>
-                        <select id="uGender" required>
-                            <option value="Male">કુમાર (Boy)</option>
-                            <option value="Female">કન્યા (Girl)</option>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label>જ્ઞાતિ</label>
-                        <select id="uCaste" required>
-                            <option value="Open">Open</option>
-                            <option value="OBC">OBC (Baxi)</option>
-                            <option value="SC">SC</option>
-                            <option value="ST">ST</option>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label>પ્રવેશ પ્રકાર</label>
-                        <select id="uType" required>
-                            <option value="Local">Local (લોકલ)</option>
-                            <option value="Up-Down">Up-Down (અપડાઉન)</option>
-                        </select>
-                    </div>
+                    <div class="field"><label>ધોરણ</label><input type="text" id="uGrade" required></div>
+                    <div class="field"><label>લિંગ</label><select id="uGender" required><option value="Male">કુમાર</option><option value="Female">કન્યા</option></select></div>
+                    <div class="field"><label>જ્ઞાતિ</label><select id="uCaste" required><option value="Open">Open</option><option value="OBC">OBC</option><option value="SC">SC</option><option value="ST">ST</option></select></div>
+                    <div class="field"><label>પ્રવેશ પ્રકાર</label><select id="uType" required><option value="Local">Local</option><option value="Up-Down">Up-Down</option></select></div>
                     <div class="field"><label>જન્મ તારીખ</label><input type="date" id="uDob" required></div>
-                    <div class="field"><label>આધાર નંબર</label><input type="text" id="uAadhar" maxlength="12" placeholder="૧૨ આંકડાનો નંબર" required></div>
+                    <div class="field">
+                        </div>
+                    <div class="field"><label>વિદ્યાર્થીનો આધાર નંબર</label><input type="text" id="uAadhar" maxlength="12" required></div>
+                    <div class="field"><label>પિતાનો આધાર નંબર</label><input type="text" id="uFatherAadhar" maxlength="12" required></div>
+                    <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" id="uMobile" maxlength="10" required></div>
                 </div>
 
-                <div class="section-bar">૨. વાલીની વિગત</div>
+                <div class="section-bar">૨. વાલી અને સરનામાની વિગત</div>
                 <div class="grid">
-                    <div class="field span-2"><label>પિતા/વાલીનું પૂરું નામ</label><input type="text" id="uFather" required></div>
-                    <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" id="uMobile" maxlength="10" placeholder="10 આંકડાનો નંબર" required></div>
-                    <div class="field span-3"><label>સરનામું</label><textarea id="uAddress" rows="2" placeholder="ગામ, તાલુકો, જિલ્લો" required></textarea></div>
-                    <div class="field"><label>પિતાનો આધાર નંબર</label><input type="text" id="uAadhar" maxlength="12" placeholder="૧૨ આંકડાનો નંબર" required></div>
+                    <div class="field span-2"><label>પિતાનું પૂરું નામ</label><input type="text" id="uFather" required></div>
+                    <div class="field span-3"><label>પૂરું સરનામું</label><textarea id="uAddress" rows="2" required></textarea></div>
                 </div>
 
                 <button type="submit" id="submitBtn" class="btn-main">ફોર્મ સબમિટ કરો</button>
@@ -129,7 +99,7 @@
     </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbz7AabyxKdLGzAmyh77aMnJO6lLHp7ENPaoiXji3Xxp1aDJ2TSmbB4oIsI5fpi4zZQe/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwl9yeXB1_PbBqAZ5QRGUY_2PD-lkPkpA39zB9wxJ8B3IM1jPty_ixzultOMJVbroII/exec';
 
     window.onload = function() {
         if (localStorage.getItem("formSubmitted") === "true") {
@@ -171,6 +141,7 @@
         formData.append("dob", document.getElementById('uDob').value);
         formData.append("aadhar", document.getElementById('uAadhar').value);
         formData.append("fatherName", document.getElementById('uFather').value);
+        formData.append("fatherAadhar", document.getElementById('uFatherAadhar').value);
         formData.append("mobile", document.getElementById('uMobile').value);
         formData.append("address", document.getElementById('uAddress').value);
 
@@ -185,6 +156,7 @@
                 dob: document.getElementById('uDob').value,
                 aadhar: document.getElementById('uAadhar').value,
                 father: document.getElementById('uFather').value,
+                fAadhar: document.getElementById('uFatherAadhar').value,
                 mobile: document.getElementById('uMobile').value,
                 address: document.getElementById('uAddress').value,
                 photo: photoBase64
@@ -193,10 +165,6 @@
             localStorage.setItem("studentData", JSON.stringify(data));
             alert("ડેટા સફળતાપૂર્વક સેવ થઈ ગયો!");
             location.reload();
-        })
-        .catch(err => {
-            alert("ભૂલ આવી, ફરી ટ્રાય કરો.");
-            btn.disabled = false; btn.innerHTML = "સબમિટ કરો";
         });
     });
 
@@ -206,90 +174,52 @@
         const data = JSON.parse(localStorage.getItem("studentData"));
         if(!data) return;
 
-        // Header Background
         doc.setFillColor(14, 30, 96);
-        doc.rect(0, 0, 210, 50, 'F');
-        
-        // School Name
+        doc.rect(0, 0, 210, 45, 'F');
         doc.setTextColor(212, 175, 55);
-        doc.setFontSize(24);
-        doc.setFont(undefined, 'bold');
-        doc.text("VRUNDAVANDHAM KHIRASARA", 105, 22, { align: "center" });
-        
-        // Receipt Title
+        doc.setFontSize(22);
+        doc.text("VRUNDAVANDHAM KHIRASARA", 105, 20, { align: "center" });
         doc.setTextColor(255, 255, 255);
-        doc.setFontSize(12);
-        doc.setFont(undefined, 'normal');
-        doc.text("Local & Up-Down Admission Receipt : 2026-27", 105, 35, { align: "center" });
+        doc.setFontSize(11);
+        doc.text("Admission Receipt : 2026-27 (Local & Up-Down)", 105, 32, { align: "center" });
 
-        // Outer Border
         doc.setDrawColor(14, 30, 96);
-        doc.setLineWidth(1);
-        doc.rect(10, 55, 190, 220);
+        doc.rect(10, 50, 190, 225);
 
-        // Photo Rendering
-        if(data.photo) {
-            doc.setDrawColor(200);
-            doc.rect(155, 60, 35, 45);
-            doc.addImage(data.photo, 'JPEG', 156, 61, 33, 43);
-        }
+        if(data.photo) doc.addImage(data.photo, 'JPEG', 160, 55, 32, 42);
 
-        // Student Data Table Look
-        doc.setTextColor(14, 30, 96);
-        doc.setFontSize(16);
-        doc.setFont(undefined, 'bold');
-        doc.text("ADMISSION DETAILS", 20, 75);
-        doc.setDrawColor(212, 175, 55);
-        doc.line(20, 77, 80, 77);
-
-        doc.setTextColor(0, 0, 0);
-        doc.setFontSize(12);
-        let y = 90;
-        const rows = [
-            ["Student Name", data.name],
-            ["Grade", data.grade],
-            ["Gender", data.gender],
-            ["Category", data.caste],
-            ["Admission Type", data.type],
-            ["Date of Birth", data.dob],
-            ["Aadhar Card", data.aadhar],
-            ["Father Name", data.father],
-            ["Contact No", data.mobile],
-            ["Address", data.address]
+        doc.setTextColor(0);
+        doc.setFontSize(11);
+        let y = 70;
+        const details = [
+            ["Student Name", data.name], ["Grade", data.grade], ["Gender", data.gender],
+            ["Category", data.caste], ["Type", data.type], ["Student Aadhar", data.aadhar],
+            ["Father Name", data.father], ["Father Aadhar", data.fAadhar],
+            ["Mobile", data.mobile], ["Address", data.address]
         ];
 
-        rows.forEach(row => {
+        details.forEach(item => {
             doc.setFont(undefined, 'bold');
-            doc.text(row[0] + " :", 25, y);
+            doc.text(item[0] + " :", 20, y);
             doc.setFont(undefined, 'normal');
-            doc.text(row[1].toString(), 75, y);
+            doc.text(item[1].toString(), 70, y);
             y += 12;
-            doc.setDrawColor(230);
-            doc.line(25, y-8, 185, y-8);
+            doc.line(20, y-8, 190, y-8);
         });
 
-        // Footer Section
-        doc.setTextColor(100);
-        doc.setFontSize(10);
-        doc.text("This is a computer-generated receipt for admission process.", 105, 240, { align: "center" });
-        
-        doc.setTextColor(14, 30, 96);
-        doc.setFontSize(14);
         doc.setFont(undefined, 'bold');
-        doc.text("Principal Signature", 150, 265);
-        doc.line(140, 260, 190, 260);
-
-        doc.save(`VSGK_Receipt_2026_${data.name}.pdf`);
+        doc.text("Authorized Signature", 150, 255);
+        doc.save(`VSGK_Admission_${data.name}.pdf`);
     }
 
     function handleCancel() {
-        if(confirm("શું તમે ખરેખર એડમિશન રદ કરવા માંગો છો? આ ડેટા શીટમાંથી પણ નીકળી જશે.")) {
+        if(confirm("શું તમે ખરેખર એડમિશન રદ કરવા માંગો છો?")) {
             const localData = JSON.parse(localStorage.getItem("studentData"));
             const f = new FormData();
             f.append("action", "cancel");
             f.append("aadhar", localData.aadhar);
             fetch(scriptURL, { method: 'POST', body: f })
-            .then(() => { localStorage.clear(); alert("એડમિશન રદ થઈ ગયું છે."); location.reload(); });
+            .then(() => { localStorage.clear(); alert("રદ થઈ ગયું!"); location.reload(); });
         }
     }
 </script>
