@@ -158,24 +158,26 @@
         canvas.getContext('2d').drawImage(photo, 0, 0);
         const photoBase64 = canvas.toDataURL('image/jpeg');
 
-        const data = {
-            name: document.getElementById('uName').value,
-            grade: document.getElementById('uGrade').value,
-            gender: document.getElementById('uGender').value,
-            caste: document.getElementById('uCaste').value,
-            type: document.getElementById('uType').value,
-            dob: document.getElementById('uDob').value,
-            aadhar: document.getElementById('uAadhar').value,
-            father: document.getElementById('uFather').value,
-            mobile: document.getElementById('uMobile').value,
-            address: document.getElementById('uAddress').value,
-            photo: photoBase64
-        };
+        const formData = new FormData(this);
 
-        fetch(scriptURL, { method: 'POST', body: new FormData(this)})
+        fetch(scriptURL, { method: 'POST', body: formData })
             .then(res => {
+                const data = {
+                    name: document.getElementById('uName').value,
+                    grade: document.getElementById('uGrade').value,
+                    gender: document.getElementById('uGender').value,
+                    caste: document.getElementById('uCaste').value,
+                    type: document.getElementById('uType').value,
+                    dob: document.getElementById('uDob').value,
+                    aadhar: document.getElementById('uAadhar').value,
+                    father: document.getElementById('uFather').value,
+                    mobile: document.getElementById('uMobile').value,
+                    address: document.getElementById('uAddress').value,
+                    photo: photoBase64
+                };
                 localStorage.setItem("formSubmitted", "true");
                 localStorage.setItem("studentData", JSON.stringify(data));
+                alert("ફોર્મ સફળતાપૂર્વક સબમિટ થઈ ગયું છે!");
                 location.reload();
             })
             .catch(err => { alert("ભૂલ આવી!"); btn.disabled = false; btn.innerHTML = "સબમિટ કરો"; });
@@ -186,18 +188,13 @@
         const doc = new jsPDF();
         const data = JSON.parse(localStorage.getItem("studentData"));
 
-        // હેડર ડિઝાઇન
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 40, 'F');
         doc.setTextColor(212, 175, 55); doc.setFontSize(22); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 20, { align: "center" });
         doc.setTextColor(255, 255, 255); doc.setFontSize(10); doc.text("Admission Receipt 2026-27", 105, 30, { align: "center" });
 
-        // મેઈન બોર્ડર
         doc.setDrawColor(0); doc.rect(10, 45, 190, 230);
-        
-        // ફોટો
         if(data.photo) doc.addImage(data.photo, 'JPEG', 160, 50, 30, 35);
 
-        // વિગતો
         doc.setTextColor(0); doc.setFontSize(12);
         let y = 60;
         const items = [
