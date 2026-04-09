@@ -15,18 +15,18 @@
         .splash-emoji { font-size: 80px; }
         .splash-text { font-size: 28px; font-weight: bold; color: var(--primary); }
 
-        .info-title { width: 100%; max-width: 900px; color: var(--primary); font-size: 18px; font-weight: 700; margin: 15px 0 10px 0; border-left: 5px solid var(--golden); padding-left: 10px; }
+        .info-title { width: 100%; max-width: 900px; color: var(--primary); font-size: 18px; font-weight: 700; margin: 15px 0 10px 0; border-left: 5px solid var(--golden); padding-left: 10px; text-align: left; }
         .pdf-box { width: 100%; max-width: 900px; height: 350px; border-radius: 12px; border: 1px solid #cbd5e1; margin-bottom: 20px; background: white; }
         .btn-main { width: 100%; max-width: 900px; padding: 18px; background: linear-gradient(135deg, var(--primary), #1e3a8a); color: white; border: none; border-radius: 50px; font-size: 19px; font-weight: 800; cursor: pointer; margin: 20px 0; box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
         
         #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 40px 20px; border-radius: 20px; text-align: center; margin: 40px 0; border: 2px solid var(--golden); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
         .btn-action { color: white; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 10px; font-size: 16px; width: 85%; }
-        .btn-download { background: #059669; } .btn-cancel { background: #dc2626; }
+        .btn-download { background: #059669; } .btn-cancel { background: #dc2626; margin-top: 15px; }
         
         #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 50px; }
         .header-img { width: 100%; height: auto; display: block; border-bottom: 4px solid var(--golden); }
         .p-content { padding: 25px; }
-        .section-bar { background: var(--primary); color: white; padding: 12px; border-radius: 8px; margin: 25px 0 15px 0; font-weight: 600; font-size: 15px; }
+        .section-bar { background: var(--primary); color: white; padding: 12px; border-radius: 8px; margin: 25px 0 15px 0; font-weight: 600; font-size: 15px; text-align: left; }
         
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
         .field { display: flex; flex-direction: column; text-align: left; }
@@ -65,7 +65,6 @@
         <h2 style="color: var(--primary);">ફોર્મ સફળતાપૂર્વક સબમિટ થઈ ગયું છે! ✅</h2>
         <p>તમારી પ્રવેશ રસીદ નીચેથી ડાઉનલોડ કરો.</p>
         <button class="btn-action btn-download" onclick="downloadReceipt()">📄 પ્રવેશ રસીદ ડાઉનલોડ કરો</button>
-        <hr style="margin: 20px; border: 0; border-top: 1px solid #eee;">
         <button class="btn-action btn-cancel" onclick="handleCancel()">❌ એડમિશન રદ કરો / નવું ફોર્મ ભરો</button>
     </div>
 
@@ -116,15 +115,20 @@
     </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwW-Nfk4_bFy_BJY57suUQmBJVBmSx3W0AR2aBjEpoGBMm7JwYVFMCLYVKlTNCqLk--/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbx3ZFvxjIMx-myP1YJV_EhpA2CKwPof_VOWteKmxYJ0NhKgkPlhvLxEpA8rfky6ap8s/exec';
 
     window.onload = function() {
         setTimeout(() => { document.getElementById('splashScreen').style.display = 'none'; }, 1000);
         if (localStorage.getItem("formSubmitted") === "true") {
-            document.getElementById('statusBox').style.display = 'block';
-            document.getElementById('mainView').style.display = 'none';
+            showStatusBox();
         }
     };
+
+    function showStatusBox() {
+        document.getElementById('statusBox').style.display = 'block';
+        document.getElementById('mainView').style.display = 'none';
+        document.getElementById('formSection').style.display = 'none';
+    }
 
     function toggleForm() { 
         document.getElementById('formSection').style.display = 'block'; 
@@ -148,9 +152,8 @@
     document.getElementById('admissionForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
-        btn.disabled = true; btn.innerHTML = "પ્રોસેસ થઈ રહ્યું છે...";
+        btn.disabled = true; btn.innerHTML = "પ્રોસેસ થઈ રહ્યું છે, મહેરબાની કરીને રાહ જુઓ...";
 
-        // Passport Photo Processing
         const photo = document.getElementById('savedPhoto');
         let photoBase64 = "";
         if(photo) {
@@ -182,13 +185,19 @@
         };
 
         try {
-            await fetch(scriptURL, { method: 'POST', body: JSON.stringify(data) });
+            // Apps Script સાથે કનેક્ટ કરવા માટે 'no-cors' ને બદલે સાદી રીત
+            await fetch(scriptURL, { 
+                method: 'POST', 
+                mode: 'no-cors', // Redirect ની સમસ્યા રોકવા માટે
+                body: JSON.stringify(data) 
+            });
+            
             localStorage.setItem("formSubmitted", "true");
             localStorage.setItem("studentData", JSON.stringify(data));
-            alert("ડેટા સફળતાપૂર્વક સેવ થઈ ગયો!");
+            alert("ડેટા સફળતાપૂર્વક મોકલવામાં આવ્યો છે!");
             location.reload();
         } catch (err) {
-            alert("ભૂલ આવી, ફરી પ્રયાસ કરો.");
+            alert("ભૂલ આવી: " + err.message);
             btn.disabled = false; btn.innerHTML = "ફોર્મ સબમિટ કરો";
         }
     });
@@ -199,19 +208,19 @@
         const d = JSON.parse(localStorage.getItem("studentData"));
         if(!d) return;
 
-        // Header
+        // Header Design
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 45, 'F');
         doc.setTextColor(212, 175, 55); doc.setFontSize(22); doc.setFont(undefined, 'bold');
         doc.text("VRUNDAVANDHAM KHIRASARA", 105, 20, {align:"center"});
         doc.setTextColor(255); doc.setFontSize(14); doc.text("Admission Receipt : 2026-27", 105, 32, {align:"center"});
 
-        // Student Photo
+        // Passport Photo
         if(d.photoData) {
             doc.setDrawColor(14, 30, 96); doc.rect(159, 49, 37, 44);
             doc.addImage(d.photoData, 'JPEG', 160, 50, 35, 42);
         }
 
-        // Details
+        // Student Info - Larger Text
         doc.setTextColor(0); doc.setFontSize(13);
         let y = 65;
         const info = [
@@ -225,7 +234,7 @@
             y += 11;
         });
 
-        // Aadhaar Images
+        // Aadhaar Images - Clearer and Larger
         y += 5;
         doc.setFont(undefined, 'bold'); doc.text("Student Aadhaar:", 15, y);
         doc.text("Father Aadhaar:", 110, y);
@@ -238,8 +247,18 @@
     async function handleCancel() {
         if(confirm("શું તમે ખરેખર એડમિશન રદ કરવા માંગો છો?")) {
             const d = JSON.parse(localStorage.getItem("studentData"));
-            await fetch(scriptURL, { method: 'POST', body: JSON.stringify({action:"cancel", aadhar: d.aadhar}) });
-            localStorage.clear(); alert("એડમિશન રદ થયું છે. હવે તમે ફરી ફોર્મ ભરી શકો છો."); location.reload();
+            try {
+                await fetch(scriptURL, { 
+                    method: 'POST', 
+                    mode: 'no-cors',
+                    body: JSON.stringify({action:"cancel", aadhar: d.aadhar}) 
+                });
+                localStorage.clear(); 
+                alert("એડમિશન રદ થયું છે. હવે તમે ફરી નવું ફોર્મ ભરી શકો છો."); 
+                location.reload();
+            } catch (e) {
+                alert("ભૂલ આવી, ફરી પ્રયાસ કરો.");
+            }
         }
     }
 </script>
