@@ -12,8 +12,13 @@
         #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; transition: 0.5s; }
         .welcome-text { font-size: 26px; color: var(--primary); font-weight: bold; margin-top: 15px; }
 
+        /* PDF & Info Styles */
+        .info-title { width: 100%; max-width: 850px; color: var(--primary); font-size: 18px; font-weight: 700; margin: 15px 0 10px 0; border-left: 5px solid var(--golden); padding-left: 10px; text-align: left; }
+        .pdf-box { width: 100%; max-width: 850px; height: 380px; border-radius: 12px; border: 1px solid #cbd5e1; margin-bottom: 20px; background: white; }
+
+        /* Form Styling */
         .container { width: 100%; max-width: 850px; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; margin-top: 20px; display: none; }
-        .header-bar { background: var(--primary); color: white; padding: 25px; text-align: center; border-bottom: 5px solid var(--golden); }
+        .header-img { width: 100%; height: auto; display: block; border-bottom: 4px solid var(--golden); }
         .form-body { padding: 30px; }
         
         .section-title { background: #f8fafc; padding: 12px; margin: 25px 0 15px 0; font-weight: bold; border-left: 5px solid var(--primary); color: var(--primary); border-radius: 4px; }
@@ -23,13 +28,13 @@
         label { font-size: 14px; font-weight: 700; margin-bottom: 6px; color: #334155; }
         input, select, textarea { padding: 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; width: 100%; box-sizing: border-box; font-size: 15px; }
 
-        /* Photo Preview Styling */
+        /* Photo Box */
         .photo-upload-box { display: flex; flex-direction: column; align-items: center; background: #f1f5f9; padding: 15px; border-radius: 10px; border: 2px dashed #cbd5e1; margin-bottom: 15px; }
         #photo-preview { width: 100px; height: 120px; border: 1px solid #ddd; background: #fff; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 10px; }
         #photo-preview img { width: 100%; height: 100%; object-fit: cover; }
 
         .btn-submit { background: linear-gradient(135deg, var(--primary), #1e3a8a); color: white; padding: 16px; border: none; width: 100%; border-radius: 50px; font-size: 19px; cursor: pointer; margin-top: 25px; font-weight: bold; transition: 0.3s; }
-        .btn-submit:disabled { background: #94a3b8; }
+        .btn-main-open { width: 100%; max-width: 850px; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; margin: 20px 0; }
         
         #status-box { display: none; text-align: center; padding: 60px 20px; }
         
@@ -43,36 +48,49 @@
         <div class="welcome-text">જય સ્વામિનારાયણ</div>
     </div>
 
+    <div class="info-title">૧. ફી માળખું</div>
+    <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
+
+    <div class="info-title">૨. VSGK માહિતી પત્રક</div> 
+    <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
+
+    <button id="openFormBtn" class="btn-main-open" onclick="showForm()">લોકલ અને અપડાઉન પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
+
     <div id="form-container" class="container">
-        <div class="header-bar">
-            <h1 style="margin:0; font-size: 24px;">VRUNDAVANDHAM KHIRASARA</h1>
-            <p style="margin:8px 0 0 0; opacity: 0.9;">પ્રવેશ ફોર્મ ૨૦૨૬-૨૭</p>
-        </div>
+        <img src="header.jpeg" class="header-img">
+        
         <div class="form-body">
             <form id="admissionForm">
                 
-                <div class="section-title">૧. વિદ્યાર્થીનો ફોટો</div>
+                <div class="section-title">વિદ્યાર્થીનો પ્રોફાઇલ ફોટો</div>
                 <div class="photo-upload-box">
                     <div id="photo-preview">ફોટો</div>
                     <input type="file" id="uPhoto" accept="image/*" onchange="previewImg(this, 'photo-preview')" required>
                 </div>
 
-                <div class="section-title">૨. વિદ્યાર્થીની વિગત</div>
-                <div class="field">
-                    <label>વિદ્યાર્થીનું પૂરું નામ (અટક પ્રથમ)</label>
-                    <input type="text" id="uName" required>
-                </div>
+                <div class="section-title">૧. પ્રવેશ વિગતો</div>
                 <div class="grid">
+                    <div class="field">
+                        <label>વિદ્યાર્થીનું પૂરું નામ (અટક પ્રથમ)</label>
+                        <input type="text" id="uName" required>
+                    </div>
+                    <div class="field">
+                        <label>જન્મ તારીખ</label>
+                        <input type="date" id="uDob" required>
+                    </div>
                     <div class="field"><label>ધોરણ</label><input type="text" id="uGrade" required></div>
+                    <div class="field">
+                        <label>લિંગ</label>
+                        <select id="uGender"><option>Male</option><option>Female</option></select>
+                    </div>
                     <div class="field">
                         <label>પ્રવેશ પ્રકાર</label>
                         <select id="uType"><option value="Local">Local</option><option value="Up-Down">Up-Down</option></select>
                     </div>
                     <div class="field"><label>આધાર નંબર</label><input type="text" id="uAadhar" maxlength="12" required></div>
-                    <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" id="uMobile" maxlength="10" required></div>
                 </div>
 
-                <div class="section-title">૩. દસ્તાવેજો અપલોડ (ફક્ત રસીદ માટે)</div>
+                <div class="section-title">૨. ડોક્યુમેન્ટ અપલોડ (રસીદ માટે)</div>
                 <div class="grid">
                     <div class="field">
                         <label>વિદ્યાર્થીનું આધાર કાર્ડ</label>
@@ -84,8 +102,12 @@
                     </div>
                 </div>
 
-                <div class="section-title">૪. વાલી અને સરનામું</div>
+                <div class="section-title">૩. વાલી અને સરનામું</div>
                 <div class="field"><label>પિતાનું પૂરું નામ</label><input type="text" id="uFather" required></div>
+                <div class="grid">
+                    <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" id="uMobile" maxlength="10" required></div>
+                    <div class="field"><label>પિતાનો આધાર નંબર</label><input type="text" id="uFatherAadhar" maxlength="12" required></div>
+                </div>
                 <div class="field"><label>રહેઠાણનું સરનામું</label><textarea id="uAddress" rows="3" required></textarea></div>
                 
                 <button type="submit" id="subBtn" class="btn-submit">ફોર્મ અને રસીદ સબમિટ કરો</button>
@@ -96,7 +118,7 @@
     <div id="status-box" class="container">
         <div style="font-size: 60px; color: #059669; margin-bottom: 20px;">✅</div>
         <h2 style="color: var(--primary);">સફળતાપૂર્વક સબમિટ થઈ ગયું છે!</h2>
-        <p>તમારી રસીદ Google Drive માં સેવ થઈ ગઈ છે.</p>
+        <p>રસીદ Google Drive માં સેવ થઈ ગઈ છે.</p>
         <button class="btn-submit" style="max-width: 300px;" onclick="location.reload()">બીજું ફોર્મ ભરો</button>
     </div>
 
@@ -106,25 +128,23 @@
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('splash-screen').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('splash-screen').style.display = 'none';
-                    document.getElementById('form-container').style.display = 'block';
-                }, 500);
+                setTimeout(() => document.getElementById('splash-screen').style.display = 'none', 500);
             }, 1000); 
         });
 
-        // Image Preview Logic
+        function showForm() {
+            document.getElementById('form-container').style.display = 'block';
+            document.getElementById('openFormBtn').style.display = 'none';
+        }
+
         function previewImg(input, previewId) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById(previewId).innerHTML = '<img src="'+e.target.result+'">';
-                }
+                reader.onload = (e) => document.getElementById(previewId).innerHTML = `<img src="${e.target.result}">`;
                 reader.readAsDataURL(input.files[0]);
             }
         }
 
-        // File to Base64 Function
         async function toBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -137,31 +157,29 @@
         document.getElementById('admissionForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('subBtn');
-            btn.disabled = true;
-            btn.innerText = "ફાઈલો પ્રોસેસ થઈ રહી છે...";
+            btn.disabled = true; btn.innerText = "સેવ થઈ રહ્યું છે...";
 
             try {
-                // ફોટાઓને ટેક્સ્ટ (Base64) માં ફેરવો
-                const photoBase = await toBase64(document.getElementById('uPhoto').files[0]);
-                const sAadharBase = await toBase64(document.getElementById('uAadharImg').files[0]);
-                const fAadharBase = await toBase64(document.getElementById('uFatherAadharImg').files[0]);
+                const photo = await toBase64(document.getElementById('uPhoto').files[0]);
+                const sAadhar = await toBase64(document.getElementById('uAadharImg').files[0]);
+                const fAadhar = await toBase64(document.getElementById('uFatherAadharImg').files[0]);
 
                 const formData = {
                     action: "add",
                     studentName: document.getElementById('uName').value,
+                    dob: document.getElementById('uDob').value,
                     grade: document.getElementById('uGrade').value,
+                    gender: document.getElementById('uGender').value,
                     studentType: document.getElementById('uType').value,
                     aadhar: document.getElementById('uAadhar').value,
                     fatherName: document.getElementById('uFather').value,
                     mobile: document.getElementById('uMobile').value,
+                    fAadharNo: document.getElementById('uFatherAadhar').value,
                     address: document.getElementById('uAddress').value,
-                    // આ ડેટા Apps Script માં જશે PDF બનાવવા માટે
-                    photoData: photoBase,
-                    sAadharImg: sAadharBase,
-                    fAadharImg: fAadharBase
+                    photoData: photo,
+                    sAadharImg: sAadhar,
+                    fAadharImg: fAadhar
                 };
-
-                btn.innerText = "Google Drive માં સેવ થઈ રહ્યું છે...";
 
                 fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(formData) })
                 .then(() => {
@@ -171,9 +189,8 @@
                 });
 
             } catch (err) {
-                alert("ભૂલ આવી: " + err);
-                btn.disabled = false;
-                btn.innerText = "ફોર્મ અને રસીદ સબમિટ કરો";
+                alert("ભૂલ: " + err);
+                btn.disabled = false; btn.innerText = "સબમિટ કરો";
             }
         });
     </script>
