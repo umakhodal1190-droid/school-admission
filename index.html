@@ -17,9 +17,8 @@
         .field { display: flex; flex-direction: column; text-align: left; }
         label { font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #444; }
         input, select { padding: 12px; border: 1px solid #ccc; border-radius: 8px; width: 100%; box-sizing: border-box; }
-        .btn-submit { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.3s; }
+        .btn-submit { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; }
         .btn-cancel { background: #64748b; margin-top: 10px; }
-        .btn-new { background: var(--success, #16a34a); margin-top: 20px; }
         #preview { width: 110px; height: 130px; background: #eee; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 10px; border-radius: 8px; }
         #preview img { width: 100%; height: 100%; object-fit: cover; }
         @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
@@ -34,9 +33,8 @@
     </div>
 
     <div id="statusBox">
-        <h2 style="color: #16a34a;">✅ પ્રવેશ ફોર્મ સફળતાપૂર્વક સબમિટ થયું!</h2>
-        <p>તમારી રસીદ તૈયાર છે.</p>
-        <button class="btn-submit" style="background: #16a34a;" onclick="generatePDF()">📄 રસીદ ડાઉનલોડ કરો</button>
+        <h2 style="color: #16a34a;">✅ ફોર્મ સબમિટ થઈ ગયું છે!</h2>
+        <button class="btn-submit" style="background: #16a34a;" onclick="generatePDF()">📄 રસીદ સેવ (ડાઉનલોડ) કરો</button>
         <button class="btn-submit btn-cancel" onclick="resetApp()">ફોર્મ રદ કરો (Home)</button>
         <button class="btn-submit" style="margin-top:20px; background: var(--golden);" onclick="resetApp()">➕ નવું ફોર્મ ભરો</button>
     </div>
@@ -52,7 +50,7 @@
                     </div>
                     <div class="field" style="grid-column: span 2;">
                         <label>વિદ્યાર્થીનું પૂરું નામ (અટક પ્રથમ)</label>
-                        <input type="text" id="uName" placeholder="દા.ત. પટેલ આર્યન રાજેશભાઈ" required>
+                        <input type="text" id="uName" placeholder="Patal Aryan R." required>
                     </div>
                 </div>
 
@@ -62,8 +60,8 @@
                     <div class="field">
                         <label>લિંગ</label>
                         <select id="uGender">
-                            <option value="કુમાર">કુમાર</option>
-                            <option value="કન્યા">કન્યા</option>
+                            <option value="Boy">કુમાર (Boy)</option>
+                            <option value="Girl">કન્યા (Girl)</option>
                         </select>
                     </div>
                     <div class="field"><label>જ્ઞાતિ</label><select id="uCaste"><option>Open</option><option>OBC</option><option>SC</option><option>ST</option></select></div>
@@ -74,8 +72,8 @@
 
                 <div class="section-bar">૨. ડોક્યુમેન્ટ અપલોડ</div>
                 <div class="grid">
-                    <div class="field" style="grid-column: span 1.5;"><label>વિદ્યાર્થી આધાર કાર્ડ (ફોટો)</label><input type="file" accept="image/*" onchange="processImg(event, '', 'uAadharImgData')" required></div>
-                    <div class="field" style="grid-column: span 1.5;"><label>પિતાનું આધાર કાર્ડ (ફોટો)</label><input type="file" accept="image/*" onchange="processImg(event, '', 'uFatherImgData')" required></div>
+                    <div class="field" style="grid-column: span 1.5;"><label>વિદ્યાર્થી આધાર કાર્ડ</label><input type="file" accept="image/*" onchange="processImg(event, '', 'uAadharImgData')" required></div>
+                    <div class="field" style="grid-column: span 1.5;"><label>પિતાનું આધાર કાર્ડ</label><input type="file" accept="image/*" onchange="processImg(event, '', 'uFatherImgData')" required></div>
                 </div>
 
                 <div class="section-bar">૩. વાલી વિગત</div>
@@ -87,7 +85,7 @@
                 </div>
 
                 <input type="hidden" id="uPhotoData"><input type="hidden" id="uAadharImgData"><input type="hidden" id="uFatherImgData">
-                <button type="submit" id="submitBtn" class="btn-submit">સબમિટ કરો</button>
+                <button type="submit" id="submitBtn" class="btn-submit">માહિતી સેવ કરો</button>
             </form>
         </div>
     </div>
@@ -110,11 +108,11 @@
             img.src = ev.target.result;
             img.onload = () => {
                 const canvas = document.createElement('canvas');
-                const maxWidth = 400; 
+                const maxWidth = 300; 
                 const scale = maxWidth / img.width;
                 canvas.width = maxWidth; canvas.height = img.height * scale;
                 canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-                const base64 = canvas.toDataURL('image/jpeg', 0.7);
+                const base64 = canvas.toDataURL('image/jpeg', 0.6); // Quality 60% for speed
                 document.getElementById(hiddenId).value = base64;
                 if(prevId) document.getElementById(prevId).innerHTML = `<img src="${base64}">`;
             };
@@ -124,7 +122,7 @@
     document.getElementById('admissionForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
-        btn.disabled = true; btn.innerHTML = "માહિતી સેવ થઈ રહી છે...";
+        btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે...";
 
         const data = {
             studentName: document.getElementById('uName').value,
@@ -134,7 +132,6 @@
             studentType: document.getElementById('uType').value,
             aadhar: document.getElementById('uAadhar').value,
             fatherName: document.getElementById('uFather').value,
-            fatherAadhar: document.getElementById('uFatherAadhar').value,
             mobile: document.getElementById('uMobile').value,
             address: document.getElementById('uAddress').value,
             dob: document.getElementById('uDob').value,
@@ -142,19 +139,18 @@
         };
 
         localStorage.setItem("tempData", JSON.stringify(data));
+        
         const script = document.createElement('script');
         script.src = scriptURL + "?callback=ctrlRes&data=" + encodeURIComponent(JSON.stringify(data));
         document.body.appendChild(script);
 
-        // સાવચેતી માટે 6 સેકન્ડનો ટાઈમર
-        setTimeout(() => { if(!localStorage.getItem("done")) ctrlRes(); }, 6000);
+        // જો ૪ સેકન્ડમાં નેટવર્ક જવાબ ન આપે તો પણ રસીદ બતાવવી
+        setTimeout(() => { ctrlRes(); }, 4000);
     });
 
     window.ctrlRes = function(res) {
-        localStorage.setItem("done", "true");
         document.getElementById('formSection').style.display = 'none';
         document.getElementById('statusBox').style.display = 'block';
-        generatePDF();
     };
 
     function generatePDF() {
@@ -162,39 +158,36 @@
         const doc = new jsPDF();
         const data = JSON.parse(localStorage.getItem("tempData"));
         
-        // --- રીસીપ્ટ ડિઝાઇન ---
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 40, 'F');
         doc.setTextColor(255); doc.setFontSize(20); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, {align:"center"});
-        doc.setFontSize(12); doc.text("ADMISSION RECEIPT (2026-27)", 105, 28, {align:"center"});
+        doc.setFontSize(12); doc.text("OFFICIAL RECEIPT (2026-27)", 105, 28, {align:"center"});
 
-        // વિદ્યાર્થીનો ફોટો
         if(data.photoData) {
             try { doc.addImage(data.photoData, 'JPEG', 160, 45, 30, 35); } catch(e) {}
         }
 
-        doc.setTextColor(0); doc.setFontSize(12);
-        let y = 55;
+        doc.setTextColor(0); doc.setFontSize(13);
+        let y = 60;
         const row = (l, v) => { 
             doc.setFont("helvetica", "bold"); doc.text(l + ":", 20, y); 
-            doc.setFont("helvetica", "normal"); doc.text(String(v), 65, y); 
-            y += 10; 
+            doc.setFont("helvetica", "normal"); doc.text(String(v), 70, y); 
+            y += 12; 
         };
 
         row("Student Name", data.studentName);
         row("Grade", data.grade);
-        row("Gender", data.gender);
-        row("Admission Type", data.studentType);
+        row("Gender", data.gender); // Boy અથવા Girl આવશે
         row("Caste", data.caste);
-        row("Aadhar No.", data.aadhar);
-        row("Father Name", data.fatherName);
-        row("Mobile No.", data.mobile);
-        row("Date of Birth", data.dob);
+        row("Adm. Type", data.studentType);
+        row("Aadhar", data.aadhar);
+        row("Mobile", data.mobile);
         row("Address", data.address);
+        row("Birth Date", data.dob);
 
-        doc.setFontSize(10); doc.setTextColor(100);
-        doc.text("Vrundavandham Shree Swaminarayan Gurukul - Khirasara", 105, 190, {align:"center"});
+        doc.setFontSize(10); doc.setTextColor(120);
+        doc.text("Generated on: " + new Date().toLocaleString(), 105, 190, {align:"center"});
         
-        doc.save(`Receipt_${data.studentName}.pdf`);
+        doc.save(`${data.studentName}_Receipt.pdf`);
     }
 
     function resetApp() { localStorage.clear(); location.reload(); }
