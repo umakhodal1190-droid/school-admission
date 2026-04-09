@@ -53,6 +53,9 @@
             <form id="admissionForm">
                 <div class="section-bar">૧. વિદ્યાર્થીની વિગતો</div>
                 <div class="field">
+                    <label>વિદ્યાર્થીનો પાસપોર્ટ સાઈઝ ફોટો</label>
+                    <input type="file" id="uPhoto" accept="image/*" required>
+                    
                     <label>વિદ્યાર્થીનું પૂરું નામ (અટક પ્રથમ)</label>
                     <input type="text" id="uName" placeholder="અટક નામ પિતાનું નામ" required>
                 </div>
@@ -69,17 +72,15 @@
                     <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" id="uMobile" maxlength="10" required></div>
                 </div>
 
-                <div class="section-bar">૨. ફોટા અપલોડ (Photo Upload)</div>
+                <div class="section-bar">૨.જરૂરી ફોટોસ (Photo Upload)</div>
                 <div class="field">
-                    <label>વિદ્યાર્થીનો પાસપોર્ટ સાઈઝ ફોટો</label>
-                    <input type="file" id="uPhoto" accept="image/*" required>
                 </div>
                 <div class="grid">
                     <div class="field"><label>વિદ્યાર્થીનું આધાર કાર્ડ</label><input type="file" id="uStdAadhar" accept="image/*" required></div>
                     <div class="field"><label>પિતાનું આધાર કાર્ડ</label><input type="file" id="uFatAadhar" accept="image/*" required></div>
                 </div>
 
-                <div class="section-bar">૩. વાલી અને સરનામું</div>
+                <div class="section-bar">૩. વાલીની વિગત</div>
                 <div class="field"><label>પિતાનું પૂરું નામ</label><input type="text" id="uFather" required></div>
                 <div class="field"><label>રહેઠાણનું સરનામું</label><textarea id="uAddress" rows="2" required></textarea></div>
 
