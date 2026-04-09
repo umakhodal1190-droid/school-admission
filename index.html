@@ -9,18 +9,17 @@
         :root { --primary: #0e1e60; --golden: #d4af37; --bg: #f1f5f9; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
         
-        /* સ્પ્લેશ સ્ક્રીન (Intro) CSS */
-        #introOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary); color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; text-align: center; }
-        .intro-logo { width: 150px; height: auto; margin-bottom: 20px; }
-        .intro-text { font-size: 26px; font-weight: bold; }
+        /* સ્પ્લેશ સ્ક્રીન - ફોટો કાઢી નાખ્યો છે */
+        #introOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary); color: white; display: flex; justify-content: center; align-items: center; z-index: 9999; text-align: center; }
+        .intro-text { font-size: 30px; font-weight: bold; letter-spacing: 1px; }
 
         .pdf-box { width: 100%; max-width: 900px; height: 350px; border-radius: 12px; border: 2px solid #cbd5e1; margin-bottom: 20px; background: white; }
         
         #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; text-align: center; margin: 40px 0; border: 2px solid var(--golden); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         
-        /* ફોર્મ હેડર CSS (Photo) */
-        #formHeader { width: 100%; max-width: 900px; text-align: center; background: white; padding: 0; border-radius: 15px 15px 0 0; border: 1px solid #cbd5e1; border-bottom: none; display: none; overflow: hidden; }
-        .header-logo { width: 100%; height: auto; display: block; }
+        /* ફોર્મ હેડર - અહીં તમારો લેટરહેડ ફોટો દેખાશે */
+        #formHeader { width: 100%; max-width: 900px; text-align: center; background: white; border-radius: 15px 15px 0 0; border: 1px solid #cbd5e1; border-bottom: none; display: none; overflow: hidden; }
+        .header-img { width: 100%; height: auto; display: block; }
 
         #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 0 0 15px 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 50px; border: 1px solid #cbd5e1; border-top: none; }
         
@@ -40,7 +39,6 @@
 <body>
 
     <div id="introOverlay">
-        <img src="https://umakhodal1190-droid.github.io/school-admission/header.jpeg" alt="Logo" class="intro-logo">
         <div class="intro-text">🙏 જય સ્વામિનારાયણ 🙏</div>
     </div>
 
@@ -58,7 +56,7 @@
     </div>
 
     <div id="formHeader">
-        <img src="https://umakhodal1190-droid.github.io/school-admission/header.jpeg" alt="Header" class="header-logo">
+        <img src="https://umakhodal1190-droid.github.io/school-admission/header.jpeg" alt="Header" class="header-img">
     </div>
 
     <div id="formSection">
@@ -115,9 +113,9 @@
     </div>
 
 <script>
+    // તમારી નવી Apps Script URL અહીં છે
     const scriptURL = 'https://script.google.com/macros/s/AKfycbx7zvUxS7HhiCkvdiI-Uv77_TAb0vGAMNXWPZtADUCx1UdWi84U4YBLnl-VlkEr4w/exec';
 
-    // Intro Overlay handling (1.2 seconds)
     window.onload = () => {
         setTimeout(() => {
             document.getElementById('introOverlay').style.display = 'none';
@@ -176,7 +174,6 @@
         script.src = scriptURL + "?callback=ctrlRes&data=" + encodeURIComponent(JSON.stringify(data));
         document.body.appendChild(script);
 
-        // Backup timer in case network lags (6 seconds)
         setTimeout(() => { if(!localStorage.getItem("done")) ctrlRes({receiptNo: "---"}); }, 6000);
     });
 
@@ -192,18 +189,16 @@
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         const data = JSON.parse(localStorage.getItem("tempData"));
-        // શીટમાંથી આવેલો ઓરિજિનલ સીરીયલ નંબર (૧, ૨, ૩...)
         const recNo = localStorage.getItem("currentReceiptNo") || "1";
 
-        // Receipt Header (Blue Bar)
+        // Receipt Header
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 40, 'F');
         doc.setTextColor(255); doc.setFontSize(18); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, {align:"center"});
         doc.setFontSize(11); doc.text("ADMISSION RECEIPT (2026-27)", 105, 28, {align:"center"});
         
-        // Receipt No on Top Right Corner
+        // રિસીપ્ટ નંબર જમણી બાજુ ઉપર
         doc.setFontSize(12); doc.text("Receipt No: " + recNo, 195, 12, {align:"right"});
 
-        // વિદ્યાર્થી ફોટો
         if(data.photoData) {
             try { doc.addImage(data.photoData, 'JPEG', 160, 45, 30, 35); } catch(e) {}
         }
@@ -228,7 +223,6 @@
 
         doc.setFontSize(9); doc.setTextColor(100);
         doc.text("Generated on: " + new Date().toLocaleString(), 20, 190);
-        
         doc.text("Vrundavandham Shree Swaminarayan Gurukul-Khirasara", 105, 200, {align:"center"});
         
         doc.save(`Receipt_${recNo}_${data.studentName}.pdf`);
