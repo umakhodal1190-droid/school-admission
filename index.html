@@ -8,12 +8,15 @@
         :root { --primary: #0e1e60; --golden: #d4af37; --bg: #f1f5f9; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
         
+        /* Splash Screen - 1 Second */
         #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; transition: 0.5s; }
         .welcome-text { font-size: 26px; color: var(--primary); font-weight: bold; margin-top: 15px; }
 
+        /* PDF & Info Titles */
         .info-title { width: 100%; max-width: 850px; color: var(--primary); font-size: 18px; font-weight: 700; margin: 15px 0 10px 0; border-left: 5px solid var(--golden); padding-left: 10px; text-align: left; }
         .pdf-box { width: 100%; max-width: 850px; height: 380px; border-radius: 12px; border: 1px solid #cbd5e1; margin-bottom: 20px; background: white; }
 
+        /* Form Container Styles */
         .container { width: 100%; max-width: 850px; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; margin-top: 20px; display: none; }
         .header-img { width: 100%; height: auto; display: block; border-bottom: 4px solid var(--golden); }
         .form-body { padding: 30px; }
@@ -25,12 +28,14 @@
         label { font-size: 14px; font-weight: 700; margin-bottom: 6px; color: #334155; }
         input, select, textarea { padding: 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; width: 100%; box-sizing: border-box; font-size: 15px; }
 
+        /* Photo Upload UI */
         .photo-upload-box { display: flex; flex-direction: column; align-items: center; background: #f1f5f9; padding: 15px; border-radius: 10px; border: 2px dashed #cbd5e1; margin-bottom: 15px; }
         #photo-preview { width: 100px; height: 120px; border: 1px solid #ddd; background: #fff; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 10px; }
         #photo-preview img { width: 100%; height: 100%; object-fit: cover; }
 
+        /* Buttons */
         .btn-submit { background: linear-gradient(135deg, var(--primary), #1e3a8a); color: white; padding: 16px; border: none; width: 100%; border-radius: 50px; font-size: 19px; cursor: pointer; margin-top: 25px; font-weight: bold; transition: 0.3s; }
-        .btn-main-open { width: 100%; max-width: 850px; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; margin: 20px 0; }
+        .btn-main-open { width: 100%; max-width: 850px; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         
         #status-box { display: none; text-align: center; padding: 60px 20px; }
         
@@ -68,11 +73,11 @@
                 <div class="grid">
                     <div class="field">
                         <label>વિદ્યાર્થીનું પૂરું નામ (અટક પ્રથમ)</label>
-                        <input type="text" id="uName" required>
+                        <input type="text" id="uName" placeholder="અટક નામ પિતાનું નામ" required>
                     </div>
                     <div class="field">
                         <label>જન્મ તારીખ (DD/MM/YYYY)</label>
-                        <input type="text" id="uDob" placeholder="દા.ત. 15/05/2015" required>
+                        <input type="text" id="uDob" placeholder="દા.ત. 01/05/2015" required>
                     </div>
                     <div class="field"><label>ધોરણ</label><input type="text" id="uGrade" required></div>
                     <div class="field">
@@ -86,7 +91,7 @@
                         <label>પ્રવેશ પ્રકાર</label>
                         <select id="uType"><option value="Local">Local</option><option value="Up-Down">Up-Down</option></select>
                     </div>
-                    <div class="field"><label>આધાર નંબર</label><input type="text" id="uAadhar" maxlength="12" required></div>
+                    <div class="field"><label>વિદ્યાર્થીનો આધાર નંબર</label><input type="text" id="uAadhar" maxlength="12" required></div>
                 </div>
 
                 <div class="section-title">૨. ડોક્યુમેન્ટ અપલોડ (રસીદ માટે)</div>
@@ -117,13 +122,15 @@
     <div id="status-box" class="container">
         <div style="font-size: 60px; color: #059669; margin-bottom: 20px;">✅</div>
         <h2 style="color: var(--primary);">સફળતાપૂર્વક સબમિટ થઈ ગયું છે!</h2>
-        <p>રસીદ Google Drive માં સેવ થઈ ગઈ છે.</p>
+        <p>તમારી રસીદ Google Drive માં સેવ થઈ ગઈ છે.</p>
         <button class="btn-submit" style="max-width: 300px;" onclick="location.reload()">બીજું ફોર્મ ભરો</button>
     </div>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbxyD68A8jjToGJC_uZhrtwvS5xdVvqBcKQAp4XSHkM3Iw665rD6rW6yo28jAo00I2WS/exec';
+        // તમારી નવી URL
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwMWRpmVj3tH_UG3wVlmNTpTMBxD5aWoUEGoC6-ODNbxFq3-1U7ou6VPC0d8uSWQ1Yn/exec';
 
+        // ૧ સેકન્ડ માટે સ્પ્લેશ સ્ક્રીન
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('splash-screen').style.opacity = '0';
@@ -159,6 +166,7 @@
             btn.disabled = true; btn.innerText = "સેવ થઈ રહ્યું છે...";
 
             try {
+                // ઈમેજ પ્રોસેસિંગ
                 const photo = await toBase64(document.getElementById('uPhoto').files[0]);
                 const sAadhar = await toBase64(document.getElementById('uAadharImg').files[0]);
                 const fAadhar = await toBase64(document.getElementById('uFatherAadharImg').files[0]);
@@ -188,7 +196,7 @@
                 });
 
             } catch (err) {
-                alert("ભૂલ: " + err);
+                alert("Error: " + err);
                 btn.disabled = false; btn.innerText = "સબમિટ કરો";
             }
         });
