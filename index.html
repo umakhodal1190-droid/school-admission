@@ -9,7 +9,7 @@
         :root { --primary: #0e1e60; --golden: #d4af37; --bg: #f1f5f9; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
         .pdf-box { width: 100%; max-width: 900px; height: 350px; border-radius: 12px; border: 2px solid #cbd5e1; margin-bottom: 20px; background: white; }
-        #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; text-align: center; margin: 40px 0; border: 2px solid var(--golden); }
+        #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; text-align: center; margin: 40px 0; border: 2px solid var(--golden); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 50px; }
         .p-content { padding: 25px; }
         .section-bar { background: var(--primary); color: white; padding: 12px; border-radius: 8px; margin: 20px 0 10px 0; font-weight: bold; }
@@ -17,9 +17,11 @@
         .field { display: flex; flex-direction: column; text-align: left; }
         label { font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #444; }
         input, select { padding: 12px; border: 1px solid #ccc; border-radius: 8px; width: 100%; box-sizing: border-box; }
-        .btn-submit { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+        .btn-submit { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.3s; }
         .btn-cancel { background: #64748b; margin-top: 10px; }
-        #preview { width: 110px; height: 130px; background: #eee; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 10px; }
+        .btn-new { background: var(--success, #16a34a); margin-top: 20px; }
+        #preview { width: 110px; height: 130px; background: #eee; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 10px; border-radius: 8px; }
+        #preview img { width: 100%; height: 100%; object-fit: cover; }
         @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -28,11 +30,12 @@
     <div id="mainView" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
-        <button class="btn-submit" style="max-width: 400px;" onclick="toggleForm(true)">પ્રવેશ ફોર્મ ભરવા ક્લિક કરો</button>
+        <button class="btn-submit" style="max-width: 400px; margin-bottom: 30px;" onclick="toggleForm(true)">પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
     </div>
 
     <div id="statusBox">
         <h2 style="color: #16a34a;">✅ પ્રવેશ ફોર્મ સફળતાપૂર્વક સબમિટ થયું!</h2>
+        <p>તમારી રસીદ તૈયાર છે.</p>
         <button class="btn-submit" style="background: #16a34a;" onclick="generatePDF()">📄 રસીદ ડાઉનલોડ કરો</button>
         <button class="btn-submit btn-cancel" onclick="resetApp()">ફોર્મ રદ કરો (Home)</button>
         <button class="btn-submit" style="margin-top:20px; background: var(--golden);" onclick="resetApp()">➕ નવું ફોર્મ ભરો</button>
@@ -45,11 +48,11 @@
                 <div class="grid">
                     <div style="text-align: center;">
                         <div id="preview">વિદ્યાર્થી ફોટો</div>
-                        <input type="file" accept="image/*" onchange="handleImg(event, 'preview', 'uPhotoData')" required>
+                        <input type="file" accept="image/*" onchange="processImg(event, 'preview', 'uPhotoData')" required>
                     </div>
                     <div class="field" style="grid-column: span 2;">
-                        <label>વિદ્યાર્થીનું પૂરું નામ</label>
-                        <input type="text" id="uName" placeholder="અટક નામ પિતાનું નામ" required>
+                        <label>વિદ્યાર્થીનું પૂરું નામ (અટક પ્રથમ)</label>
+                        <input type="text" id="uName" placeholder="દા.ત. પટેલ આર્યન રાજેશભાઈ" required>
                     </div>
                 </div>
 
@@ -71,13 +74,13 @@
 
                 <div class="section-bar">૨. ડોક્યુમેન્ટ અપલોડ</div>
                 <div class="grid">
-                    <div class="field" style="grid-column: span 1.5;"><label>વિદ્યાર્થી આધાર કાર્ડ (ફોટો)</label><input type="file" accept="image/*" onchange="handleImg(event, '', 'uAadharImgData')" required></div>
-                    <div class="field" style="grid-column: span 1.5;"><label>પિતાનું આધાર કાર્ડ (ફોટો)</label><input type="file" accept="image/*" onchange="handleImg(event, '', 'uFatherImgData')" required></div>
+                    <div class="field" style="grid-column: span 1.5;"><label>વિદ્યાર્થી આધાર કાર્ડ (ફોટો)</label><input type="file" accept="image/*" onchange="processImg(event, '', 'uAadharImgData')" required></div>
+                    <div class="field" style="grid-column: span 1.5;"><label>પિતાનું આધાર કાર્ડ (ફોટો)</label><input type="file" accept="image/*" onchange="processImg(event, '', 'uFatherImgData')" required></div>
                 </div>
 
                 <div class="section-bar">૩. વાલી વિગત</div>
                 <div class="grid">
-                    <div class="field" style="grid-column: span 2;"><label>પિતાનું નામ</label><input type="text" id="uFather" required></div>
+                    <div class="field" style="grid-column: span 2;"><label>પિતાનું પૂરું નામ</label><input type="text" id="uFather" required></div>
                     <div class="field"><label>પિતાનો આધાર નંબર</label><input type="text" id="uFatherAadhar" maxlength="12" required></div>
                     <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" id="uMobile" maxlength="10" required></div>
                     <div class="field" style="grid-column: span 2;"><label>સરનામું</label><input type="text" id="uAddress" required></div>
@@ -90,20 +93,31 @@
     </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbxwpOSlSOgCSHjUFU0x90k2TLKS8l2eiho61QTx2vb7NxLZTnMIF3tONShQUvXfYjnS/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxh6Ou__uRN6xYtpjlHetc9ssIB8ziUQ5YpeAw1_naXINlepuamVsoce0qhfjpXIIiF/exec';
 
     function toggleForm(show) {
         document.getElementById('formSection').style.display = show ? 'block' : 'none';
         document.getElementById('mainView').style.display = show ? 'none' : 'block';
+        window.scrollTo(0,0);
     }
 
-    async function handleImg(e, prevId, hiddenId) {
+    function processImg(e, prevId, hiddenId) {
         const file = e.target.files[0];
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = (ev) => {
-            document.getElementById(hiddenId).value = ev.target.result;
-            if(prevId) document.getElementById(prevId).innerHTML = `<img src="${ev.target.result}" style="width:100%;height:100%;object-fit:cover;">`;
+            const img = new Image();
+            img.src = ev.target.result;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const maxWidth = 400; 
+                const scale = maxWidth / img.width;
+                canvas.width = maxWidth; canvas.height = img.height * scale;
+                canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                const base64 = canvas.toDataURL('image/jpeg', 0.7);
+                document.getElementById(hiddenId).value = base64;
+                if(prevId) document.getElementById(prevId).innerHTML = `<img src="${base64}">`;
+            };
         };
     }
 
@@ -131,6 +145,9 @@
         const script = document.createElement('script');
         script.src = scriptURL + "?callback=ctrlRes&data=" + encodeURIComponent(JSON.stringify(data));
         document.body.appendChild(script);
+
+        // સાવચેતી માટે 6 સેકન્ડનો ટાઈમર
+        setTimeout(() => { if(!localStorage.getItem("done")) ctrlRes(); }, 6000);
     });
 
     window.ctrlRes = function(res) {
@@ -145,38 +162,38 @@
         const doc = new jsPDF();
         const data = JSON.parse(localStorage.getItem("tempData"));
         
+        // --- રીસીપ્ટ ડિઝાઇન ---
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 40, 'F');
-        doc.setTextColor(255, 255, 255);
-        doc.setFontSize(18); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, {align:"center"});
+        doc.setTextColor(255); doc.setFontSize(20); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, {align:"center"});
         doc.setFontSize(12); doc.text("ADMISSION RECEIPT (2026-27)", 105, 28, {align:"center"});
 
-        // રસીદમાં માત્ર વિદ્યાર્થીનો ફોટો
+        // વિદ્યાર્થીનો ફોટો
         if(data.photoData) {
             try { doc.addImage(data.photoData, 'JPEG', 160, 45, 30, 35); } catch(e) {}
         }
 
-        doc.setTextColor(0, 0, 0);
+        doc.setTextColor(0); doc.setFontSize(12);
         let y = 55;
-        const row = (label, val) => {
-            doc.setFont("helvetica", "bold"); doc.text(label + ":", 20, y);
-            doc.setFont("helvetica", "normal"); doc.text(val, 65, y);
-            y += 10;
+        const row = (l, v) => { 
+            doc.setFont("helvetica", "bold"); doc.text(l + ":", 20, y); 
+            doc.setFont("helvetica", "normal"); doc.text(String(v), 65, y); 
+            y += 10; 
         };
 
         row("Student Name", data.studentName);
         row("Grade", data.grade);
         row("Gender", data.gender);
-        row("Caste", data.caste);
         row("Admission Type", data.studentType);
-        row("Aadhar No.", "[Aadhaar Redacted]");
+        row("Caste", data.caste);
+        row("Aadhar No.", data.aadhar);
         row("Father Name", data.fatherName);
-        row("Father Aadhar", "[Aadhaar Redacted]");
         row("Mobile No.", data.mobile);
-        row("Address", data.address);
         row("Date of Birth", data.dob);
+        row("Address", data.address);
 
         doc.setFontSize(10); doc.setTextColor(100);
         doc.text("Vrundavandham Shree Swaminarayan Gurukul - Khirasara", 105, 190, {align:"center"});
+        
         doc.save(`Receipt_${data.studentName}.pdf`);
     }
 
