@@ -13,6 +13,10 @@
         .intro-text { font-size: 30px; font-weight: bold; }
 
         .pdf-box { width: 100%; max-width: 900px; height: 350px; border-radius: 12px; border: 2px solid #cbd5e1; margin-bottom: 20px; background: white; }
+        
+        /* Heading Styles for PDF Section */
+        .pdf-title { width: 100%; max-width: 900px; color: var(--primary); background: #e2e8f0; padding: 12px; border-radius: 8px; border-left: 5px solid var(--golden); margin: 20px 0 10px 0; font-size: 1.1rem; font-weight: bold; box-sizing: border-box; }
+
         #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; text-align: center; margin: 40px 0; border: 2px solid var(--golden); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         
         #formHeader { width: 100%; max-width: 900px; text-align: center; background: white; border-radius: 15px 15px 0 0; border: 1px solid #cbd5e1; border-bottom: none; display: none; overflow: hidden; }
@@ -37,15 +41,20 @@
     <div id="introOverlay"><div class="intro-text">🙏 જય સ્વામિનારાયણ 🙏</div></div>
 
     <div id="mainView" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+        
+        <div class="pdf-title">૧. સ્કૂલ એડમિશન માહિતી</div>
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
+
+        <div class="pdf-title">૨. VSGK માહિતી પત્રક</div>
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
-        <button class="btn-submit" style="max-width: 400px; margin-bottom: 30px;" onclick="showForm()">પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
+
+        <button class="btn-submit" style="max-width: 400px; margin-top: 10px; margin-bottom: 30px;" onclick="showForm()">પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
     </div>
 
     <div id="statusBox">
         <h2 style="color: #16a34a;">✅ ફોર્મ સફળતાપૂર્વક સબમિટ થયું!</h2>
         <button class="btn-submit" style="background: #16a34a;" onclick="generatePDF()">📄 રસીદ ડાઉનલોડ કરો</button>
-        <button id="cancelBtn" class="btn-submit" style="background: var(--red); margin-top: 10px;" onclick="cancelForm()">❌ ફોર્મ રદ (Cancel) કરો</button>
+        <button id="cancelBtn" class="btn-submit" style="background: var(--red); margin-top: 10px;" onclick="cancelFormAction()">❌ ફોર્મ રદ (Cancel) કરો</button>
         <button class="btn-submit" style="margin-top:20px; background: var(--golden);" onclick="resetApp()">➕ નવું ફોર્મ ભરો</button>
     </div>
 
@@ -58,7 +67,7 @@
                 <div class="grid">
                     <div style="text-align: center;">
                         <div id="preview">વિદ્યાર્થી ફોટો</div>
-                        <input type="file" id="uPhoto" accept="image/*" onchange="processImg(event)" required>
+                        <input type="file" accept="image/*" onchange="processImg(event)" required>
                     </div>
                     <div class="field" style="grid-column: span 2;">
                         <label>વિદ્યાર્થીનું પૂરું નામ (અટક પ્રથમ)</label>
@@ -98,7 +107,6 @@
         document.getElementById('formSection').style.display = 'block';
     }
 
-    // ફોટાને કમ્પ્રેસ કરવાનું ફંક્શન
     function processImg(e) {
         const file = e.target.files[0];
         const reader = new FileReader();
@@ -121,9 +129,9 @@
 
     document.getElementById('admissionForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        localStorage.removeItem("done");
         const btn = document.getElementById('submitBtn');
         btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે... (રાહ જુઓ)";
+        localStorage.removeItem("done");
 
         const data = {
             studentName: document.getElementById('uName').value,
@@ -145,7 +153,7 @@
         const script = document.createElement('script');
         script.src = scriptURL + "?callback=ctrlRes&data=" + encodeURIComponent(JSON.stringify(data));
         
-        const timeout = setTimeout(() => {
+        setTimeout(() => {
             if(!localStorage.getItem("done")) {
                 alert("સર્વર પ્રતિસાદ આપી રહ્યું નથી. લિંક અને નેટવર્ક ચેક કરો.");
                 btn.disabled = false; btn.innerHTML = "માહિતી સેવ કરો";
@@ -163,21 +171,21 @@
             document.getElementById('formSection').style.display = 'none';
             document.getElementById('statusBox').style.display = 'block';
         } else {
-            alert("ભૂલ: " + (res.message || "સેવિંગ નિષ્ફળ"));
+            alert("ભૂલ: ડેટા સેવ થયો નથી.");
             document.getElementById('submitBtn').disabled = false;
         }
     };
 
-    function cancelForm() {
-        if(!confirm("શું તમે આ ફોર્મ રદ કરવા માંગો છો?")) return;
-        const btn = document.getElementById('cancelBtn');
-        btn.disabled = true; btn.innerHTML = "રદ થઈ રહ્યું છે...";
+    function cancelFormAction() {
+        if (!confirm("શું તમે આ ફોર્મ રદ કરવા માંગો છો?")) return;
+        const cBtn = document.getElementById('cancelBtn');
+        cBtn.disabled = true; cBtn.innerHTML = "રદ થઈ રહ્યું છે...";
         const script = document.createElement('script');
         script.src = scriptURL + "?callback=cancelRes&action=cancel&data=" + encodeURIComponent(JSON.stringify({}));
         document.body.appendChild(script);
     }
 
-    window.cancelRes = function() { alert("ફોર્મ રદ કરવામાં આવ્યું છે."); resetApp(); };
+    window.cancelRes = function() { alert("ફોર્મ સફળતાપૂર્વક રદ કરવામાં આવ્યું છે."); resetApp(); };
 
     function generatePDF() {
         const { jsPDF } = window.jspdf;
@@ -190,9 +198,8 @@
         doc.setFontSize(11); doc.text("ADMISSION RECEIPT (2026-27)", 105, 28, {align:"center"});
         doc.text("Receipt No: " + recNo, 195, 12, {align:"right"});
 
-        // ફોટો ઉમેરવો
         if(data.photoData) {
-            try { doc.addImage(data.photoData, 'JPEG', 160, 45, 30, 35); } catch(e) { console.log(e); }
+            try { doc.addImage(data.photoData, 'JPEG', 160, 45, 30, 35); } catch(e) {}
         }
 
         doc.setTextColor(0); doc.setFontSize(13);
