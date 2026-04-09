@@ -8,35 +8,25 @@
     <style>
         :root { --primary: #0e1e60; --golden: #d4af37; --bg: #f1f5f9; --success: #16a34a; --danger: #dc2626; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
-        
         #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; display: flex; justify-content: center; align-items: center; z-index: 99999; }
-        
-        /* Status Box */
         #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; text-align: center; margin: 40px 0; border: 2px solid var(--golden); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         .status-indicator { padding: 15px; border-radius: 12px; margin-bottom: 20px; font-weight: bold; font-size: 18px; }
-        
         .btn-action { color: white; border: none; padding: 15px; border-radius: 12px; cursor: pointer; font-weight: bold; margin: 10px 0; font-size: 16px; width: 100%; display: block; text-decoration: none; }
         .btn-download { background: var(--success); } 
         .btn-cancel { background: var(--danger); }
         .btn-new { background: #64748b; }
-
-        /* Form Styling */
         #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 50px; }
         .header-img { width: 100%; height: auto; display: block; border-bottom: 4px solid var(--golden); }
         .p-content { padding: 25px; }
         .section-bar { background: var(--primary); color: white; padding: 12px; border-radius: 8px; margin: 20px 0 15px 0; font-weight: 600; text-align: left; }
-        
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
         .field { display: flex; flex-direction: column; text-align: left; }
         label { font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 5px; }
         input, select, textarea { padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 14px; width: 100%; box-sizing: border-box; }
-        
         .photo-container { grid-column: span 1; display: flex; flex-direction: column; align-items: center; background: #f8fafc; padding: 15px; border-radius: 12px; border: 2px dashed #cbd5e1; }
         #preview { width: 110px; height: 130px; background: #fff; border: 1px solid #e2e8f0; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         #preview img { width: 100%; height: 100%; object-fit: cover; }
-        
         .btn-submit { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 30px; }
-        
         .span-2 { grid-column: span 2; } .span-3 { grid-column: span 3; }
         @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } .span-2, .span-3 { grid-column: span 1; } }
     </style>
@@ -52,7 +42,7 @@
     <div id="statusBox">
         <div id="statusIndicator" class="status-indicator"></div>
         <p id="receiptMsg">તમારો ડેટા સુરક્ષિત રીતે સેવ કરવામાં આવ્યો છે.</p>
-        <button class="btn-action btn-download" onclick="generatePDF()">📄 પ્રવેશ રસીદ ડાઉનલોડ કરો</button>
+        <button class="btn-action btn-download" onclick="generatePDF()">📄 પ્રવેશ રસીદ (PDF) ડાઉનલોડ કરો</button>
         <button id="cancelBtn" class="btn-action btn-cancel" onclick="handleCancel()">❌ એડમિશન રદ કરો</button>
         <button id="newFormBtn" class="btn-action btn-new" style="display:none;" onclick="resetApp()">➕ નવું ફોર્મ ભરો</button>
     </div>
@@ -203,11 +193,17 @@
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         const db = await initDB();
-        const data = await new Promise(res => { const req = db.transaction("store").objectStore("store").get("studentData"); req.onsuccess = () => res(req.result); });
+        
+        const data = await new Promise(res => { 
+            const req = db.transaction("store").objectStore("store").get("studentData"); 
+            req.onsuccess = () => res(req.result); 
+        });
 
-        // Header
+        if(!data) { alert("માહિતી મળી નથી!"); return; }
+
+        // --- PDF DESIGN ---
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 40, 'F');
-        doc.setTextColor(255); doc.setFontSize(20); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, {align:"center"});
+        doc.setTextColor(255); doc.setFontSize(22); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, {align:"center"});
         doc.setFontSize(12); doc.text("Admission Receipt : 2026-27", 105, 28, {align:"center"});
 
         // Photo
@@ -215,25 +211,27 @@
 
         // Details
         doc.setTextColor(0); doc.setFontSize(11);
-        let y = 50;
+        let y = 55;
         const info = [
             ["વિદ્યાર્થીનું નામ", data.studentName], ["ધોરણ", data.grade], ["લિંગ", data.gender],
             ["જ્ઞાતિ", data.caste], ["પ્રવેશ પ્રકાર", data.studentType], ["જન્મ તારીખ", data.dob],
             ["આધાર નંબર", data.aadhar], ["મોબાઈલ નંબર", data.mobile], ["પિતાનું નામ", data.fatherName],
-            ["પિતાનો આધાર", data.fatherAadhar], ["સરનામું", data.address], ["સ્ટેટસ", localStorage.getItem("status")]
+            ["પિતાનો આધાર", data.fatherAadhar], ["સરનામું", data.address], ["સ્ટેટસ", localStorage.getItem("status") || "Confirmed"]
         ];
 
         info.forEach(row => {
             doc.setFont(undefined, 'bold'); doc.text(row[0] + ":", 20, y);
             doc.setFont(undefined, 'normal'); doc.text(String(row[1]), 65, y);
-            y += 9;
+            y += 10;
         });
 
         // Document Images
+        y += 5;
+        doc.setFont(undefined, 'bold'); doc.text("ડોક્યુમેન્ટ્સ:", 20, y);
         if(data.studentAadharData) doc.addImage(data.studentAadharData, 'JPEG', 20, y+5, 80, 50);
         if(data.fatherAadharData) doc.addImage(data.fatherAadharData, 'JPEG', 110, y+5, 80, 50);
 
-        doc.save(`Receipt_${data.studentName}.pdf`);
+        doc.save(`Admission_Receipt_${data.studentName}.pdf`);
     }
 </script>
 </body>
