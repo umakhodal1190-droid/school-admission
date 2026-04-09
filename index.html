@@ -16,9 +16,11 @@
         
         #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; text-align: center; margin: 40px 0; border: 2px solid var(--golden); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         
-        #formHeader { width: 100%; max-width: 900px; text-align: center; background: var(--primary); color: white; padding: 15px 0; border-radius: 15px 15px 0 0; margin-bottom: -5px; display: none; }
-        
-        #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 0 0 15px 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 50px; }
+        /* નવું ફોર્મ હેડર CSS */
+        #formHeader { width: 100%; max-width: 900px; text-align: center; background: white; color: var(--primary); padding: 20px 0; border-radius: 15px 15px 0 0; border: 1px solid #cbd5e1; border-bottom: none; display: none; }
+        .header-logo { width: 120px; height: auto; margin-bottom: 10px; }
+
+        #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 0 0 15px 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 50px; border: 1px solid #cbd5e1; border-top: none; }
         
         .p-content { padding: 25px; }
         .section-bar { background: var(--primary); color: white; padding: 12px; border-radius: 8px; margin: 20px 0 10px 0; font-weight: bold; }
@@ -40,7 +42,7 @@
     <div id="mainView" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
-        <button class="btn-submit" style="max-width: 400px; margin-bottom: 30px;" onclick="showForm()">પ્રવેશ ફોર્મ ભરવા ક્લિક કરો</button>
+        <button class="btn-submit" style="max-width: 400px; margin-bottom: 30px;" onclick="showForm()">પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
     </div>
 
     <div id="statusBox">
@@ -51,8 +53,9 @@
     </div>
 
     <div id="formHeader">
+        <img src="https://umakhodal1190-droid.github.io/school-admission/VSGK.png" alt="Logo" class="header-logo">
         <h2 style="margin:0;">વૃંદાવનધામ શ્રી સ્વામિનારાયણ ગુરુકુલ-ખીરસરા</h2>
-        <p style="margin:5px 0 0 0;">શૈક્ષણિક વર્ષ: ૨૦૨૬-૨૦૨૭</p>
+        <p style="margin:5px 0 0 0; font-weight:bold;">શૈક્ષણિક વર્ષ: ૨૦૨૬-૨૦૨૭</p>
     </div>
 
     <div id="formSection">
@@ -170,7 +173,7 @@
         document.body.appendChild(script);
 
         // Backup timer in case network lags
-        setTimeout(() => { if(!localStorage.getItem("done")) ctrlRes({receiptNo: "---"}); }, 6000);
+        setTimeout(() => { if(!localStorage.getItem("done")) ctrlRes({receiptNo: localStorage.getItem("tempReceiptNo") || "---"}); }, 6000);
     });
 
     window.ctrlRes = function(res) {
@@ -185,16 +188,18 @@
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         const data = JSON.parse(localStorage.getItem("tempData"));
+        // શીટમાંથી આવેલો ઓરિજિનલ સીરીયલ નંબર (૧, ૨, ૩...)
         const recNo = localStorage.getItem("currentReceiptNo") || "1";
 
-        // Receipt Header
+        // Receipt Header (Blue Bar)
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 40, 'F');
         doc.setTextColor(255); doc.setFontSize(18); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, {align:"center"});
         doc.setFontSize(11); doc.text("ADMISSION RECEIPT (2026-27)", 105, 28, {align:"center"});
         
-        // Receipt No on Top Right
+        // Receipt No on Top Right Corner
         doc.setFontSize(12); doc.text("Receipt No: " + recNo, 195, 12, {align:"right"});
 
+        // વિદ્યાર્થી ફોટો
         if(data.photoData) {
             try { doc.addImage(data.photoData, 'JPEG', 160, 45, 30, 35); } catch(e) {}
         }
