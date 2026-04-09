@@ -8,35 +8,25 @@
     <style>
         :root { --primary: #0e1e60; --golden: #d4af37; --bg: #f1f5f9; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
-        
         .info-title { width: 100%; max-width: 900px; color: var(--primary); font-size: 18px; font-weight: 700; margin: 15px 0 10px 0; border-left: 5px solid var(--golden); padding-left: 10px; text-align: left; }
         .pdf-box { width: 100%; max-width: 900px; height: 380px; border-radius: 12px; border: 1px solid #cbd5e1; margin-bottom: 20px; background: white; }
-        
-        .btn-main { width: 100%; max-width: 900px; padding: 18px; background: linear-gradient(135deg, var(--primary), #1e3a8a); color: white; border: none; border-radius: 50px; font-size: 19px; font-weight: 800; cursor: pointer; margin: 20px 0; box-shadow: 0 10px 15px rgba(0,0,0,0.1); transition: 0.3s; }
-        .btn-main:disabled { background: #64748b; cursor: not-allowed; }
-
+        .btn-main { width: 100%; max-width: 900px; padding: 18px; background: linear-gradient(135deg, var(--primary), #1e3a8a); color: white; border: none; border-radius: 50px; font-size: 19px; font-weight: 800; cursor: pointer; margin: 20px 0; box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
         #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 40px 20px; border-radius: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.1); text-align: center; margin: 40px 0; border: 2px solid var(--golden); }
         .btn-action { color: white; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 10px; font-size: 16px; width: 85%; }
-        .btn-download { background: #059669; }
-
+        .btn-download { background: #059669; } .btn-cancel { background: #dc2626; margin-top: 15px; }
         #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 50px; }
         .header-img { width: 100%; height: auto; display: block; border-bottom: 4px solid var(--golden); }
         .p-content { padding: 25px; }
-        
         .section-bar { background: var(--primary); color: white; padding: 12px; border-radius: 8px; margin: 25px 0 15px 0; font-weight: 600; text-align: left; font-size: 15px; }
-        
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
-        .field { display: flex; flex-direction: column; text-align: left; margin-bottom: 5px; }
+        .field { display: flex; flex-direction: column; text-align: left; }
         label { font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 5px; }
         input, select, textarea { padding: 11px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 14px; width: 100%; box-sizing: border-box; }
-        
         .photo-container { grid-column: span 1; display: flex; flex-direction: column; align-items: center; background: #f8fafc; padding: 15px; border-radius: 12px; border: 2px dashed #cbd5e1; }
-        #preview { width: 100px; height: 120px; background: #fff; border: 1px solid #e2e8f0; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 5px; }
+        #preview { width: 100px; height: 120px; background: #fff; border: 1px solid #e2e8f0; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         #preview img { width: 100%; height: 100%; object-fit: cover; }
         .file-label { background: var(--primary); color: white; padding: 7px 15px; border-radius: 6px; cursor: pointer; font-size: 12px; }
-
         .span-2 { grid-column: span 2; } .span-3 { grid-column: span 3; }
-        
         @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } .span-2, .span-3 { grid-column: span 1; } }
     </style>
 </head>
@@ -45,21 +35,21 @@
     <div class="info-title">૧. VSGK માહિતી પત્રક</div>
     <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
 
-    <div class="info-title">૨. ફી માળખું (Fees Structure)</div>
+    <div class="info-title">૨. ફી માળખું</div>
     <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
 
     <button id="mainOpenBtn" class="btn-main" onclick="toggleForm()">લોકલ અને અપડાઉન પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
 
     <div id="statusBox">
-        <h2 style="color: var(--primary);">ફોર્મ સફળતાપૂર્વક સબમિટ થઈ ગયું છે! ✅</h2>
+        <h2 style="color: var(--primary);">ફોર્મ સબમિટ થઈ ગયું છે! ✅</h2>
         <button class="btn-action btn-download" onclick="downloadReceipt()">📄 પ્રવેશ રસીદ ડાઉનલોડ કરો</button>
+        <button class="btn-action btn-cancel" onclick="handleCancel()">❌ એડમિશન રદ કરો</button>
     </div>
 
     <div id="formSection">
         <img src="header.jpeg" class="header-img">
         <div class="p-content">
-            <h2 style="text-align:center; color:var(--primary); margin:0 0 20px 0; border-bottom: 2px solid var(--golden); padding-bottom: 10px;">લોકલ અને અપડાઉન પ્રવેશ ફોર્મ: ૨૦૨૬-૨૭</h2>
-            
+            <h2 style="text-align:center; color:var(--primary);">લોકલ અને અપડાઉન પ્રવેશ ફોર્મ: ૨૦૨૬-૨૭</h2>
             <form id="admissionForm">
                 <div class="grid">
                     <div class="photo-container">
@@ -69,39 +59,32 @@
                     </div>
                     <div class="field span-2">
                         <label>વિદ્યાર્થીનું પૂરું નામ (અટક પ્રથમ)</label>
-                        <input type="text" id="uName" placeholder="દા.ત. અટક નામ પિતાનું નામ" required>
+                        <input type="text" id="uName" required>
                     </div>
                 </div>
 
-                <div class="section-bar">૧. પ્રવેશ અને ઓળખની વિગતો</div>
+                <div class="section-bar">૧. પ્રવેશ વિગતો</div>
                 <div class="grid">
                     <div class="field"><label>ધોરણ</label><input type="text" id="uGrade" required></div>
-                    <div class="field"><label>લિંગ</label><select id="uGender" required><option value="Male">કુમાર</option><option value="Female">કન્યા</option></select></div>
-                    <div class="field"><label>જ્ઞાતિ</label><select id="uCaste" required><option value="Open">Open</option><option value="OBC">OBC</option><option value="SC">SC</option><option value="ST">ST</option></select></div>
-                    <div class="field"><label>પ્રવેશ પ્રકાર</label><select id="uType" required><option value="Local">Local</option><option value="Up-Down">Up-Down</option></select></div>
+                    <div class="field"><label>લિંગ</label><select id="uGender"><option>Male</option><option>Female</option></select></div>
+                    <div class="field"><label>જ્ઞાતિ</label><select id="uCaste"><option>Open</option><option>OBC</option><option>SC</option><option>ST</option></select></div>
+                    <div class="field"><label>પ્રવેશ પ્રકાર</label><select id="uType"><option>Local</option><option>Up-Down</option></select></div>
                     <div class="field"><label>જન્મ તારીખ</label><input type="date" id="uDob" required></div>
                     <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" id="uMobile" maxlength="10" required></div>
-                    
                     <div class="field"><label>વિદ્યાર્થીનો આધાર નંબર</label><input type="text" id="uAadhar" maxlength="12" required></div>
                     <div class="field"><label>પિતાનો આધાર નંબર</label><input type="text" id="uFatherAadhar" maxlength="12" required></div>
                 </div>
 
-                <div class="section-bar">૨. આધાર કાર્ડના ફોટા અપલોડ કરો</div>
+                <div class="section-bar">૨. ડોક્યુમેન્ટ અપલોડ</div>
                 <div class="grid">
-                    <div class="field span-2">
-                        <label>વિદ્યાર્થીનું આધાર કાર્ડ (ફોટો)</label>
-                        <input type="file" id="uAadharFile" accept="image/*" required>
-                    </div>
-                    <div class="field span-2">
-                        <label>પિતાનું આધાર કાર્ડ (ફોટો)</label>
-                        <input type="file" id="uFatherAadharFile" accept="image/*" required>
-                    </div>
+                    <div class="field span-2"><label>વિદ્યાર્થીનું આધાર કાર્ડ</label><input type="file" id="uAadharFile" accept="image/*" required></div>
+                    <div class="field span-2"><label>પિતાનું આધાર કાર્ડ</label><input type="file" id="uFatherAadharFile" accept="image/*" required></div>
                 </div>
 
-                <div class="section-bar">૩. વાલી અને સરનામાની વિગત</div>
+                <div class="section-bar">૩. વાલી અને સરનામું</div>
                 <div class="grid">
                     <div class="field span-2"><label>પિતાનું પૂરું નામ</label><input type="text" id="uFather" required></div>
-                    <div class="field span-3"><label>પૂરું સરનામું</label><textarea id="uAddress" rows="2" required></textarea></div>
+                    <div class="field span-3"><label>સરનામું</label><textarea id="uAddress" rows="2" required></textarea></div>
                 </div>
 
                 <button type="submit" id="submitBtn" class="btn-main">ફોર્મ સબમિટ કરો</button>
@@ -119,120 +102,106 @@
         }
     };
 
-    function toggleForm() {
-        document.getElementById('formSection').style.display = 'block';
-        document.getElementById('mainOpenBtn').style.display = 'none';
-        window.scrollTo({ top: document.getElementById('formSection').offsetTop, behavior: 'smooth' });
-    }
-
-    function loadFile(e) {
-        if(e.target.files[0]) {
-            document.getElementById('preview').innerHTML = '<img id="savedPhoto" src="' + URL.createObjectURL(e.target.files[0]) + '">';
-        }
-    }
+    function toggleForm() { document.getElementById('formSection').style.display = 'block'; document.getElementById('mainOpenBtn').style.display = 'none'; }
+    function loadFile(e) { if(e.target.files[0]) document.getElementById('preview').innerHTML = '<img id="savedPhoto" src="' + URL.createObjectURL(e.target.files[0]) + '">'; }
 
     async function toBase64(file) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
         });
     }
 
     document.getElementById('admissionForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
-        btn.disabled = true; 
-        btn.innerHTML = "ફાઈલો અપલોડ થઈ રહી છે, કૃપા કરીને રાહ જુઓ...";
+        btn.disabled = true; btn.innerHTML = "ફાઈલો સેવ થઈ રહી છે...";
 
-        try {
-            // પ્રોફાઈલ ફોટો પ્રોસેસ
-            const photo = document.getElementById('savedPhoto');
-            let photoBase64 = "";
-            if(photo) {
-                const canvas = document.createElement('canvas');
-                canvas.width = 150; canvas.height = 180;
-                canvas.getContext('2d').drawImage(photo, 0, 0, 150, 180);
-                photoBase64 = canvas.toDataURL('image/jpeg');
-            }
-
-            // આધાર કાર્ડ ફાઈલો
-            const sAadharFile = document.getElementById('uAadharFile').files[0];
-            const fAadharFile = document.getElementById('uFatherAadharFile').files[0];
-
-            const data = {
-                action: "add",
-                studentName: document.getElementById('uName').value,
-                grade: document.getElementById('uGrade').value,
-                gender: document.getElementById('uGender').value,
-                caste: document.getElementById('uCaste').value,
-                studentType: document.getElementById('uType').value,
-                dob: document.getElementById('uDob').value,
-                aadhar: document.getElementById('uAadhar').value,
-                fatherName: document.getElementById('uFather').value,
-                fatherAadhar: document.getElementById('uFatherAadhar').value,
-                mobile: document.getElementById('uMobile').value,
-                address: document.getElementById('uAddress').value,
-                photoData: photoBase64,
-                studentAadharData: await toBase64(sAadharFile),
-                fatherAadharData: await toBase64(fAadharFile)
-            };
-
-            const response = await fetch(scriptURL, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify(data)
-            });
-
-            localStorage.setItem("formSubmitted", "true");
-            localStorage.setItem("studentData", JSON.stringify({
-                name: data.studentName,
-                aadhar: data.aadhar,
-                photo: photoBase64
-            }));
-            
-            alert("તમારો ડેટા અને ફોટા સુરક્ષિત રીતે સેવ થઈ ગયા છે!");
-            location.reload();
-
-        } catch (error) {
-            console.error(error);
-            alert("ભૂલ આવી! કદાચ ફાઈલ મોટી છે અથવા ઇન્ટરનેટ ધીમું છે.");
-            btn.disabled = false;
-            btn.innerHTML = "ફરી પ્રયાસ કરો";
+        const photo = document.getElementById('savedPhoto');
+        let photoBase64 = "";
+        if(photo) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 150; canvas.height = 180;
+            canvas.getContext('2d').drawImage(photo, 0, 0, 150, 180);
+            photoBase64 = canvas.toDataURL('image/jpeg');
         }
+
+        const sAadharFile = document.getElementById('uAadharFile').files[0];
+        const fAadharFile = document.getElementById('uFatherAadharFile').files[0];
+        const sAadharBase64 = await toBase64(sAadharFile);
+        const fAadharBase64 = await toBase64(fAadharFile);
+
+        const data = {
+            action: "add",
+            studentName: document.getElementById('uName').value,
+            grade: document.getElementById('uGrade').value,
+            gender: document.getElementById('uGender').value,
+            caste: document.getElementById('uCaste').value,
+            studentType: document.getElementById('uType').value,
+            dob: document.getElementById('uDob').value,
+            aadhar: document.getElementById('uAadhar').value,
+            fatherName: document.getElementById('uFather').value,
+            fatherAadhar: document.getElementById('uFatherAadhar').value,
+            mobile: document.getElementById('uMobile').value,
+            address: document.getElementById('uAddress').value,
+            photoData: photoBase64,
+            studentAadharData: sAadharBase64,
+            fatherAadharData: fAadharBase64
+        };
+
+        await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
+        
+        localStorage.setItem("formSubmitted", "true");
+        localStorage.setItem("studentData", JSON.stringify(data));
+        alert("ડેટા સફળતાપૂર્વક સેવ થઈ ગયો!");
+        location.reload();
     });
 
     function downloadReceipt() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
-        const data = JSON.parse(localStorage.getItem("studentData"));
+        const d = JSON.parse(localStorage.getItem("studentData"));
         
-        doc.setFillColor(14, 30, 96);
-        doc.rect(0, 0, 210, 40, 'F');
-        doc.setTextColor(212, 175, 55);
-        doc.setFontSize(20);
-        doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, { align: "center" });
-        doc.setTextColor(255, 255, 255);
-        doc.setFontSize(10);
-        doc.text("Admission Confirmation Receipt : 2026-27", 105, 28, { align: "center" });
+        // Header
+        doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 40, 'F');
+        doc.setTextColor(212, 175, 55); doc.setFontSize(20); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 15, {align:"center"});
+        doc.setTextColor(255); doc.setFontSize(10); doc.text("Admission Confirmation Receipt : 2026-27", 105, 25, {align:"center"});
 
-        doc.setDrawColor(14, 30, 96);
-        doc.rect(10, 45, 190, 80);
+        // Student Photo
+        if(d.photoData) doc.addImage(d.photoData, 'JPEG', 160, 45, 35, 42);
 
-        if(data.photo) doc.addImage(data.photo, 'JPEG', 160, 50, 30, 36);
+        // Details
+        doc.setTextColor(0); doc.setFontSize(11);
+        let y = 55;
+        const info = [
+            ["Name", d.studentName], ["Grade", d.grade], ["Gender", d.gender], 
+            ["Type", d.studentType], ["Student Aadhaar", d.aadhar], ["Father Name", d.fatherName],
+            ["Father Aadhaar", d.fatherAadhar], ["Mobile", d.mobile], ["Address", d.address]
+        ];
+        info.forEach(item => {
+            doc.setFont(undefined, 'bold'); doc.text(item[0]+":", 15, y);
+            doc.setFont(undefined, 'normal'); doc.text(item[1].toString(), 55, y);
+            y += 10;
+        });
 
-        doc.setTextColor(0);
-        doc.setFontSize(12);
-        doc.text("Student Name: " + data.name, 20, 60);
-        doc.text("Aadhar Card: " + data.aadhar, 20, 75);
-        doc.text("Status: ADMISSION CONFIRMED", 20, 90);
+        // Aadhaar Photos in Receipt
+        doc.setFontSize(10); doc.setFont(undefined, 'bold');
+        doc.text("Student Aadhaar Card:", 15, 155);
+        if(d.studentAadharData) doc.addImage(d.studentAadharData, 'JPEG', 15, 160, 85, 55);
         
-        doc.setFontSize(10);
-        doc.setTextColor(100);
-        doc.text("Note: Please keep this receipt for future reference.", 105, 115, { align: "center" });
+        doc.text("Father Aadhaar Card:", 110, 155);
+        if(d.fatherAadharData) doc.addImage(d.fatherAadharData, 'JPEG', 110, 160, 85, 55);
 
-        doc.save(`VSGK_Receipt_${data.name}.pdf`);
+        doc.save(`VSGK_Receipt_${d.studentName}.pdf`);
+    }
+
+    async function handleCancel() {
+        if(confirm("શું તમે ખરેખર એડમિશન રદ કરવા માંગો છો?")) {
+            const d = JSON.parse(localStorage.getItem("studentData"));
+            await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action:"cancel", aadhar: d.aadhar}) });
+            localStorage.clear(); alert("એડમિશન રદ કરવામાં આવ્યું છે."); location.reload();
+        }
     }
 </script>
 </body>
