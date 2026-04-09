@@ -45,9 +45,7 @@
     <div id="statusBox">
         <h2 style="color: #16a34a;">✅ ફોર્મ સફળતાપૂર્વક સબમિટ થયું!</h2>
         <button class="btn-submit" style="background: #16a34a;" onclick="generatePDF()">📄 રસીદ ડાઉનલોડ કરો</button>
-        
-        <button id="cancelBtn" class="btn-submit" style="background: var(--red); margin-top: 10px;" onclick="cancelLastEntry()">❌ ફોર્મ રદ (Cancel) કરો</button>
-        
+        <button id="cancelBtn" class="btn-submit" style="background: var(--red); margin-top: 10px;" onclick="cancelFormAction()">❌ ફોર્મ રદ (Cancel) કરો</button>
         <button class="btn-submit" style="margin-top:20px; background: var(--golden);" onclick="resetApp()">➕ નવું ફોર્મ ભરો</button>
     </div>
 
@@ -90,7 +88,7 @@
     </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwZTurxZ-Ci4F4GOxcPVazxL2XoGipDhCdYNj6D7xK413cDmXjnbw8vnREWqjciswI/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyAyEgfEPMwzeSwcv3Mzpe5Xw4zvcrOrsRaoD4G3wMgoppoz6MJGuApp_iZ25dP5wFH/exec';
 
     window.onload = () => { setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 1200); };
 
@@ -105,15 +103,26 @@
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = (ev) => {
-            document.getElementById(hiddenId).value = ev.target.result;
-            if(prevId) document.getElementById(prevId).innerHTML = `<img src="${ev.target.result}">`;
+            const img = new Image();
+            img.src = ev.target.result;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const maxWidth = 300; 
+                const scale = maxWidth / img.width;
+                canvas.width = maxWidth; canvas.height = img.height * scale;
+                canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                const base64 = canvas.toDataURL('image/jpeg', 0.6);
+                document.getElementById(hiddenId).value = base64;
+                if(prevId) document.getElementById(prevId).innerHTML = `<img src="${base64}">`;
+            };
         };
     }
 
     document.getElementById('admissionForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
-        btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે...";
+        btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે... (રાહ જુઓ)";
+        localStorage.removeItem("done");
 
         const data = {
             studentName: document.getElementById('uName').value,
@@ -131,12 +140,23 @@
         };
 
         localStorage.setItem("tempData", JSON.stringify(data));
+        
         const script = document.createElement('script');
         script.src = scriptURL + "?callback=ctrlRes&data=" + encodeURIComponent(JSON.stringify(data));
+        
+        // Timeout handling
+        setTimeout(() => {
+            if(!localStorage.getItem("done")) {
+                alert("સર્વર પ્રતિસાદ આપી રહ્યું નથી. તપાસો કે Apps Script 'Anyone' એક્સેસ સાથે છે કે નહીં.");
+                btn.disabled = false; btn.innerHTML = "માહિતી સેવ કરો";
+            }
+        }, 15000);
+
         document.body.appendChild(script);
     });
 
     window.ctrlRes = function(res) {
+        localStorage.setItem("done", "true");
         if(res && res.status === "Success") {
             localStorage.setItem("currentReceiptNo", res.receiptNo);
             document.getElementById('formHeader').style.display = 'none';
@@ -148,15 +168,13 @@
         }
     };
 
-    // ફોર્મ રદ કરવાનું કાર્ય
-    function cancelLastEntry() {
+    function cancelFormAction() {
         if (!confirm("શું તમે ખરેખર આ ફોર્મ રદ કરવા માંગો છો?")) return;
         
         const cBtn = document.getElementById('cancelBtn');
         cBtn.disabled = true; cBtn.innerHTML = "રદ થઈ રહ્યું છે...";
 
         const script = document.createElement('script');
-        // action=cancel મોકલી રહ્યું છે
         script.src = scriptURL + "?callback=cancelRes&action=cancel&data=" + encodeURIComponent(JSON.stringify({}));
         document.body.appendChild(script);
     }
