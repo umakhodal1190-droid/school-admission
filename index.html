@@ -6,99 +6,79 @@
     <title>પ્રવેશ ફોર્મ - VRUNDAVANDHAM KHIRASARA</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        :root { --primary: #0e1e60; --golden: #d4af37; --bg: #f1f5f9; --success: #16a34a; --danger: #dc2626; --text: #334155; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; color: var(--text); }
-        
-        /* સ્પ્લેશ સ્ક્રીન */
-        #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; display: flex; justify-content: center; align-items: center; z-index: 9999; }
-        
-        /* પીડીએફ વ્યુઅર બોક્સ */
-        .pdf-box { width: 100%; max-width: 900px; height: 400px; border-radius: 12px; border: 2px solid #cbd5e1; margin-bottom: 20px; background: white; }
-        
-        /* સ્ટેટસ બોક્સ */
-        #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; text-align: center; margin: 40px 0; border: 2px solid var(--golden); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        
-        /* ફોર્મ સેક્શન */
-        #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 50px; }
+        :root { --primary: #0e1e60; --golden: #d4af37; --bg: #f1f5f9; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
+        .pdf-box { width: 100%; max-width: 900px; height: 350px; border-radius: 12px; border: 2px solid #cbd5e1; margin-bottom: 20px; background: white; }
+        #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; text-align: center; margin: 40px 0; border: 2px solid var(--golden); }
+        #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 50px; }
         .p-content { padding: 25px; }
-        .section-bar { background: var(--primary); color: white; padding: 12px; border-radius: 8px; margin: 20px 0 15px 0; font-weight: 600; text-align: left; }
-        
-        /* ગ્રીડ સિસ્ટમ */
+        .section-bar { background: var(--primary); color: white; padding: 12px; border-radius: 8px; margin: 20px 0 10px 0; font-weight: bold; }
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
         .field { display: flex; flex-direction: column; text-align: left; }
-        label { font-size: 13px; font-weight: 700; margin-bottom: 5px; color: #475569; }
-        input, select, textarea { padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 14px; width: 100%; box-sizing: border-box; transition: 0.3s; }
-        input:focus { border-color: var(--primary); outline: none; }
-        
-        /* બટન્સ */
-        .btn-submit { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.3s; }
-        .btn-submit:disabled { background: #94a3b8; cursor: not-allowed; }
-        .btn-cancel { background: #64748b; margin-top: 10px; }
-        .btn-receipt { background: var(--success); margin-top: 10px; }
-        
-        #preview { width: 110px; height: 130px; background: #f8fafc; border: 1px solid #e2e8f0; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 8px; }
-        #preview img { width: 100%; height: 100%; object-fit: cover; }
-        
+        label { font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #444; }
+        input, select { padding: 12px; border: 1px solid #ccc; border-radius: 8px; width: 100%; box-sizing: border-box; }
+        .btn-submit { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+        .btn-cancel { background: #666; margin-top: 10px; }
+        #preview { width: 110px; height: 130px; background: #eee; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 10px; }
         @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-    <div id="splashScreen"><h2>🙏 જય સ્વામિનારાયણ</h2></div>
-
     <div id="mainView" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
-        <h3 style="color: var(--primary);">૧. ફી માળખું (૨૦૨૬-૨૭)</h3>
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
-        
-        <h3 style="color: var(--primary);">૨. VSGK માહિતી પત્રક</h3> 
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
-        
-        <button class="btn-submit" style="max-width: 400px; margin-bottom: 40px;" onclick="toggleForm(true)">પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
+        <button class="btn-submit" style="max-width: 400px;" onclick="toggleForm(true)">પ્રવેશ ફોર્મ ભરવા ક્લિક કરો</button>
     </div>
 
     <div id="statusBox">
-        <h2 style="color: var(--success);">✅ ફોર્મ સફળતાપૂર્વક સબમિટ થયું!</h2>
-        <p>તમારી પ્રવેશ રસીદ તૈયાર છે.</p>
-        <button class="btn-submit btn-receipt" onclick="generatePDF()">📄 રસીદ ડાઉનલોડ કરો</button>
+        <h2 style="color: green;">✅ ફોર્મ સફળતાપૂર્વક સબમિટ થયું!</h2>
+        <button class="btn-submit" onclick="generatePDF()">📄 રસીદ ફરી ડાઉનલોડ કરો</button>
         <button class="btn-submit" onclick="resetApp()">➕ નવું ફોર્મ ભરો</button>
     </div>
 
     <div id="formSection">
         <div class="p-content">
-            <h2 style="text-align:center; color:var(--primary); margin-top:0;">લોકલ અને અપડાઉન પ્રવેશ ફોર્મ</h2>
+            <h2 style="text-align:center; color:var(--primary);">લોકલ અને અપડાઉન પ્રવેશ ફોર્મ</h2>
             <form id="admissionForm">
                 <div class="grid">
                     <div style="text-align: center;">
                         <div id="preview">ફોટો</div>
-                        <input type="file" accept="image/*" onchange="handleImg(event)" required>
+                        <input type="file" accept="image/*" onchange="handleImg(event, 'preview', 'uPhotoData')" required>
                     </div>
                     <div class="field" style="grid-column: span 2;">
-                        <label>વિદ્યાર્થીનું પૂરું નામ (અટક પ્રથમ)</label>
-                        <input type="text" id="uName" placeholder="દા.ત. પટેલ આર્યન રાજેશભાઈ" required>
+                        <label>વિદ્યાર્થીનું પૂરું નામ</label>
+                        <input type="text" id="uName" required>
                     </div>
                 </div>
 
-                <div class="section-bar">૧. વિદ્યાર્થીની વિગત</div>
+                <div class="section-bar">૧. પ્રવેશ વિગતો</div>
                 <div class="grid">
                     <div class="field"><label>ધોરણ</label><input type="text" id="uGrade" required></div>
                     <div class="field"><label>લિંગ</label><select id="uGender"><option>કુમાર</option><option>કન્યા</option></select></div>
                     <div class="field"><label>જ્ઞાતિ</label><select id="uCaste"><option>Open</option><option>OBC</option><option>SC</option><option>ST</option></select></div>
                     <div class="field"><label>પ્રવેશ પ્રકાર</label><select id="uType"><option>Local</option><option>Up-Down</option></select></div>
-                    <div class="field"><label>જન્મ તારીખ</label><input type="text" id="uDob" placeholder="DD/MM/YYYY" required></div>
                     <div class="field"><label>આધાર નંબર</label><input type="text" id="uAadhar" maxlength="12" required></div>
+                    <div class="field"><label>જન્મ તારીખ</label><input type="text" id="uDob" placeholder="DD/MM/YYYY" required></div>
                 </div>
 
-                <div class="section-bar">૨. વાલીની વિગત</div>
+                <div class="section-bar">૨. ડોક્યુમેન્ટ અપલોડ</div>
                 <div class="grid">
-                    <div class="field" style="grid-column: span 2;"><label>પિતાનું પૂરું નામ</label><input type="text" id="uFather" required></div>
+                    <div class="field" style="grid-column: span 1.5;"><label>વિદ્યાર્થી આધાર કાર્ડ (ફોટો)</label><input type="file" accept="image/*" onchange="handleImg(event, '', 'uAadharImgData')" required></div>
+                    <div class="field" style="grid-column: span 1.5;"><label>પિતાનું આધાર કાર્ડ (ફોટો)</label><input type="file" accept="image/*" onchange="handleImg(event, '', 'uFatherImgData')" required></div>
+                </div>
+
+                <div class="section-bar">૩. વાલી વિગત</div>
+                <div class="grid">
+                    <div class="field" style="grid-column: span 2;"><label>પિતાનું નામ</label><input type="text" id="uFather" required></div>
                     <div class="field"><label>પિતાનો આધાર નંબર</label><input type="text" id="uFatherAadhar" maxlength="12" required></div>
                     <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" id="uMobile" maxlength="10" required></div>
                     <div class="field" style="grid-column: span 2;"><label>સરનામું</label><input type="text" id="uAddress" required></div>
                 </div>
 
-                <input type="hidden" id="uPhotoData">
-                <button type="submit" id="submitBtn" class="btn-submit">ફોર્મ સબમિટ કરો</button>
-                <button type="button" class="btn-submit btn-cancel" onclick="toggleForm(false)">પાછા જાઓ (Cancel)</button>
+                <input type="hidden" id="uPhotoData"><input type="hidden" id="uAadharImgData"><input type="hidden" id="uFatherImgData">
+                <button type="submit" id="submitBtn" class="btn-submit">સબમિટ કરો</button>
+                <button type="button" class="btn-submit btn-cancel" onclick="toggleForm(false)">રદ કરો</button>
             </form>
         </div>
     </div>
@@ -106,30 +86,18 @@
 <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbxwpOSlSOgCSHjUFU0x90k2TLKS8l2eiho61QTx2vb7NxLZTnMIF3tONShQUvXfYjnS/exec';
 
-    window.onload = () => {
-        setTimeout(() => document.getElementById('splashScreen').style.display = 'none', 1000);
-        if(localStorage.getItem("done") === "true") showStatus();
-    };
-
     function toggleForm(show) {
         document.getElementById('formSection').style.display = show ? 'block' : 'none';
         document.getElementById('mainView').style.display = show ? 'none' : 'block';
-        window.scrollTo(0,0);
     }
 
-    function showStatus() {
-        document.getElementById('statusBox').style.display = 'block';
-        document.getElementById('mainView').style.display = 'none';
-        document.getElementById('formSection').style.display = 'none';
-    }
-
-    function handleImg(e) {
+    async function handleImg(e, prevId, hiddenId) {
         const file = e.target.files[0];
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = (ev) => {
-            document.getElementById('uPhotoData').value = ev.target.result;
-            document.getElementById('preview').innerHTML = `<img src="${ev.target.result}">`;
+            document.getElementById(hiddenId).value = ev.target.result;
+            if(prevId) document.getElementById(prevId).innerHTML = `<img src="${ev.target.result}" style="width:100%;height:100%;object-fit:cover;">`;
         };
     }
 
@@ -153,8 +121,6 @@
         };
 
         localStorage.setItem("tempData", JSON.stringify(data));
-
-        // JSONP Callback Method (સૌથી સુરક્ષિત)
         const script = document.createElement('script');
         script.src = scriptURL + "?callback=ctrlRes&data=" + encodeURIComponent(JSON.stringify(data));
         document.body.appendChild(script);
@@ -162,8 +128,9 @@
 
     window.ctrlRes = function(res) {
         localStorage.setItem("done", "true");
-        generatePDF(); // ઓટોમેટિક ડાઉનલોડ ટ્રાય કરો
-        showStatus();
+        generatePDF();
+        document.getElementById('formSection').style.display = 'none';
+        document.getElementById('statusBox').style.display = 'block';
     };
 
     function generatePDF() {
@@ -171,18 +138,25 @@
         const doc = new jsPDF();
         const data = JSON.parse(localStorage.getItem("tempData"));
         
-        // રસીદની ડિઝાઇન
-        doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 40, 'F');
-        doc.setTextColor(255); doc.setFontSize(18); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 25, {align:"center"});
+        // વ્યવસ્થિત રિસીપ્ટ ડિઝાઇન
+        doc.setFontSize(22); doc.setTextColor(14, 30, 96);
+        doc.text("Admission Receipt - 2026-27", 105, 20, {align:"center"});
+        doc.line(20, 25, 190, 25);
         
-        doc.setTextColor(0); doc.setFontSize(12);
-        let y = 60;
-        doc.text("વિદ્યાર્થી નામ: " + data.studentName, 20, y);
+        doc.setFontSize(14); doc.setTextColor(0, 0, 0);
+        let y = 40;
+        doc.text("વિદ્યાર્થીનું નામ: " + data.studentName, 20, y);
         doc.text("ધોરણ: " + data.grade + " | લિંગ: " + data.gender, 20, y+10);
-        doc.text("આધાર: " + data.aadhar, 20, y+20);
-        doc.text("પિતાનું નામ: " + data.fatherName, 20, y+30);
-        doc.text("મોબાઈલ: " + data.mobile, 20, y+40);
-        doc.text("તારીખ: " + new Date().toLocaleDateString(), 20, y+50);
+        doc.text("જ્ઞાતિ: " + data.caste + " | પ્રકાર: " + data.studentType, 20, y+20);
+        doc.text("આધાર નંબર: " + data.aadhar, 20, y+30);
+        doc.text("પિતાનું નામ: " + data.fatherName, 20, y+40);
+        doc.text("પિતાનો આધાર: " + data.fatherAadhar, 20, y+50);
+        doc.text("મોબાઈલ: " + data.mobile, 20, y+60);
+        doc.text("સરનામું: " + data.address, 20, y+70);
+        doc.text("જન્મ તારીખ: " + data.dob, 20, y+80);
+        
+        doc.setFontSize(10); doc.setTextColor(100);
+        doc.text("VRUNDAVANDHAM SHREE SWAMINARAYAN GURUKUL-KHIRASARA", 105, 130, {align:"center"});
         
         doc.save(`Receipt_${data.studentName}.pdf`);
     }
