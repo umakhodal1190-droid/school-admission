@@ -9,33 +9,25 @@
         :root { --primary: #0e1e60; --golden: #d4af37; --bg: #f1f5f9; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
 
-        /* Splash Screen (Welcome Screen) Style */
         #splash-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #ffffff;
-            display: flex; flex-direction: column; 
-            align-items: center; justify-content: center;
-            z-index: 10000; /* સૌથી ઉપર રાખવા માટે */
-            transition: opacity 0.8s ease, visibility 0.8s;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #ffffff; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; z-index: 10000;
+            transition: opacity 0.8s ease;
         }
-        .namaste-icon { font-size: 80px; margin-bottom: 20px; animation: pulse 2s infinite; }
+        .namaste-icon { font-size: 80px; animation: pulse 2s infinite; }
         .welcome-text { font-size: 28px; color: var(--primary); font-weight: bold; margin-top: 10px; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-
-        /* Form Content Style */
         .info-title { width: 100%; max-width: 900px; color: var(--primary); font-size: 18px; font-weight: 700; margin: 15px 0 10px 0; border-left: 5px solid var(--golden); padding-left: 10px; text-align: left; }
         .pdf-box { width: 100%; max-width: 900px; height: 380px; border-radius: 12px; border: 1px solid #cbd5e1; margin-bottom: 20px; background: white; }
         .btn-main { width: 100%; max-width: 900px; padding: 18px; background: linear-gradient(135deg, var(--primary), #1e3a8a); color: white; border: none; border-radius: 50px; font-size: 19px; font-weight: 800; cursor: pointer; margin: 20px 0; box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
         
         #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 40px 20px; border-radius: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.1); text-align: center; margin: 40px 0; border: 2px solid var(--golden); }
         .btn-action { color: white; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 10px; font-size: 16px; width: 85%; }
-        .btn-download { background: #059669; } .btn-cancel { background: #dc2626; margin-top: 15px; }
+        .btn-download { background: #059669; } 
+        .btn-cancel { background: #dc2626; margin-top: 15px; }
+        .cancelled-msg { color: #dc2626; font-weight: bold; font-size: 20px; }
 
         #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 50px; }
         .header-img { width: 100%; height: auto; display: block; border-bottom: 4px solid var(--golden); }
@@ -59,7 +51,8 @@
 <body>
 
     <div id="splash-screen">
-        <div class="namaste-icon">🙏</div> <div class="welcome-text">જય સ્વામિનારાયણ</div>
+        <div class="namaste-icon">🙏</div>
+        <div class="welcome-text">જય સ્વામિનારાયણ</div>
     </div>
 
     <div class="info-title">૧. ફી માળખું</div>
@@ -71,9 +64,11 @@
     <button id="mainOpenBtn" class="btn-main" onclick="toggleForm()">લોકલ અને અપડાઉન પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
 
     <div id="statusBox">
-        <h2 style="color: var(--primary);">ફોર્મ સબમિટ થઈ ગયું છે! ✅</h2>
-        <button class="btn-action btn-download" onclick="downloadReceipt()">📄 પ્રવેશ રસીદ ડાઉનલોડ કરો</button>
-        <button class="btn-action btn-cancel" onclick="handleCancel()">❌ એડમિશન રદ કરો</button>
+        <div id="statusContent">
+            <h2 style="color: var(--primary);">ફોર્મ સબમિટ થઈ ગયું છે! ✅</h2>
+            <button class="btn-action btn-download" id="dlBtn" onclick="downloadReceipt()">📄 પ્રવેશ રસીદ ડાઉનલોડ કરો</button>
+            <button class="btn-action btn-cancel" id="cnlBtn" onclick="handleCancel()">❌ એડમિશન રદ કરો</button>
+        </div>
     </div>
 
     <div id="formSection">
@@ -89,7 +84,7 @@
                     </div>
                     <div class="field span-2">
                         <label>વિદ્યાર્થીનું પૂરું નામ (અટક પ્રથમ)</label>
-                        <input type="text" id="uName" placeholder="અટક નામ પિતાનું નામ" required>
+                        <input type="text" id="uName" required>
                     </div>
                 </div>
 
@@ -106,8 +101,8 @@
 
                 <div class="section-bar">૨. ડોક્યુમેન્ટ અપલોડ</div>
                 <div class="grid">
-                    <div class="field span-2"><label>વિદ્યાર્થીનું આધાર કાર્ડ (ફોટો)</label><input type="file" id="uAadharFile" accept="image/*" required></div>
-                    <div class="field span-2"><label>પિતાનું આધાર કાર્ડ (ફોટો)</label><input type="file" id="uFatherAadharFile" accept="image/*" required></div>
+                    <div class="field span-2"><label>વિદ્યાર્થીનું આધાર કાર્ડ</label><input type="file" id="uAadharFile" accept="image/*" required></div>
+                    <div class="field span-2"><label>પિતાનું આધાર કાર્ડ</label><input type="file" id="uFatherAadharFile" accept="image/*" required></div>
                 </div>
 
                 <div class="section-bar">૩. વાલી અને સરનામું</div>
@@ -126,30 +121,34 @@
     const scriptURL = 'https://script.google.com/macros/s/AKfycbwwa_rbL843iodSFZH9uowm9gT9s6iul5W5B1ONhgOfTyr4YZSgaJGHiOMLeIa_iEfu/exec';
 
     window.addEventListener('load', function() {
-        // Splash Screen ને ૨.૫ સેકન્ડ પછી હટાવવા માટેનું ફંક્શન
-        setTimeout(function() {
+        setTimeout(() => {
             const splash = document.getElementById('splash-screen');
             splash.style.opacity = '0';
-            setTimeout(() => {
-                splash.style.visibility = 'hidden';
-                splash.style.display = 'none';
-            }, 800);
+            setTimeout(() => splash.style.display = 'none', 800);
         }, 2500);
 
-        if (localStorage.getItem("formSubmitted") === "true") {
-            document.getElementById('statusBox').style.display = 'block';
-            document.getElementById('mainOpenBtn').style.display = 'none';
-        }
+        checkStatus();
     });
 
-    function toggleForm() { 
-        document.getElementById('formSection').style.display = 'block'; 
-        document.getElementById('mainOpenBtn').style.display = 'none'; 
+    function checkStatus() {
+        const submitted = localStorage.getItem("formSubmitted");
+        const isCancelled = localStorage.getItem("isCancelled");
+
+        if (submitted === "true") {
+            document.getElementById('statusBox').style.display = 'block';
+            document.getElementById('mainOpenBtn').style.display = 'none';
+            
+            if (isCancelled === "true") {
+                document.getElementById('statusContent').innerHTML = `
+                    <h2 class="cancelled-msg">❌ તમારું એડમિશન રદ કરવામાં આવ્યું છે!</h2>
+                    <p>તમારો ડેટા સિસ્ટમમાં સુરક્ષિત છે, પરંતુ પ્રવેશ પ્રક્રિયા અટકાવી દેવામાં આવી છે.</p>
+                `;
+            }
+        }
     }
 
-    function loadFile(e) { 
-        if(e.target.files[0]) document.getElementById('preview').innerHTML = '<img id="savedPhoto" src="' + URL.createObjectURL(e.target.files[0]) + '">'; 
-    }
+    function toggleForm() { document.getElementById('formSection').style.display = 'block'; document.getElementById('mainOpenBtn').style.display = 'none'; }
+    function loadFile(e) { if(e.target.files[0]) document.getElementById('preview').innerHTML = '<img id="savedPhoto" src="' + URL.createObjectURL(e.target.files[0]) + '">'; }
 
     async function toBase64(file) {
         return new Promise((resolve) => {
@@ -162,7 +161,7 @@
     document.getElementById('admissionForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
-        btn.disabled = true; btn.innerHTML = "ફાઈલો સેવ થઈ રહી છે, રાહ જુઓ...";
+        btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે...";
 
         const photo = document.getElementById('savedPhoto');
         let photoBase64 = "";
@@ -172,11 +171,6 @@
             canvas.getContext('2d').drawImage(photo, 0, 0, 150, 180);
             photoBase64 = canvas.toDataURL('image/jpeg');
         }
-
-        const sAadharFile = document.getElementById('uAadharFile').files[0];
-        const fAadharFile = document.getElementById('uFatherAadharFile').files[0];
-        const sAadharBase64 = await toBase64(sAadharFile);
-        const fAadharBase64 = await toBase64(fAadharFile);
 
         const data = {
             action: "add",
@@ -192,58 +186,61 @@
             mobile: document.getElementById('uMobile').value,
             address: document.getElementById('uAddress').value,
             photoData: photoBase64,
-            studentAadharData: sAadharBase64,
-            fatherAadharData: fAadharBase64
+            studentAadharData: await toBase64(document.getElementById('uAadharFile').files[0]),
+            fatherAadharData: await toBase64(document.getElementById('uFatherAadharFile').files[0])
         };
 
-        await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
+        fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
         
         localStorage.setItem("formSubmitted", "true");
+        localStorage.setItem("isCancelled", "false");
         localStorage.setItem("studentData", JSON.stringify(data));
-        alert("ડેટા અને ડોક્યુમેન્ટ્સ સફળતાપૂર્વક સેવ થઈ ગયા!");
+        alert("ડેટા સેવ થયો!");
         location.reload();
     });
 
     function downloadReceipt() {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        const d = JSON.parse(localStorage.getItem("studentData"));
-        
-        doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 40, 'F');
-        doc.setTextColor(212, 175, 55); doc.setFontSize(22); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 15, {align:"center"});
-        doc.setTextColor(255); doc.setFontSize(11); doc.text("Admission Confirmation Receipt : 2026-27", 105, 26, {align:"center"});
+        try {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const d = JSON.parse(localStorage.getItem("studentData"));
+            
+            doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 40, 'F');
+            doc.setTextColor(212, 175, 55); doc.setFontSize(22); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 15, {align:"center"});
+            doc.setTextColor(255); doc.setFontSize(11); doc.text("Admission Receipt : 2026-27", 105, 26, {align:"center"});
 
-        if(d.photoData) doc.addImage(d.photoData, 'JPEG', 160, 45, 35, 42);
+            if(d.photoData) doc.addImage(d.photoData, 'JPEG', 160, 45, 35, 42);
 
-        doc.setTextColor(0); doc.setFontSize(11);
-        let y = 55;
-        const info = [
-            ["Student Name", d.studentName], ["Grade", d.grade], ["Gender", d.gender], 
-            ["Category", d.caste], ["Type", d.studentType], ["Student Aadhaar", d.aadhar], 
-            ["Father Name", d.fatherName], ["Father Aadhaar", d.fatherAadhar], 
-            ["Mobile No", d.mobile], ["Address", d.address]
-        ];
-        info.forEach(item => {
-            doc.setFont(undefined, 'bold'); doc.text(item[0]+":", 15, y);
-            doc.setFont(undefined, 'normal'); doc.text(item[1].toString(), 55, y);
-            y += 10;
-        });
+            doc.setTextColor(0); doc.setFontSize(11);
+            let y = 55;
+            const info = [
+                ["Name", d.studentName], ["Grade", d.grade], ["Student Aadhaar", d.aadhar], 
+                ["Father Name", d.fatherName], ["Father Aadhaar", d.fatherAadhar], 
+                ["Mobile", d.mobile], ["Address", d.address]
+            ];
+            info.forEach(item => {
+                doc.setFont(undefined, 'bold'); doc.text(item[0]+":", 15, y);
+                doc.setFont(undefined, 'normal'); doc.text(String(item[1]), 55, y);
+                y += 10;
+            });
 
-        doc.setFontSize(10); doc.setFont(undefined, 'bold');
-        doc.text("Student Aadhaar Card:", 15, 155);
-        if(d.studentAadharData) doc.addImage(d.studentAadharData, 'JPEG', 15, 160, 85, 55);
-        
-        doc.text("Father Aadhaar Card:", 110, 155);
-        if(d.fatherAadharData) doc.addImage(d.fatherAadharData, 'JPEG', 110, 160, 85, 55);
+            if(d.studentAadharData) doc.addImage(d.studentAadharData, 'JPEG', 15, 160, 85, 55);
+            if(d.fatherAadharData) doc.addImage(d.fatherAadharData, 'JPEG', 110, 160, 85, 55);
 
-        doc.save(`Receipt_${d.studentName}.pdf`);
+            doc.save(`Receipt_${d.studentName}.pdf`);
+        } catch (e) { alert("ભૂલ: " + e.message); }
     }
 
     async function handleCancel() {
         if(confirm("શું તમે ખરેખર એડમિશન રદ કરવા માંગો છો?")) {
             const d = JSON.parse(localStorage.getItem("studentData"));
-            await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action:"cancel", aadhar: d.aadhar}) });
-            localStorage.clear(); alert("એડમિશન રદ કરવામાં આવ્યું છે."); location.reload();
+            // શીટમાં કેન્સલ કરવા માટે વિનંતી મોકલો
+            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action:"cancel", aadhar: d.aadhar}) });
+            
+            // લોકલ સ્ટેટસ અપડેટ કરો
+            localStorage.setItem("isCancelled", "true");
+            alert("એડમિશન રદ કરવાની વિનંતી મોકલી દેવામાં આવી છે."); 
+            location.reload();
         }
     }
 </script>
