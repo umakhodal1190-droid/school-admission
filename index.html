@@ -123,9 +123,10 @@
         document.getElementById('admissionForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('subBtn');
-            btn.disabled = true; btn.innerText = "ફોટા પ્રોસેસ થઈ રહ્યા છે...";
+            btn.disabled = true; btn.innerText = "પ્રોસેસ થઈ રહ્યું છે...";
 
             try {
+                // Converting all photos to base64
                 const sPhoto = await toBase64(document.getElementById('uPhoto').files[0]);
                 const sAadhar = await toBase64(document.getElementById('uStdAadhar').files[0]);
                 const fAadhar = await toBase64(document.getElementById('uFatAadhar').files[0]);
@@ -143,15 +144,14 @@
                     fatherAadharPhoto: fAadhar
                 };
 
-                btn.innerText = "સેવ થઈ રહ્યું છે...";
-                // Sending data to Google Apps Script
+                btn.innerText = "ડેટા મોકલી રહ્યો છે...";
                 await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
 
                 localStorage.setItem("vsgk_done", "true");
                 localStorage.setItem("vsgk_data", JSON.stringify(data));
                 location.reload();
             } catch (err) {
-                alert("Error: " + err);
+                alert("ભૂલ આવી: " + err);
                 btn.disabled = false;
                 btn.innerText = "ફોર્મ સબમિટ કરો";
             }
@@ -162,10 +162,10 @@
             const doc = new jsPDF();
             const d = JSON.parse(localStorage.getItem("vsgk_data"));
 
-            // Receipt Header Design
+            // Design Header
             doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 40, 'F');
             doc.setTextColor(212, 175, 55); doc.setFontSize(22); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, {align:"center"});
-            doc.setTextColor(255); doc.setFontSize(10); doc.text("Official Admission Receipt : 2026-27", 105, 28, {align:"center"});
+            doc.setTextColor(255); doc.setFontSize(10); doc.text("Admission Receipt : 2026-27", 105, 28, {align:"center"});
 
             // Personal Info
             doc.setTextColor(0); doc.setFontSize(12);
@@ -175,20 +175,21 @@
             doc.text(`મોબાઈલ: ${d.mobile}`, 20, 85);
             doc.text(`પિતાનું નામ: ${d.fatherName}`, 20, 95);
 
-            // Student Passport Photo
-            doc.addImage(d.studentPhoto, 'JPEG', 150, 45, 40, 50);
-            doc.setFontSize(8); doc.text("વિદ્યાર્થીનો ફોટો", 170, 100, {align:"center"});
+            // Student Photo Integration
+            if(d.studentPhoto) {
+                doc.addImage(d.studentPhoto, 'JPEG', 150, 45, 40, 50);
+                doc.setFontSize(8); doc.text("વિદ્યાર્થીનો ફોટો", 170, 100, {align:"center"});
+            }
 
-            // Aadhaar Photos
+            // Aadhaar Photos Integration
             doc.setFontSize(12); doc.text("વિદ્યાર્થીનું આધાર કાર્ડ:", 20, 115);
             doc.addImage(d.studentAadharPhoto, 'JPEG', 20, 120, 80, 50);
 
             doc.text("પિતાનું આધાર કાર્ડ:", 110, 115);
             doc.addImage(d.fatherAadharPhoto, 'JPEG', 110, 120, 80, 50);
 
-            // Footer
             doc.setFontSize(10); doc.setTextColor(150);
-            doc.text("Vrundavandham Khirasara - Digital Receipt", 105, 285, {align:"center"});
+            doc.text("Computer Generated Official Receipt", 105, 285, {align:"center"});
 
             doc.save(`Receipt_${d.studentName}.pdf`);
         }
