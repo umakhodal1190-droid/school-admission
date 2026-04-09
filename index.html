@@ -89,7 +89,7 @@
                 <div class="grid">
                     <div class="field"><label>ધોરણ</label><input type="text" id="uGrade" required></div>
                     <div class="field"><label>લિંગ</label><select id="uGender"><option value="કુમાર">કુમાર</option><option value="કન્યા">કન્યા</option></select></div>
-                    <div class="field"><label>જ્ઞાતિ</label><select id="uCaste"><option>Open</option><option>OBC</option><option>SC</option><option>ST</option></select></div>
+                    <div class="field"><label>જ્ઞાતિ</label><select id="uCaste"><option value="Open">Open</option><option value="OBC">OBC</option><option value="SC">SC</option><option value="ST">ST</option></select></div>
                     <div class="field"><label>પ્રવેશ પ્રકાર</label><select id="uType"><option value="Local(લોકલ)">Local(લોકલ)</option><option value="Up-Down(અપડાઉન)">Up-Down(અપડાઉન)</option></select></div>
                     <div class="field"><label>જન્મ તારીખ</label><input type="text" id="uDob" placeholder="DD/MM/YYYY" required></div>
                     <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" id="uMobile" maxlength="10" required></div>
@@ -115,7 +115,7 @@
     </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbw6S1_eWNpt5iRdNsi1DR3-5cwkjAwmmgjnuevuO36Ph7mcyRDAYtTt-8P8j7fsCdKD/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbybeOb4i_opFjNor8OMYh3mnwXTHS_PFVlPBBtC7ip3hHLwXrrYKdJfvNvexRksLs5R/exec';
 
     window.onload = function() {
         setTimeout(() => { document.getElementById('splashScreen').style.display = 'none'; }, 1000);
@@ -142,6 +142,7 @@
     }
 
     async function toBase64(file) {
+        if (!file) return "";
         return new Promise((resolve) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
@@ -152,7 +153,8 @@
     document.getElementById('admissionForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
-        btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે, મહેરબાની કરીને રાહ જુઓ...";
+        btn.disabled = true; 
+        btn.innerHTML = "સેવ થઈ રહ્યું છે, મહેરબાની કરીને રાહ જુઓ...";
 
         const photo = document.getElementById('savedPhoto');
         let photoBase64 = "";
@@ -166,7 +168,6 @@
         const sAadharFile = document.getElementById('uAadharFile').files[0];
         const fAadharFile = document.getElementById('uFatherAadharFile').files[0];
 
-        // અહિં ડેટાના વેરિયેબલ ખાસ ચેક કરજો
         const data = {
             action: "add",
             studentName: document.getElementById('uName').value,
@@ -186,6 +187,7 @@
         };
 
         try {
+            // mode: 'no-cors' વાપરવાથી ડેટા ડ્રાઇવમાં જશે, પણ રિસ્પોન્સમાં JSON નહિ મળે.
             await fetch(scriptURL, { 
                 method: 'POST', 
                 mode: 'no-cors',
@@ -209,7 +211,7 @@
         const d = JSON.parse(localStorage.getItem("studentData"));
         if(!d) { alert("ડેટા મળ્યો નથી!"); return; }
 
-        // Header
+        // Header Design
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 45, 'F');
         doc.setTextColor(212, 175, 55); doc.setFontSize(22); doc.setFont(undefined, 'bold');
         doc.text("VRUNDAVANDHAM KHIRASARA", 105, 20, {align:"center"});
@@ -221,35 +223,35 @@
             doc.addImage(d.photoData, 'JPEG', 160, 50, 35, 42);
         }
 
-        // Details with Larger Text
+        // Student Info Details
         doc.setTextColor(0); doc.setFontSize(13);
         let y = 65;
         const info = [
-            ["Full Name", d.studentName], 
-            ["Standard", d.grade], 
-            ["Gender", d.gender], 
-            ["Adm. Type", d.studentType], 
-            ["Mobile", d.mobile], 
-            ["Aadhaar No", d.aadhar],
-            ["Father Name", d.fatherName], 
-            ["DOB", d.dob]
+            ["વિદ્યાર્થીનું નામ", d.studentName], 
+            ["ધોરણ", d.grade], 
+            ["લિંગ", d.gender], 
+            ["પ્રવેશ પ્રકાર", d.studentType], 
+            ["મોબાઈલ નંબર", d.mobile], 
+            ["આધાર નંબર", d.aadhar],
+            ["પિતાનું નામ", d.fatherName], 
+            ["જન્મ તારીખ", d.dob]
         ];
 
         info.forEach(item => {
             doc.setFont(undefined, 'bold'); doc.text(item[0]+":", 15, y);
             doc.setFont(undefined, 'normal'); 
-            doc.text(item[1] ? item[1].toString() : "N/A", 60, y);
+            doc.text(item[1] ? item[1].toString() : "માહિતી ઉપલબ્ધ નથી", 60, y);
             y += 11;
         });
 
-        // Aadhaar Card Images
+        // Aadhaar Images - Display if exists
         y += 5;
-        doc.setFont(undefined, 'bold'); doc.text("Student Aadhaar Card:", 15, y);
-        doc.text("Father Aadhaar Card:", 110, y);
+        doc.setFont(undefined, 'bold'); doc.text("વિદ્યાર્થીનું આધાર કાર્ડ:", 15, y);
+        doc.text("પિતાનું આધાર કાર્ડ:", 110, y);
         if(d.studentAadharData) doc.addImage(d.studentAadharData, 'JPEG', 15, y+5, 85, 55);
         if(d.fatherAadharData) doc.addImage(d.fatherAadharData, 'JPEG', 110, y+5, 85, 55);
 
-        doc.save(`VSGK_Receipt_${d.studentName}.pdf`);
+        doc.save(`Receipt_${d.studentName}.pdf`);
     }
 
     async function handleCancel() {
@@ -262,10 +264,10 @@
                     body: JSON.stringify({action:"cancel", aadhar: d.aadhar}) 
                 });
                 localStorage.clear(); 
-                alert("એડમિશન રદ થયું છે."); 
+                alert("એડમિશન રદ થયું છે. હવે તમે ફરી નવું ફોર્મ ભરી શકો છો."); 
                 location.reload();
             } catch (e) {
-                alert("ભૂલ આવી, ફરી પ્રયાસ કરો.");
+                alert("સર્વર સાથે જોડાણમાં ભૂલ આવી.");
             }
         }
     }
