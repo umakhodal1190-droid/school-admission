@@ -11,7 +11,7 @@
         #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; display: flex; justify-content: center; align-items: center; z-index: 99999; }
         .info-title { width: 100%; max-width: 900px; color: var(--primary); font-size: 18px; font-weight: 700; margin: 15px 0 10px 0; border-left: 5px solid var(--golden); padding-left: 10px; text-align: left; }
         .pdf-box { width: 100%; max-width: 900px; height: 350px; border-radius: 12px; border: 1px solid #cbd5e1; margin-bottom: 20px; background: white; }
-        #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; text-align: center; margin: 40px 0; border: 2px solid var(--golden); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; text-align: center; margin: 40px 0; border: 2px solid var(--golden); }
         #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 50px; }
         .header-img { width: 100%; height: auto; display: block; border-bottom: 4px solid var(--golden); }
         .p-content { padding: 25px; }
@@ -28,16 +28,14 @@
 </head>
 <body>
 
-    <div id="splashScreen"><h2>🙏 જય સ્વામિનારાયણ</h2></div>
+    <div id="splashScreen"><h2>🙏 જય સ્વામિનારાયણ 🙏</h2></div>
 
     <div id="mainView" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
         <div class="info-title">૧. ફી માળખું</div>
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
-        
         <div class="info-title">૨. VSGK માહિતી પત્રક</div> 
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
-        
-        <button class="btn-submit" style="max-width: 500px; margin-bottom: 40px;" onclick="toggleForm()">લોકલ અને અપડાઉન પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
+        <button class="btn-submit" style="max-width: 500px;" onclick="toggleForm()">લોકલ અને અપડાઉન પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
     </div>
 
     <div id="statusBox">
@@ -54,7 +52,7 @@
                 <div class="grid">
                     <div style="grid-column: span 1; text-align: center;">
                         <div id="preview">વિદ્યાર્થી ફોટો</div>
-                        <input type="file" id="photoFile" accept="image/*" onchange="loadFile(event)" required>
+                        <input type="file" id="photoFile" accept="image/*" onchange="handleImg(event, 'preview', 'uPhotoData')" required>
                     </div>
                     <div class="field span-2">
                         <label>વિદ્યાર્થીનું પૂરું નામ (અટક પ્રથમ)</label>
@@ -67,6 +65,7 @@
                     <div class="field"><label>ધોરણ</label><input type="text" id="uGrade" required></div>
                     <div class="field"><label>લિંગ</label><select id="uGender"><option>કુમાર</option><option>કન્યા</option></select></div>
                     <div class="field"><label>જ્ઞાતિ</label><select id="uCaste"><option>Open</option><option>OBC</option><option>SC</option><option>ST</option></select></div>
+                    <div class="field"><label>પ્રવેશ પ્રકાર</label><select id="uType"><option>Local(લોકલ)</option><option>Up-Down(અપડાઉન)</option></select></div>
                     <div class="field"><label>જન્મ તારીખ</label><input type="text" id="uDob" placeholder="DD/MM/YYYY" required></div>
                     <div class="field"><label>આધાર નંબર</label><input type="text" id="uAadhar" maxlength="12" required></div>
                     <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" id="uMobile" maxlength="10" required></div>
@@ -74,8 +73,8 @@
 
                 <div class="section-bar">૨. ડોક્યુમેન્ટ અપલોડ</div>
                 <div class="grid">
-                    <div class="field span-2"><label>વિદ્યાર્થી આધાર કાર્ડ</label><input type="file" id="uAadharFile" accept="image/*" required></div>
-                    <div class="field span-2"><label>પિતાનું આધાર કાર્ડ</label><input type="file" id="uFatherAadharFile" accept="image/*" required></div>
+                    <div class="field span-2"><label>વિદ્યાર્થી આધાર કાર્ડ</label><input type="file" id="uAadharFile" accept="image/*" onchange="handleImg(event, '', 'uAadharImgData')" required></div>
+                    <div class="field span-2"><label>પિતાનું આધાર કાર્ડ</label><input type="file" id="uFatherAadharFile" accept="image/*" onchange="handleImg(event, '', 'uFatherImgData')" required></div>
                 </div>
 
                 <div class="section-bar">૩. વાલીની વિગત</div>
@@ -85,13 +84,16 @@
                     <div class="field span-3"><label>સરનામું</label><textarea id="uAddress" rows="2" required></textarea></div>
                 </div>
 
+                <input type="hidden" id="uPhotoData">
+                <input type="hidden" id="uAadharImgData">
+                <input type="hidden" id="uFatherImgData">
                 <button type="submit" id="submitBtn" class="btn-submit">ફોર્મ સબમિટ કરો</button>
             </form>
         </div>
     </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbw2tJSay79xu0H7pKWg1pc_KzsXreBP6H12nJWSzZ6RBOEhCgZysZfABzwp6f2zZEXN/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyoEu2BByGRJMWGaNWcsuxH00FOrjh_d2ro3febg2NdYMYnlABdH_wyBbUjmTE3inpD/exec';
 
     window.onload = () => {
         setTimeout(() => document.getElementById('splashScreen').style.display = 'none', 1000);
@@ -103,26 +105,24 @@
 
     function toggleForm() { document.getElementById('formSection').style.display='block'; document.getElementById('mainView').style.display='none'; }
 
-    function loadFile(e) { if(e.target.files[0]) document.getElementById('preview').innerHTML = `<img id="studentImg" src="${URL.createObjectURL(e.target.files[0])}" style="width:100%;height:100%;object-fit:cover;">`; }
-
-    async function toBase64(file) {
-        if (!file) return "";
-        return new Promise((res) => {
-            const r = new FileReader();
-            r.readAsDataURL(file);
-            r.onload = (e) => {
-                const img = new Image();
-                img.src = e.target.result;
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    const maxWidth = 500; 
-                    const scale = maxWidth / img.width;
-                    canvas.width = maxWidth; canvas.height = img.height * scale;
-                    canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-                    res(canvas.toDataURL('image/jpeg', 0.6));
-                };
+    async function handleImg(e, prevId, hiddenId) {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (ev) => {
+            const img = new Image();
+            img.src = ev.target.result;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const maxWidth = 400; 
+                const scale = maxWidth / img.width;
+                canvas.width = maxWidth; canvas.height = img.height * scale;
+                canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                const base64 = canvas.toDataURL('image/jpeg', 0.6);
+                document.getElementById(hiddenId).value = base64;
+                if(prevId) document.getElementById(prevId).innerHTML = `<img src="${base64}" style="width:100%;height:100%;object-fit:cover;">`;
             };
-        });
+        };
     }
 
     document.getElementById('admissionForm').addEventListener('submit', async function(e) {
@@ -135,15 +135,16 @@
             grade: document.getElementById('uGrade').value,
             gender: document.getElementById('uGender').value,
             caste: document.getElementById('uCaste').value,
-            dob: document.getElementById('uDob').value,
+            studentType: document.getElementById('uType').value,
             aadhar: document.getElementById('uAadhar').value,
-            mobile: document.getElementById('uMobile').value,
             fatherName: document.getElementById('uFather').value,
             fatherAadhar: document.getElementById('uFatherAadhar').value,
+            mobile: document.getElementById('uMobile').value,
             address: document.getElementById('uAddress').value,
-            photoData: await toBase64(document.getElementById('photoFile').files[0]),
-            studentAadharData: await toBase64(document.getElementById('uAadharFile').files[0]),
-            fatherAadharData: await toBase64(document.getElementById('uFatherAadharFile').files[0])
+            dob: document.getElementById('uDob').value,
+            photoData: document.getElementById('uPhotoData').value,
+            studentAadharData: document.getElementById('uAadharImgData').value,
+            fatherAadharData: document.getElementById('uFatherImgData').value
         };
 
         localStorage.setItem("tempData", JSON.stringify(data));
@@ -156,7 +157,7 @@
                 location.reload();
             }, 3000);
         })
-        .catch(err => { alert("ભૂલ: " + err); btn.disabled = false; btn.innerHTML = "ફોર્મ સબમિટ કરો"; });
+        .catch(err => { alert("ભૂલ આવી: " + err); btn.disabled = false; btn.innerHTML = "ફોર્મ સબમિટ કરો"; });
     });
 
     function generatePDF() {
@@ -171,11 +172,12 @@
         let y = 50;
         doc.text("વિદ્યાર્થી નામ: " + data.studentName, 20, y);
         doc.text("ધોરણ: " + data.grade + " | લિંગ: " + data.gender, 20, y+10);
-        doc.text("જ્ઞાતિ: " + data.caste + " | જન્મ તારીખ: " + data.dob, 20, y+20);
+        doc.text("જ્ઞાતિ: " + data.caste + " | પ્રવેશ પ્રકાર: " + data.studentType, 20, y+20);
         doc.text("આધાર: " + data.aadhar + " | મોબાઈલ: " + data.mobile, 20, y+30);
         doc.text("પિતાનું નામ: " + data.fatherName, 20, y+40);
         doc.text("પિતાનો આધાર: " + data.fatherAadhar, 20, y+50);
         doc.text("સરનામું: " + data.address, 20, y+60);
+        doc.text("જન્મ તારીખ: " + data.dob, 20, y+70);
         
         doc.save(`Receipt_${data.studentName}.pdf`);
     }
