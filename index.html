@@ -8,35 +8,55 @@
     <style>
         :root { --primary: #0e1e60; --golden: #d4af37; --bg: #f1f5f9; --success: #16a34a; --danger: #dc2626; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
+        
         #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; display: flex; justify-content: center; align-items: center; z-index: 99999; }
+        
+        /* PDF Viewer Styling */
+        .info-title { width: 100%; max-width: 900px; color: var(--primary); font-size: 18px; font-weight: 700; margin: 15px 0 10px 0; border-left: 5px solid var(--golden); padding-left: 10px; text-align: left; }
+        .pdf-box { width: 100%; max-width: 900px; height: 350px; border-radius: 12px; border: 1px solid #cbd5e1; margin-bottom: 20px; background: white; }
+
+        /* Status Box */
         #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; text-align: center; margin: 40px 0; border: 2px solid var(--golden); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         .status-indicator { padding: 15px; border-radius: 12px; margin-bottom: 20px; font-weight: bold; font-size: 18px; }
+        
         .btn-action { color: white; border: none; padding: 15px; border-radius: 12px; cursor: pointer; font-weight: bold; margin: 10px 0; font-size: 16px; width: 100%; display: block; text-decoration: none; }
         .btn-download { background: var(--success); } 
         .btn-cancel { background: var(--danger); }
         .btn-new { background: #64748b; }
+
+        /* Form Styling */
         #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 50px; }
         .header-img { width: 100%; height: auto; display: block; border-bottom: 4px solid var(--golden); }
         .p-content { padding: 25px; }
         .section-bar { background: var(--primary); color: white; padding: 12px; border-radius: 8px; margin: 20px 0 15px 0; font-weight: 600; text-align: left; }
+        
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
         .field { display: flex; flex-direction: column; text-align: left; }
         label { font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 5px; }
         input, select, textarea { padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 14px; width: 100%; box-sizing: border-box; }
+        
         .photo-container { grid-column: span 1; display: flex; flex-direction: column; align-items: center; background: #f8fafc; padding: 15px; border-radius: 12px; border: 2px dashed #cbd5e1; }
         #preview { width: 110px; height: 130px; background: #fff; border: 1px solid #e2e8f0; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         #preview img { width: 100%; height: 100%; object-fit: cover; }
+        
         .btn-submit { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 30px; }
+        
         .span-2 { grid-column: span 2; } .span-3 { grid-column: span 3; }
         @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } .span-2, .span-3 { grid-column: span 1; } }
     </style>
 </head>
 <body>
 
-    <div id="splashScreen"><h2>🙏 જય સ્વામિનારાયણ 🙏</h2></div>
+    <div id="splashScreen"><h2>🙏 જય સ્વામિનારાયણ</h2></div>
 
-    <div id="mainView" style="text-align: center;">
-        <button class="btn-submit" style="max-width: 400px;" onclick="toggleForm()">લોકલ અને અપડાઉન પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
+    <div id="mainView" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+        <div class="info-title">૧. ફી માળખું</div>
+        <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
+        
+        <div class="info-title">૨. VSGK માહિતી પત્રક</div> 
+        <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
+        
+        <button id="mainOpenBtn" class="btn-submit" style="max-width: 500px; margin-bottom: 40px;" onclick="toggleForm()">લોકલ અને અપડાઉન પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
     </div>
 
     <div id="statusBox">
@@ -50,11 +70,12 @@
     <div id="formSection">
         <img src="header.jpeg" class="header-img">
         <div class="p-content">
+            <h2 style="text-align:center; color:var(--primary);">લોકલ અને અપડાઉન પ્રવેશ ફોર્મ</h2>
             <form id="admissionForm">
                 <div class="grid">
                     <div class="photo-container">
                         <div id="preview">ફોટો</div>
-                        <label style="background:var(--primary); color:white; padding:5px 10px; border-radius:5px; cursor:pointer;">
+                        <label style="background:var(--primary); color:white; padding:5px 10px; border-radius:5px; cursor:pointer; font-size: 12px;">
                             અપલોડ <input type="file" id="photoFile" accept="image/*" onchange="loadFile(event)" style="display:none;">
                         </label>
                     </div>
@@ -110,7 +131,10 @@
         if (localStorage.getItem("submitted") === "true") showStatus();
     };
 
-    function toggleForm() { document.getElementById('formSection').style.display = 'block'; document.getElementById('mainView').style.display = 'none'; }
+    function toggleForm() { 
+        document.getElementById('formSection').style.display = 'block'; 
+        document.getElementById('mainView').style.display = 'none'; 
+    }
 
     function showStatus() {
         document.getElementById('statusBox').style.display = 'block';
@@ -193,23 +217,15 @@
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         const db = await initDB();
-        
-        const data = await new Promise(res => { 
-            const req = db.transaction("store").objectStore("store").get("studentData"); 
-            req.onsuccess = () => res(req.result); 
-        });
+        const data = await new Promise(res => { const req = db.transaction("store").objectStore("store").get("studentData"); req.onsuccess = () => res(req.result); });
 
-        if(!data) { alert("માહિતી મળી નથી!"); return; }
-
-        // --- PDF DESIGN ---
+        // Design
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 40, 'F');
         doc.setTextColor(255); doc.setFontSize(22); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, {align:"center"});
         doc.setFontSize(12); doc.text("Admission Receipt : 2026-27", 105, 28, {align:"center"});
 
-        // Photo
         if(data.photoData) doc.addImage(data.photoData, 'JPEG', 160, 45, 35, 42);
 
-        // Details
         doc.setTextColor(0); doc.setFontSize(11);
         let y = 55;
         const info = [
@@ -225,13 +241,12 @@
             y += 10;
         });
 
-        // Document Images
         y += 5;
         doc.setFont(undefined, 'bold'); doc.text("ડોક્યુમેન્ટ્સ:", 20, y);
         if(data.studentAadharData) doc.addImage(data.studentAadharData, 'JPEG', 20, y+5, 80, 50);
         if(data.fatherAadharData) doc.addImage(data.fatherAadharData, 'JPEG', 110, y+5, 80, 50);
 
-        doc.save(`Admission_Receipt_${data.studentName}.pdf`);
+        doc.save(`Admission_${data.studentName}.pdf`);
     }
 </script>
 </body>
