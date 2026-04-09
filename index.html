@@ -49,7 +49,7 @@
         <button class="btn-submit" style="margin-top:20px; background: var(--golden);" onclick="resetApp()">➕ નવું ફોર્મ ભરો</button>
     </div>
 
-    <div id="formHeader"><img src="https://umakhodal1190-droid.github.io/school-admission/header.jpeg" class="header-img"></div>
+    <div id="formHeader"><img src="https://umakhodal1190-droid.github.io/school-admission/header.jpeg" alt="Header" class="header-img"></div>
 
     <div id="formSection">
         <div class="p-content">
@@ -98,6 +98,7 @@
         document.getElementById('formSection').style.display = 'block';
     }
 
+    // ફોટાને કમ્પ્રેસ (નાનો) કરવા માટેનું સુધારેલું ફંક્શન
     function processImg(e, prevId, hiddenId) {
         const file = e.target.files[0];
         const reader = new FileReader();
@@ -107,11 +108,11 @@
             img.src = ev.target.result;
             img.onload = () => {
                 const canvas = document.createElement('canvas');
-                const maxWidth = 300; 
+                const maxWidth = 300; // ફોટાની પહોળાઈ નાની કરવી
                 const scale = maxWidth / img.width;
                 canvas.width = maxWidth; canvas.height = img.height * scale;
                 canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-                const base64 = canvas.toDataURL('image/jpeg', 0.6);
+                const base64 = canvas.toDataURL('image/jpeg', 0.6); // ગુણવત્તા થોડી ઓછી કરવી
                 document.getElementById(hiddenId).value = base64;
                 if(prevId) document.getElementById(prevId).innerHTML = `<img src="${base64}">`;
             };
@@ -136,7 +137,7 @@
             mobile: document.getElementById('uMobile').value,
             address: document.getElementById('uAddress').value,
             dob: document.getElementById('uDob').value,
-            photoData: document.getElementById('uPhotoData').value
+            photoData: document.getElementById('uPhotoData').value // ફોટો ડેટા અહીં છે
         };
 
         localStorage.setItem("tempData", JSON.stringify(data));
@@ -144,7 +145,6 @@
         const script = document.createElement('script');
         script.src = scriptURL + "?callback=ctrlRes&data=" + encodeURIComponent(JSON.stringify(data));
         
-        // Timeout handling
         setTimeout(() => {
             if(!localStorage.getItem("done")) {
                 alert("સર્વર પ્રતિસાદ આપી રહ્યું નથી. તપાસો કે Apps Script 'Anyone' એક્સેસ સાથે છે કે નહીં.");
@@ -184,18 +184,28 @@
         resetApp();
     };
 
+    // રસીદ (PDF) જનરેટ કરવાનું ફંક્શન
     function generatePDF() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         const data = JSON.parse(localStorage.getItem("tempData"));
         const recNo = localStorage.getItem("currentReceiptNo") || "1";
 
+        // Header
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 40, 'F');
         doc.setTextColor(255); doc.setFontSize(18); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, {align:"center"});
         doc.setFontSize(11); doc.text("ADMISSION RECEIPT (2026-27)", 105, 28, {align:"center"});
         doc.text("Receipt No: " + recNo, 195, 12, {align:"right"});
 
-        if(data.photoData) { try { doc.addImage(data.photoData, 'JPEG', 160, 45, 30, 35); } catch(e) {} }
+        // ફોટો રસીદમાં ઉમેરવાનો સુધારેલો કોડ
+        if(data.photoData) { 
+            try { 
+                // ફોટો ઉમેરો: x=160, y=45, પહોળાઈ=30, ઊંચાઈ=35
+                doc.addImage(data.photoData, 'JPEG', 160, 45, 30, 35); 
+            } catch(e) {
+                console.error("PDF ફોટો ભૂલ: ", e);
+            } 
+        }
 
         doc.setTextColor(0); doc.setFontSize(13);
         let y = 60;
@@ -212,8 +222,10 @@
         row("Address", data.address);
 
         doc.setFontSize(9); doc.setTextColor(100);
+        doc.text("Generated on: " + new Date().toLocaleString(), 20, 200);
         doc.text("Vrundavandham Shree Swaminarayan Gurukul-Khirasara", 105, 210, {align:"center"});
-        doc.save(`Receipt_${recNo}.pdf`);
+        
+        doc.save(`Receipt_${recNo}_${data.studentName}.pdf`);
     }
 
     function resetApp() { localStorage.clear(); location.reload(); }
