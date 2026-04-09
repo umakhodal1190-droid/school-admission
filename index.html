@@ -9,20 +9,16 @@
         :root { --primary: #0e1e60; --golden: #d4af37; --bg: #f1f5f9; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
         
-        /* સ્પ્લેશ સ્ક્રીન */
         #introOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary); color: white; display: flex; justify-content: center; align-items: center; z-index: 9999; text-align: center; }
         .intro-text { font-size: 30px; font-weight: bold; }
 
         .pdf-box { width: 100%; max-width: 900px; height: 350px; border-radius: 12px; border: 2px solid #cbd5e1; margin-bottom: 20px; background: white; }
-        
         #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; text-align: center; margin: 40px 0; border: 2px solid var(--golden); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         
-        /* ફોર્મ હેડર ફોટો */
         #formHeader { width: 100%; max-width: 900px; text-align: center; background: white; border-radius: 15px 15px 0 0; border: 1px solid #cbd5e1; border-bottom: none; display: none; overflow: hidden; }
         .header-img { width: 100%; height: auto; display: block; }
 
         #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 0 0 15px 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 50px; border: 1px solid #cbd5e1; border-top: none; }
-        
         .p-content { padding: 25px; }
         .section-bar { background: var(--primary); color: white; padding: 12px; border-radius: 8px; margin: 20px 0 10px 0; font-weight: bold; }
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
@@ -30,7 +26,6 @@
         label { font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #444; }
         input, select { padding: 12px; border: 1px solid #ccc; border-radius: 8px; width: 100%; box-sizing: border-box; }
         .btn-submit { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.3s; }
-        .btn-cancel { background: #64748b; margin-top: 10px; }
         #preview { width: 110px; height: 130px; background: #eee; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 10px; border-radius: 8px; }
         #preview img { width: 100%; height: 100%; object-fit: cover; }
         @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
@@ -38,9 +33,7 @@
 </head>
 <body>
 
-    <div id="introOverlay">
-        <div class="intro-text">🙏 જય સ્વામિનારાયણ 🙏</div>
-    </div>
+    <div id="introOverlay"><div class="intro-text">🙏 જય સ્વામિનારાયણ 🙏</div></div>
 
     <div id="mainView" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
@@ -51,13 +44,10 @@
     <div id="statusBox">
         <h2 style="color: #16a34a;">✅ ફોર્મ સફળતાપૂર્વક સબમિટ થયું!</h2>
         <button class="btn-submit" style="background: #16a34a;" onclick="generatePDF()">📄 રસીદ ડાઉનલોડ કરો</button>
-        <button class="btn-submit btn-cancel" onclick="resetApp()">ફોર્મ રદ કરો (Home)</button>
         <button class="btn-submit" style="margin-top:20px; background: var(--golden);" onclick="resetApp()">➕ નવું ફોર્મ ભરો</button>
     </div>
 
-    <div id="formHeader">
-        <img src="https://umakhodal1190-droid.github.io/school-admission/header.jpeg" alt="Header" class="header-img">
-    </div>
+    <div id="formHeader"><img src="https://umakhodal1190-droid.github.io/school-admission/header.jpeg" class="header-img"></div>
 
     <div id="formSection">
         <div class="p-content">
@@ -70,60 +60,40 @@
                     </div>
                     <div class="field" style="grid-column: span 2;">
                         <label>વિદ્યાર્થીનું પૂરું નામ (અટક પ્રથમ)</label>
-                        <input type="text" id="uName" placeholder="દા.ત. પટેલ આર્યન રાજેશભાઈ" required>
+                        <input type="text" id="uName" required>
                     </div>
                 </div>
-
                 <div class="section-bar">૧. પ્રવેશ વિગતો</div>
                 <div class="grid">
                     <div class="field"><label>ધોરણ</label><input type="text" id="uGrade" required></div>
-                    <div class="field">
-                        <label>લિંગ</label>
-                        <select id="uGender">
-                            <option value="Kumar">કુમાર</option>
-                            <option value="Kanya">કન્યા</option>
-                        </select>
-                    </div>
+                    <div class="field"><label>લિંગ</label><select id="uGender"><option value="Kumar">કુમાર</option><option value="Kanya">કન્યા</option></select></div>
                     <div class="field"><label>જ્ઞાતિ</label><select id="uCaste"><option>Open</option><option>OBC</option><option>SC</option><option>ST</option></select></div>
                     <div class="field"><label>પ્રવેશ પ્રકાર</label><select id="uType"><option>Local</option><option>Up-Down</option></select></div>
                     <div class="field"><label>આધાર નંબર</label><input type="text" id="uAadhar" maxlength="12" required></div>
                     <div class="field"><label>જન્મ તારીખ</label><input type="text" id="uDob" placeholder="DD/MM/YYYY" required></div>
                 </div>
-
-                <div class="section-bar">૨. ડોક્યુમેન્ટ અપલોડ</div>
-                <div class="grid">
-                    <div class="field" style="grid-column: span 1.5;"><label>વિદ્યાર્થી આધાર કાર્ડ (ફોટો)</label><input type="file" accept="image/*" onchange="processImg(event, '', 'uAadharImgData')" required></div>
-                    <div class="field" style="grid-column: span 1.5;"><label>પિતાનું આધાર કાર્ડ (ફોટો)</label><input type="file" accept="image/*" onchange="processImg(event, '', 'uFatherImgData')" required></div>
-                </div>
-
-                <div class="section-bar">૩. વાલી વિગત</div>
+                <div class="section-bar">૨. વાલી વિગત</div>
                 <div class="grid">
                     <div class="field" style="grid-column: span 2;"><label>પિતાનું નામ</label><input type="text" id="uFather" required></div>
                     <div class="field"><label>પિતાનો આધાર નંબર</label><input type="text" id="uFatherAadhar" maxlength="12" required></div>
                     <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" id="uMobile" maxlength="10" required></div>
                     <div class="field" style="grid-column: span 2;"><label>સરનામું</label><input type="text" id="uAddress" required></div>
                 </div>
-
                 <input type="hidden" id="uPhotoData">
-                <input type="hidden" id="uAadharImgData">
-                <input type="hidden" id="uFatherImgData">
                 <button type="submit" id="submitBtn" class="btn-submit">માહિતી સેવ કરો</button>
             </form>
         </div>
     </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbymAMQY0SmRFG_abDwAMI_onwmo10ePdy_RqACwEDz8FIZWPP0wriUn0z6sW5OdyzbX/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzTxmi9-MRn-mdJfiOiHWea1_DSW1qq0ZfJlLJIoOvlhLLpXxvL_Dhs8M5o_-eozWPW/exec';
 
-    window.onload = () => {
-        setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 1200);
-    };
+    window.onload = () => { setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 1200); };
 
     function showForm() {
         document.getElementById('mainView').style.display = 'none';
         document.getElementById('formHeader').style.display = 'block';
         document.getElementById('formSection').style.display = 'block';
-        window.scrollTo(0,0);
     }
 
     function processImg(e, prevId, hiddenId) {
@@ -131,18 +101,8 @@
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = (ev) => {
-            const img = new Image();
-            img.src = ev.target.result;
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                const maxWidth = 300; 
-                const scale = maxWidth / img.width;
-                canvas.width = maxWidth; canvas.height = img.height * scale;
-                canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-                const base64 = canvas.toDataURL('image/jpeg', 0.6);
-                document.getElementById(hiddenId).value = base64;
-                if(prevId) document.getElementById(prevId).innerHTML = `<img src="${base64}">`;
-            };
+            document.getElementById(hiddenId).value = ev.target.result;
+            if(prevId) document.getElementById(prevId).innerHTML = `<img src="${ev.target.result}">`;
         };
     }
 
@@ -151,7 +111,6 @@
         const btn = document.getElementById('submitBtn');
         btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે...";
 
-        // અહીં ડેટાનો ક્રમ તમારી Apps Script મુજબ સેટ કર્યો છે
         const data = {
             studentName: document.getElementById('uName').value,
             grade: document.getElementById('uGrade').value,
@@ -171,16 +130,19 @@
         const script = document.createElement('script');
         script.src = scriptURL + "?callback=ctrlRes&data=" + encodeURIComponent(JSON.stringify(data));
         document.body.appendChild(script);
-
-        setTimeout(() => { if(!localStorage.getItem("done")) ctrlRes({receiptNo: "---"}); }, 6000);
     });
 
     window.ctrlRes = function(res) {
-        localStorage.setItem("done", "true");
-        if(res && res.receiptNo) localStorage.setItem("currentReceiptNo", res.receiptNo);
-        document.getElementById('formHeader').style.display = 'none';
-        document.getElementById('formSection').style.display = 'none';
-        document.getElementById('statusBox').style.display = 'block';
+        if(res && res.status === "Success") {
+            localStorage.setItem("done", "true");
+            localStorage.setItem("currentReceiptNo", res.receiptNo); // રસીદ નંબર સેવ
+            document.getElementById('formHeader').style.display = 'none';
+            document.getElementById('formSection').style.display = 'none';
+            document.getElementById('statusBox').style.display = 'block';
+        } else {
+            alert("ભૂલ: ડેટા સેવ થયો નથી.");
+            document.getElementById('submitBtn').disabled = false;
+        }
     };
 
     function generatePDF() {
@@ -189,25 +151,16 @@
         const data = JSON.parse(localStorage.getItem("tempData"));
         const recNo = localStorage.getItem("currentReceiptNo") || "1";
 
-        // રસીદ હેડર (બ્લુ બાર)
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 40, 'F');
         doc.setTextColor(255); doc.setFontSize(18); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, {align:"center"});
         doc.setFontSize(11); doc.text("ADMISSION RECEIPT (2026-27)", 105, 28, {align:"center"});
-        
-        // રસીદ નંબર જમણી બાજુ ઉપર
-        doc.setFontSize(12); doc.text("Receipt No: " + recNo, 195, 12, {align:"right"});
+        doc.text("Receipt No: " + recNo, 195, 12, {align:"right"});
 
-        if(data.photoData) {
-            try { doc.addImage(data.photoData, 'JPEG', 160, 45, 30, 35); } catch(e) {}
-        }
+        if(data.photoData) { try { doc.addImage(data.photoData, 'JPEG', 160, 45, 30, 35); } catch(e) {} }
 
         doc.setTextColor(0); doc.setFontSize(13);
         let y = 60;
-        const row = (l, v) => { 
-            doc.setFont("helvetica", "bold"); doc.text(l + ":", 20, y); 
-            doc.setFont("helvetica", "normal"); doc.text(String(v), 70, y); 
-            y += 11; 
-        };
+        const row = (l, v) => { doc.setFont("helvetica", "bold"); doc.text(l + ":", 20, y); doc.setFont("helvetica", "normal"); doc.text(String(v), 70, y); y += 11; };
 
         row("Student Name", data.studentName);
         row("Grade", data.grade);
@@ -216,16 +169,12 @@
         row("Caste", data.caste);
         row("Aadhar No.", data.aadhar);
         row("Father Name", data.fatherName);
-        row("Father Aadhar", data.fatherAadhar);
         row("Mobile", data.mobile);
-        row("Birth Date", data.dob);
         row("Address", data.address);
 
         doc.setFontSize(9); doc.setTextColor(100);
-        doc.text("Generated on: " + new Date().toLocaleString(), 20, 200);
-        doc.text("Vrundavandham Shree Swaminarayan Gurukul-Khirasara", 105, 210, {align:"center"});
-        
-        doc.save(`Receipt_${recNo}_${data.studentName}.pdf`);
+        doc.text("Vrundavandham Shree Swaminarayan Gurukul-Khirasara", 105, 200, {align:"center"});
+        doc.save(`Receipt_${recNo}.pdf`);
     }
 
     function resetApp() { localStorage.clear(); location.reload(); }
