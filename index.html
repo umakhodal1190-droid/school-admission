@@ -9,15 +9,15 @@
         :root { --primary: #0e1e60; --golden: #d4af37; --bg: #f1f5f9; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
         
-        /* સ્પ્લેશ સ્ક્રીન - ફોટો કાઢી નાખ્યો છે */
+        /* સ્પ્લેશ સ્ક્રીન */
         #introOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary); color: white; display: flex; justify-content: center; align-items: center; z-index: 9999; text-align: center; }
-        .intro-text { font-size: 30px; font-weight: bold; letter-spacing: 1px; }
+        .intro-text { font-size: 30px; font-weight: bold; }
 
         .pdf-box { width: 100%; max-width: 900px; height: 350px; border-radius: 12px; border: 2px solid #cbd5e1; margin-bottom: 20px; background: white; }
         
         #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; text-align: center; margin: 40px 0; border: 2px solid var(--golden); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         
-        /* ફોર્મ હેડર - અહીં તમારો લેટરહેડ ફોટો દેખાશે */
+        /* ફોર્મ હેડર ફોટો */
         #formHeader { width: 100%; max-width: 900px; text-align: center; background: white; border-radius: 15px 15px 0 0; border: 1px solid #cbd5e1; border-bottom: none; display: none; overflow: hidden; }
         .header-img { width: 100%; height: auto; display: block; }
 
@@ -113,13 +113,10 @@
     </div>
 
 <script>
-    // તમારી નવી Apps Script URL અહીં છે
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbx7zvUxS7HhiCkvdiI-Uv77_TAb0vGAMNXWPZtADUCx1UdWi84U4YBLnl-VlkEr4w/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbymAMQY0SmRFG_abDwAMI_onwmo10ePdy_RqACwEDz8FIZWPP0wriUn0z6sW5OdyzbX/exec';
 
     window.onload = () => {
-        setTimeout(() => {
-            document.getElementById('introOverlay').style.display = 'none';
-        }, 1200);
+        setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 1200);
     };
 
     function showForm() {
@@ -154,6 +151,7 @@
         const btn = document.getElementById('submitBtn');
         btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે...";
 
+        // અહીં ડેટાનો ક્રમ તમારી Apps Script મુજબ સેટ કર્યો છે
         const data = {
             studentName: document.getElementById('uName').value,
             grade: document.getElementById('uGrade').value,
@@ -191,12 +189,12 @@
         const data = JSON.parse(localStorage.getItem("tempData"));
         const recNo = localStorage.getItem("currentReceiptNo") || "1";
 
-        // Receipt Header
+        // રસીદ હેડર (બ્લુ બાર)
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 40, 'F');
         doc.setTextColor(255); doc.setFontSize(18); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, {align:"center"});
         doc.setFontSize(11); doc.text("ADMISSION RECEIPT (2026-27)", 105, 28, {align:"center"});
         
-        // રિસીપ્ટ નંબર જમણી બાજુ ઉપર
+        // રસીદ નંબર જમણી બાજુ ઉપર
         doc.setFontSize(12); doc.text("Receipt No: " + recNo, 195, 12, {align:"right"});
 
         if(data.photoData) {
@@ -217,13 +215,15 @@
         row("Admission Type", data.studentType);
         row("Caste", data.caste);
         row("Aadhar No.", data.aadhar);
+        row("Father Name", data.fatherName);
+        row("Father Aadhar", data.fatherAadhar);
         row("Mobile", data.mobile);
         row("Birth Date", data.dob);
         row("Address", data.address);
 
         doc.setFontSize(9); doc.setTextColor(100);
-        doc.text("Generated on: " + new Date().toLocaleString(), 20, 190);
-        doc.text("Vrundavandham Shree Swaminarayan Gurukul-Khirasara", 105, 200, {align:"center"});
+        doc.text("Generated on: " + new Date().toLocaleString(), 20, 200);
+        doc.text("Vrundavandham Shree Swaminarayan Gurukul-Khirasara", 105, 210, {align:"center"});
         
         doc.save(`Receipt_${recNo}_${data.studentName}.pdf`);
     }
