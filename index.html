@@ -6,10 +6,9 @@
     <title>પ્રવેશ ફોર્મ - VRUNDAVANDHAM KHIRASARA</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        :root { --primary: #0e1e60; --golden: #d4af37; --bg: #f1f5f9; }
+        :root { --primary: #0e1e60; --golden: #d4af37; --bg: #f1f5f9; --red: #dc2626; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
         
-        /* સ્પ્લેશ સ્ક્રીન */
         #introOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary); color: white; display: flex; justify-content: center; align-items: center; z-index: 9999; text-align: center; }
         .intro-text { font-size: 30px; font-weight: bold; }
 
@@ -46,12 +45,13 @@
     <div id="statusBox">
         <h2 style="color: #16a34a;">✅ ફોર્મ સફળતાપૂર્વક સબમિટ થયું!</h2>
         <button class="btn-submit" style="background: #16a34a;" onclick="generatePDF()">📄 રસીદ ડાઉનલોડ કરો</button>
+        
+        <button id="cancelBtn" class="btn-submit" style="background: var(--red); margin-top: 10px;" onclick="cancelLastEntry()">❌ ફોર્મ રદ (Cancel) કરો</button>
+        
         <button class="btn-submit" style="margin-top:20px; background: var(--golden);" onclick="resetApp()">➕ નવું ફોર્મ ભરો</button>
     </div>
 
-    <div id="formHeader">
-        <img src="https://umakhodal1190-droid.github.io/school-admission/header.jpeg" alt="Header" class="header-img">
-    </div>
+    <div id="formHeader"><img src="https://umakhodal1190-droid.github.io/school-admission/header.jpeg" class="header-img"></div>
 
     <div id="formSection">
         <div class="p-content">
@@ -64,10 +64,9 @@
                     </div>
                     <div class="field" style="grid-column: span 2;">
                         <label>વિદ્યાર્થીનું પૂરું નામ (અટક પ્રથમ)</label>
-                        <input type="text" id="uName" placeholder="દા.ત. પટેલ આર્યન રાજેશભાઈ" required>
+                        <input type="text" id="uName" required>
                     </div>
                 </div>
-
                 <div class="section-bar">૧. પ્રવેશ વિગતો</div>
                 <div class="grid">
                     <div class="field"><label>ધોરણ</label><input type="text" id="uGrade" required></div>
@@ -77,7 +76,6 @@
                     <div class="field"><label>આધાર નંબર</label><input type="text" id="uAadhar" maxlength="12" required></div>
                     <div class="field"><label>જન્મ તારીખ</label><input type="text" id="uDob" placeholder="DD/MM/YYYY" required></div>
                 </div>
-
                 <div class="section-bar">૨. વાલી વિગત</div>
                 <div class="grid">
                     <div class="field" style="grid-column: span 2;"><label>પિતાનું નામ</label><input type="text" id="uFather" required></div>
@@ -85,7 +83,6 @@
                     <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" id="uMobile" maxlength="10" required></div>
                     <div class="field" style="grid-column: span 2;"><label>સરનામું</label><input type="text" id="uAddress" required></div>
                 </div>
-
                 <input type="hidden" id="uPhotoData">
                 <button type="submit" id="submitBtn" class="btn-submit">માહિતી સેવ કરો</button>
             </form>
@@ -93,7 +90,7 @@
     </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbyxA_9gOygQYAqoLrEX1Qz1C6KDBLGPzcENY6NHc94UV1_eV4oOtEoPshkjxo-UNh7W/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwZTurxZ-Ci4F4GOxcPVazxL2XoGipDhCdYNj6D7xK413cDmXjnbw8vnREWqjciswI/exec';
 
     window.onload = () => { setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 1200); };
 
@@ -101,7 +98,6 @@
         document.getElementById('mainView').style.display = 'none';
         document.getElementById('formHeader').style.display = 'block';
         document.getElementById('formSection').style.display = 'block';
-        window.scrollTo(0,0);
     }
 
     function processImg(e, prevId, hiddenId) {
@@ -109,26 +105,15 @@
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = (ev) => {
-            const img = new Image();
-            img.src = ev.target.result;
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                const maxWidth = 300; 
-                const scale = maxWidth / img.width;
-                canvas.width = maxWidth; canvas.height = img.height * scale;
-                canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-                const base64 = canvas.toDataURL('image/jpeg', 0.6);
-                document.getElementById(hiddenId).value = base64;
-                if(prevId) document.getElementById(prevId).innerHTML = `<img src="${base64}">`;
-            };
+            document.getElementById(hiddenId).value = ev.target.result;
+            if(prevId) document.getElementById(prevId).innerHTML = `<img src="${ev.target.result}">`;
         };
     }
 
     document.getElementById('admissionForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        localStorage.removeItem("done"); // Reset status
         const btn = document.getElementById('submitBtn');
-        btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે... (રાહ જુઓ)";
+        btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે...";
 
         const data = {
             studentName: document.getElementById('uName').value,
@@ -146,35 +131,39 @@
         };
 
         localStorage.setItem("tempData", JSON.stringify(data));
-
-        // JSONP Call
         const script = document.createElement('script');
         script.src = scriptURL + "?callback=ctrlRes&data=" + encodeURIComponent(JSON.stringify(data));
-        
-        // Timeout handling (15 seconds)
-        const checkTimeout = setTimeout(() => {
-            if (!localStorage.getItem("done")) {
-                alert("સર્વર પ્રતિસાદ આપી રહ્યું નથી. કૃપા કરીને તપાસો કે Apps Script 'Anyone' એક્સેસ સાથે સેટ છે કે નહીં.");
-                btn.disabled = false;
-                btn.innerHTML = "માહિતી સેવ કરો";
-            }
-        }, 15000);
-
         document.body.appendChild(script);
     });
 
     window.ctrlRes = function(res) {
-        localStorage.setItem("done", "true");
         if(res && res.status === "Success") {
             localStorage.setItem("currentReceiptNo", res.receiptNo);
             document.getElementById('formHeader').style.display = 'none';
             document.getElementById('formSection').style.display = 'none';
             document.getElementById('statusBox').style.display = 'block';
         } else {
-            alert("ભૂલ: ડેટા સેવ થઈ શક્યો નથી. ફરી પ્રયત્ન કરો.");
+            alert("ભૂલ: ડેટા સેવ થયો નથી.");
             document.getElementById('submitBtn').disabled = false;
-            document.getElementById('submitBtn').innerHTML = "માહિતી સેવ કરો";
         }
+    };
+
+    // ફોર્મ રદ કરવાનું કાર્ય
+    function cancelLastEntry() {
+        if (!confirm("શું તમે ખરેખર આ ફોર્મ રદ કરવા માંગો છો?")) return;
+        
+        const cBtn = document.getElementById('cancelBtn');
+        cBtn.disabled = true; cBtn.innerHTML = "રદ થઈ રહ્યું છે...";
+
+        const script = document.createElement('script');
+        // action=cancel મોકલી રહ્યું છે
+        script.src = scriptURL + "?callback=cancelRes&action=cancel&data=" + encodeURIComponent(JSON.stringify({}));
+        document.body.appendChild(script);
+    }
+
+    window.cancelRes = function(res) {
+        alert("ફોર્મ સફળતાપૂર્વક રદ કરવામાં આવ્યું છે.");
+        resetApp();
     };
 
     function generatePDF() {
@@ -183,7 +172,6 @@
         const data = JSON.parse(localStorage.getItem("tempData"));
         const recNo = localStorage.getItem("currentReceiptNo") || "1";
 
-        // Header
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 40, 'F');
         doc.setTextColor(255); doc.setFontSize(18); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, {align:"center"});
         doc.setFontSize(11); doc.text("ADMISSION RECEIPT (2026-27)", 105, 28, {align:"center"});
@@ -193,11 +181,7 @@
 
         doc.setTextColor(0); doc.setFontSize(13);
         let y = 60;
-        const row = (l, v) => { 
-            doc.setFont("helvetica", "bold"); doc.text(l + ":", 20, y); 
-            doc.setFont("helvetica", "normal"); doc.text(String(v), 70, y); 
-            y += 11; 
-        };
+        const row = (l, v) => { doc.setFont("helvetica", "bold"); doc.text(l + ":", 20, y); doc.setFont("helvetica", "normal"); doc.text(String(v), 70, y); y += 11; };
 
         row("Student Name", data.studentName);
         row("Grade", data.grade);
@@ -206,16 +190,12 @@
         row("Caste", data.caste);
         row("Aadhar No.", data.aadhar);
         row("Father Name", data.fatherName);
-        row("Father Aadhar", data.fatherAadhar);
         row("Mobile", data.mobile);
-        row("Birth Date", data.dob);
         row("Address", data.address);
 
         doc.setFontSize(9); doc.setTextColor(100);
-        doc.text("Generated on: " + new Date().toLocaleString(), 20, 200);
         doc.text("Vrundavandham Shree Swaminarayan Gurukul-Khirasara", 105, 210, {align:"center"});
-        
-        doc.save(`Receipt_${recNo}_${data.studentName}.pdf`);
+        doc.save(`Receipt_${recNo}.pdf`);
     }
 
     function resetApp() { localStorage.clear(); location.reload(); }
