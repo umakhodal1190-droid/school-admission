@@ -8,83 +8,63 @@
     <style>
         :root { --primary: #0e1e60; --golden: #d4af37; --bg: #f1f5f9; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
-
-        /* Splash Screen */
         #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; display: flex; justify-content: center; align-items: center; z-index: 99999; }
-        .splash-content { text-align: center; }
-        .splash-emoji { font-size: 80px; }
-        .splash-text { font-size: 28px; font-weight: bold; color: var(--primary); }
-
-        .info-title { width: 100%; max-width: 900px; color: var(--primary); font-size: 18px; font-weight: 700; margin: 15px 0 10px 0; border-left: 5px solid var(--golden); padding-left: 10px; text-align: left; }
+        .splash-text { font-size: 24px; font-weight: bold; color: var(--primary); text-align: center; }
+        .info-title { width: 100%; max-width: 900px; color: var(--primary); font-size: 18px; font-weight: 700; margin: 15px 0 10px 0; border-left: 5px solid var(--golden); padding-left: 10px; }
         .pdf-box { width: 100%; max-width: 900px; height: 350px; border-radius: 12px; border: 1px solid #cbd5e1; margin-bottom: 20px; background: white; }
-        .btn-main { width: 100%; max-width: 900px; padding: 18px; background: linear-gradient(135deg, var(--primary), #1e3a8a); color: white; border: none; border-radius: 50px; font-size: 19px; font-weight: 800; cursor: pointer; margin: 20px 0; box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
-        
-        #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 40px 20px; border-radius: 20px; text-align: center; margin: 40px 0; border: 2px solid var(--golden); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+        .btn-main { width: 100%; max-width: 900px; padding: 18px; background: linear-gradient(135deg, var(--primary), #1e3a8a); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: 800; cursor: pointer; margin: 20px 0; }
+        #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 40px 20px; border-radius: 20px; text-align: center; margin: 40px 0; border: 2px solid var(--golden); }
         .btn-action { color: white; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 10px; font-size: 16px; width: 85%; }
-        .btn-download { background: #059669; } .btn-cancel { background: #dc2626; margin-top: 15px; }
-        
+        .btn-download { background: #059669; } .btn-cancel { background: #dc2626; }
         #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 50px; }
         .header-img { width: 100%; height: auto; display: block; border-bottom: 4px solid var(--golden); }
         .p-content { padding: 25px; }
-        .section-bar { background: var(--primary); color: white; padding: 12px; border-radius: 8px; margin: 25px 0 15px 0; font-weight: 600; font-size: 15px; text-align: left; }
-        
+        .section-bar { background: var(--primary); color: white; padding: 12px; border-radius: 8px; margin: 25px 0 15px 0; font-weight: 600; }
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
         .field { display: flex; flex-direction: column; text-align: left; }
         label { font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 5px; }
         input, select, textarea { padding: 11px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 14px; width: 100%; box-sizing: border-box; }
-        
         .photo-container { grid-column: span 1; display: flex; flex-direction: column; align-items: center; background: #f8fafc; padding: 15px; border-radius: 12px; border: 2px dashed #cbd5e1; }
-        #preview { width: 100px; height: 120px; background: #fff; border: 1px solid #e2e8f0; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; color: #ccc; font-size: 11px; }
+        #preview { width: 100px; height: 120px; background: #fff; border: 1px solid #e2e8f0; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; color: #ccc; }
         #preview img { width: 100%; height: 100%; object-fit: cover; }
         .file-label { background: var(--primary); color: white; padding: 7px 15px; border-radius: 6px; cursor: pointer; font-size: 12px; }
         .span-2 { grid-column: span 2; } .span-3 { grid-column: span 3; }
-
         @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } .span-2, .span-3 { grid-column: span 1; } }
     </style>
 </head>
 <body>
 
-    <div id="splashScreen">
-        <div class="splash-content">
-            <div class="splash-emoji">🙏</div>
-            <div class="splash-text">જય સ્વામિનારાયણ</div>
-        </div>
-    </div>
+    <div id="splashScreen"><div class="splash-text">🙏 જય સ્વામિનારાયણ</div></div>
 
     <div id="mainView" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
         <div class="info-title">૧. ફી માળખું</div>
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
-
         <div class="info-title">૨. VSGK માહિતી પત્રક</div> 
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
-
-        <button id="mainOpenBtn" class="btn-main" onclick="toggleForm()">લોકલ અને અપડાઉન પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
+        <button id="mainOpenBtn" class="btn-main" onclick="toggleForm()">પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
     </div>
 
     <div id="statusBox">
         <h2 style="color: var(--primary);">ફોર્મ સફળતાપૂર્વક સબમિટ થઈ ગયું છે! ✅</h2>
-        <p>તમારી પ્રવેશ રસીદ નીચેથી ડાઉનલોડ કરો.</p>
         <button class="btn-action btn-download" onclick="downloadReceipt()">📄 પ્રવેશ રસીદ ડાઉનલોડ કરો</button>
-        <button class="btn-action btn-cancel" onclick="handleCancel()">❌ એડમિશન રદ કરો / નવું ફોર્મ ભરો</button>
+        <button class="btn-action btn-cancel" onclick="handleCancel()">❌ નવું ફોર્મ ભરો / રદ કરો</button>
     </div>
 
     <div id="formSection">
         <img src="header.jpeg" class="header-img">
         <div class="p-content">
-            <h2 style="text-align:center; color:var(--primary);">લોકલ અને અપડાઉન પ્રવેશ ફોર્મ</h2>
             <form id="admissionForm">
                 <div class="grid">
                     <div class="photo-container">
-                        <div id="preview">વિદ્યાર્થીનો ફોટો</div>
-                        <label class="file-label" for="photoFile">ફોટો અપલોડ</label>
+                        <div id="preview">ફોટો</div>
+                        <label class="file-label" for="photoFile">અપલોડ</label>
                         <input type="file" id="photoFile" accept="image/*" onchange="loadFile(event)" style="display: none;" required>
                     </div>
                     <div class="field span-2">
                         <label>વિદ્યાર્થીનું પૂરું નામ (અટક પ્રથમ)</label>
-                        <input type="text" id="uName" placeholder="અટક નામ પિતાનું નામ" required>
+                        <input type="text" id="uName" required>
                     </div>
                 </div>
-
                 <div class="section-bar">૧. પ્રવેશ વિગતો</div>
                 <div class="grid">
                     <div class="field"><label>ધોરણ</label><input type="text" id="uGrade" required></div>
@@ -92,23 +72,20 @@
                     <div class="field"><label>જ્ઞાતિ</label><select id="uCaste"><option value="Open">Open</option><option value="OBC">OBC</option><option value="SC">SC</option><option value="ST">ST</option></select></div>
                     <div class="field"><label>પ્રવેશ પ્રકાર</label><select id="uType"><option value="Local(લોકલ)">Local(લોકલ)</option><option value="Up-Down(અપડાઉન)">Up-Down(અપડાઉન)</option></select></div>
                     <div class="field"><label>જન્મ તારીખ</label><input type="text" id="uDob" placeholder="DD/MM/YYYY" required></div>
-                    <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" id="uMobile" maxlength="10" required></div>
-                    <div class="field"><label>વિદ્યાર્થીનો આધાર નંબર</label><input type="text" id="uAadhar" maxlength="12" required></div>
+                    <div class="field"><label>મોબાઈલ</label><input type="tel" id="uMobile" maxlength="10" required></div>
+                    <div class="field"><label>વિદ્યાર્થી આધાર</label><input type="text" id="uAadhar" maxlength="12" required></div>
                 </div>
-
-                <div class="section-bar">૨. ડોક્યુમેન્ટ અપલોડ</div>
+                <div class="section-bar">૨. ડોક્યુમેન્ટ</div>
                 <div class="grid">
-                    <div class="field span-2"><label>વિદ્યાર્થીનું આધાર કાર્ડ</label><input type="file" id="uAadharFile" accept="image/*" required></div>
+                    <div class="field span-2"><label>વિદ્યાર્થી આધાર કાર્ડ</label><input type="file" id="uAadharFile" accept="image/*" required></div>
                     <div class="field span-2"><label>પિતાનું આધાર કાર્ડ</label><input type="file" id="uFatherAadharFile" accept="image/*" required></div>
                 </div>
-
-                <div class="section-bar">૩. વાલીની વિગત</div>
+                <div class="section-bar">૩. વાલી વિગત</div>
                 <div class="grid">
                     <div class="field span-2"><label>પિતાનું પૂરું નામ</label><input type="text" id="uFather" required></div>
-                    <div class="field"><label>પિતાનો આધાર નંબર</label><input type="text" id="uFatherAadhar" maxlength="12" required></div>
+                    <div class="field"><label>પિતાનો આધાર</label><input type="text" id="uFatherAadhar" maxlength="12" required></div>
                     <div class="field span-3"><label>સરનામું</label><textarea id="uAddress" rows="2" required></textarea></div>
                 </div>
-
                 <button type="submit" id="submitBtn" class="btn-main">ફોર્મ સબમિટ કરો</button>
             </form>
         </div>
@@ -116,12 +93,32 @@
 
 <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbybeOb4i_opFjNor8OMYh3mnwXTHS_PFVlPBBtC7ip3hHLwXrrYKdJfvNvexRksLs5R/exec';
+    const dbName = "AdmissionDB";
+
+    // IndexedDB setup for large data
+    function saveToDB(data) {
+        const req = indexedDB.open(dbName, 1);
+        req.onupgradeneeded = (e) => e.target.result.createObjectStore("store");
+        req.onsuccess = (e) => {
+            const db = e.target.result;
+            db.transaction("store", "readwrite").objectStore("store").put(data, "student");
+        };
+    }
+
+    async function getFromDB() {
+        return new Promise((res) => {
+            const req = indexedDB.open(dbName, 1);
+            req.onsuccess = (e) => {
+                const db = e.target.result;
+                const getReq = db.transaction("store", "readonly").objectStore("store").get("student");
+                getReq.onsuccess = () => res(getReq.result);
+            };
+        });
+    }
 
     window.onload = function() {
         setTimeout(() => { document.getElementById('splashScreen').style.display = 'none'; }, 1000);
-        if (localStorage.getItem("formSubmitted") === "true") {
-            showStatusBox();
-        }
+        if (localStorage.getItem("formSubmitted") === "true") showStatusBox();
     };
 
     function showStatusBox() {
@@ -136,25 +133,22 @@
     }
 
     function loadFile(e) { 
-        if(e.target.files[0]) {
-            document.getElementById('preview').innerHTML = '<img id="savedPhoto" src="' + URL.createObjectURL(e.target.files[0]) + '">';
-        } 
+        if(e.target.files[0]) document.getElementById('preview').innerHTML = '<img id="savedPhoto" src="' + URL.createObjectURL(e.target.files[0]) + '">';
     }
 
     async function toBase64(file) {
         if (!file) return "";
-        return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
+        return new Promise((res) => {
+            const r = new FileReader();
+            r.readAsDataURL(file);
+            r.onload = () => res(r.result);
         });
     }
 
     document.getElementById('admissionForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
-        btn.disabled = true; 
-        btn.innerHTML = "સેવ થઈ રહ્યું છે, મહેરબાની કરીને રાહ જુઓ...";
+        btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે...";
 
         const photo = document.getElementById('savedPhoto');
         let photoBase64 = "";
@@ -164,9 +158,6 @@
             canvas.getContext('2d').drawImage(photo, 0, 0, 150, 180);
             photoBase64 = canvas.toDataURL('image/jpeg');
         }
-
-        const sAadharFile = document.getElementById('uAadharFile').files[0];
-        const fAadharFile = document.getElementById('uFatherAadharFile').files[0];
 
         const data = {
             action: "add",
@@ -182,93 +173,54 @@
             mobile: document.getElementById('uMobile').value,
             address: document.getElementById('uAddress').value,
             photoData: photoBase64,
-            studentAadharData: await toBase64(sAadharFile),
-            fatherAadharData: await toBase64(fAadharFile)
+            studentAadharData: await toBase64(document.getElementById('uAadharFile').files[0]),
+            fatherAadharData: await toBase64(document.getElementById('uFatherAadharFile').files[0])
         };
 
         try {
-            // mode: 'no-cors' વાપરવાથી ડેટા ડ્રાઇવમાં જશે, પણ રિસ્પોન્સમાં JSON નહિ મળે.
-            await fetch(scriptURL, { 
-                method: 'POST', 
-                mode: 'no-cors',
-                body: JSON.stringify(data) 
-            });
-            
-            // ડેટા લોકલ સેવ કરી રસીદ બતાવવી
+            await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
+            saveToDB(data);
             localStorage.setItem("formSubmitted", "true");
-            localStorage.setItem("studentData", JSON.stringify(data));
-            alert("ડેટા સફળતાપૂર્વક મોકલવામાં આવ્યો છે!");
+            alert("સફળતાપૂર્વક સબમિટ થયું!");
             location.reload();
         } catch (err) {
-            alert("ભૂલ આવી: " + err.message);
-            btn.disabled = false; btn.innerHTML = "ફોર્મ સબમિટ કરો";
+            alert("ભૂલ: " + err.message);
+            btn.disabled = false;
         }
     });
 
-    function downloadReceipt() {
+    async function downloadReceipt() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
-        const d = JSON.parse(localStorage.getItem("studentData"));
-        if(!d) { alert("ડેટા મળ્યો નથી!"); return; }
+        const d = await getFromDB();
+        if(!d) return alert("ડેટા મળ્યો નથી!");
 
-        // Header Design
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 45, 'F');
-        doc.setTextColor(212, 175, 55); doc.setFontSize(22); doc.setFont(undefined, 'bold');
-        doc.text("VRUNDAVANDHAM KHIRASARA", 105, 20, {align:"center"});
+        doc.setTextColor(212, 175, 55); doc.setFontSize(22); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 20, {align:"center"});
         doc.setTextColor(255); doc.setFontSize(14); doc.text("Admission Receipt : 2026-27", 105, 32, {align:"center"});
 
-        // Passport Photo
-        if(d.photoData) {
-            doc.setDrawColor(14, 30, 96); doc.rect(159, 49, 37, 44);
-            doc.addImage(d.photoData, 'JPEG', 160, 50, 35, 42);
-        }
+        if(d.photoData) doc.addImage(d.photoData, 'JPEG', 160, 50, 35, 42);
 
-        // Student Info Details
         doc.setTextColor(0); doc.setFontSize(13);
         let y = 65;
-        const info = [
-            ["વિદ્યાર્થીનું નામ", d.studentName], 
-            ["ધોરણ", d.grade], 
-            ["લિંગ", d.gender], 
-            ["પ્રવેશ પ્રકાર", d.studentType], 
-            ["મોબાઈલ નંબર", d.mobile], 
-            ["આધાર નંબર", d.aadhar],
-            ["પિતાનું નામ", d.fatherName], 
-            ["જન્મ તારીખ", d.dob]
-        ];
-
-        info.forEach(item => {
-            doc.setFont(undefined, 'bold'); doc.text(item[0]+":", 15, y);
-            doc.setFont(undefined, 'normal'); 
-            doc.text(item[1] ? item[1].toString() : "માહિતી ઉપલબ્ધ નથી", 60, y);
-            y += 11;
+        const items = [["Name", d.studentName], ["Grade", d.grade], ["Gender", d.gender], ["Type", d.studentType], ["Mobile", d.mobile], ["Aadhar", d.aadhar]];
+        items.forEach(i => {
+            doc.setFont(undefined, 'bold'); doc.text(i[0]+":", 15, y);
+            doc.setFont(undefined, 'normal'); doc.text(i[1].toString(), 50, y);
+            y += 12;
         });
 
-        // Aadhaar Images - Display if exists
-        y += 5;
-        doc.setFont(undefined, 'bold'); doc.text("વિદ્યાર્થીનું આધાર કાર્ડ:", 15, y);
-        doc.text("પિતાનું આધાર કાર્ડ:", 110, y);
-        if(d.studentAadharData) doc.addImage(d.studentAadharData, 'JPEG', 15, y+5, 85, 55);
-        if(d.fatherAadharData) doc.addImage(d.fatherAadharData, 'JPEG', 110, y+5, 85, 55);
+        if(d.studentAadharData) doc.addImage(d.studentAadharData, 'JPEG', 15, y+10, 85, 55);
+        if(d.fatherAadharData) doc.addImage(d.fatherAadharData, 'JPEG', 110, y+10, 85, 55);
 
         doc.save(`Receipt_${d.studentName}.pdf`);
     }
 
     async function handleCancel() {
-        if(confirm("શું તમે ખરેખર એડમિશન રદ કરવા માંગો છો?")) {
-            const d = JSON.parse(localStorage.getItem("studentData"));
-            try {
-                await fetch(scriptURL, { 
-                    method: 'POST', 
-                    mode: 'no-cors',
-                    body: JSON.stringify({action:"cancel", aadhar: d.aadhar}) 
-                });
-                localStorage.clear(); 
-                alert("એડમિશન રદ થયું છે. હવે તમે ફરી નવું ફોર્મ ભરી શકો છો."); 
-                location.reload();
-            } catch (e) {
-                alert("સર્વર સાથે જોડાણમાં ભૂલ આવી.");
-            }
+        if(confirm("રદ કરવું છે?")) {
+            localStorage.clear(); 
+            const req = indexedDB.deleteDatabase(dbName);
+            location.reload();
         }
     }
 </script>
