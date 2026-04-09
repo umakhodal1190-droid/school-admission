@@ -28,27 +28,28 @@
     <div id="mainView" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
-        <button class="btn-submit" style="max-width: 400px;" onclick="toggleForm(true)">પ્રવેશ ફોર્મ ભરવા ક્લિક કરો</button>
+        <button class="btn-submit" style="max-width: 400px;" onclick="toggleForm(true)">પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
     </div>
 
     <div id="statusBox">
-        <h2 style="color: green;">✅ ફોર્મ સફળતાપૂર્વક સબમિટ થયું!</h2>
-        <button class="btn-submit" onclick="generatePDF()">📄 રસીદ ફરી ડાઉનલોડ કરો</button>
+        <h2 style="color: #16a34a;">✅ પ્રવેશ ફોર્મ સફળતાપૂર્વક સબમિટ થયું!</h2>
+        <p>નીચેના બટન પર ક્લિક કરીને રસીદ સેવ કરી લો.</p>
+        <button class="btn-submit" style="background: #16a34a;" onclick="generatePDF()">📄 રસીદ ડાઉનલોડ કરો</button>
         <button class="btn-submit" onclick="resetApp()">➕ નવું ફોર્મ ભરો</button>
     </div>
 
     <div id="formSection">
         <div class="p-content">
-            <h2 style="text-align:center; color:var(--primary);">લોકલ અને અપડાઉન પ્રવેશ ફોર્મ</h2>
+            <h2 style="text-align:center; color:var(--primary); margin-top:0;">લોકલ અને અપડાઉન પ્રવેશ ફોર્મ</h2>
             <form id="admissionForm">
                 <div class="grid">
                     <div style="text-align: center;">
-                        <div id="preview">ફોટો</div>
+                        <div id="preview">વિદ્યાર્થી ફોટો</div>
                         <input type="file" accept="image/*" onchange="handleImg(event, 'preview', 'uPhotoData')" required>
                     </div>
                     <div class="field" style="grid-column: span 2;">
-                        <label>વિદ્યાર્થીનું પૂરું નામ</label>
-                        <input type="text" id="uName" required>
+                        <label>વિદ્યાર્થીનું પૂરું નામ (અટક પ્રથમ)</label>
+                        <input type="text" id="uName" placeholder="દા.ત. પટેલ આર્યન રાજેશભાઈ" required>
                     </div>
                 </div>
 
@@ -70,7 +71,7 @@
 
                 <div class="section-bar">૩. વાલી વિગત</div>
                 <div class="grid">
-                    <div class="field" style="grid-column: span 2;"><label>પિતાનું નામ</label><input type="text" id="uFather" required></div>
+                    <div class="field" style="grid-column: span 2;"><label>પિતાનું પૂરું નામ</label><input type="text" id="uFather" required></div>
                     <div class="field"><label>પિતાનો આધાર નંબર</label><input type="text" id="uFatherAadhar" maxlength="12" required></div>
                     <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" id="uMobile" maxlength="10" required></div>
                     <div class="field" style="grid-column: span 2;"><label>સરનામું</label><input type="text" id="uAddress" required></div>
@@ -78,7 +79,7 @@
 
                 <input type="hidden" id="uPhotoData"><input type="hidden" id="uAadharImgData"><input type="hidden" id="uFatherImgData">
                 <button type="submit" id="submitBtn" class="btn-submit">સબમિટ કરો</button>
-                <button type="button" class="btn-submit btn-cancel" onclick="toggleForm(false)">રદ કરો</button>
+                <button type="button" class="btn-submit btn-cancel" onclick="toggleForm(false)">પાછા જાઓ (Cancel)</button>
             </form>
         </div>
     </div>
@@ -89,6 +90,7 @@
     function toggleForm(show) {
         document.getElementById('formSection').style.display = show ? 'block' : 'none';
         document.getElementById('mainView').style.display = show ? 'none' : 'block';
+        window.scrollTo(0,0);
     }
 
     async function handleImg(e, prevId, hiddenId) {
@@ -104,7 +106,7 @@
     document.getElementById('admissionForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
-        btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે...";
+        btn.disabled = true; btn.innerHTML = "માહિતી સેવ થઈ રહી છે...";
 
         const data = {
             studentName: document.getElementById('uName').value,
@@ -128,9 +130,9 @@
 
     window.ctrlRes = function(res) {
         localStorage.setItem("done", "true");
-        generatePDF();
         document.getElementById('formSection').style.display = 'none';
         document.getElementById('statusBox').style.display = 'block';
+        generatePDF();
     };
 
     function generatePDF() {
@@ -138,25 +140,40 @@
         const doc = new jsPDF();
         const data = JSON.parse(localStorage.getItem("tempData"));
         
-        // વ્યવસ્થિત રિસીપ્ટ ડિઝાઇન
-        doc.setFontSize(22); doc.setTextColor(14, 30, 96);
-        doc.text("Admission Receipt - 2026-27", 105, 20, {align:"center"});
-        doc.line(20, 25, 190, 25);
+        // --- રસીદની ડિઝાઇન ---
+        doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 40, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(20); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, {align:"center"});
+        doc.setFontSize(12); doc.text("ADMISSION RECEIPT (2026-2027)", 105, 28, {align:"center"});
         
-        doc.setFontSize(14); doc.setTextColor(0, 0, 0);
-        let y = 40;
-        doc.text("વિદ્યાર્થીનું નામ: " + data.studentName, 20, y);
-        doc.text("ધોરણ: " + data.grade + " | લિંગ: " + data.gender, 20, y+10);
-        doc.text("જ્ઞાતિ: " + data.caste + " | પ્રકાર: " + data.studentType, 20, y+20);
-        doc.text("આધાર નંબર: " + data.aadhar, 20, y+30);
-        doc.text("પિતાનું નામ: " + data.fatherName, 20, y+40);
-        doc.text("પિતાનો આધાર: " + data.fatherAadhar, 20, y+50);
-        doc.text("મોબાઈલ: " + data.mobile, 20, y+60);
-        doc.text("સરનામું: " + data.address, 20, y+70);
-        doc.text("જન્મ તારીખ: " + data.dob, 20, y+80);
+        doc.setTextColor(0, 0, 0);
+        let startY = 55;
+        let lineGap = 12;
+
+        const printRow = (label, value, y) => {
+            doc.setFont("helvetica", "bold");
+            doc.text(label, 25, y);
+            doc.setFont("helvetica", "normal");
+            doc.text(": " + value, 70, y);
+        };
+
+        printRow("Student Name", data.studentName, startY);
+        printRow("Grade", data.grade, startY + lineGap);
+        printRow("Gender", data.gender, startY + lineGap * 2);
+        printRow("Caste", data.caste, startY + lineGap * 3);
+        printRow("Type", data.studentType, startY + lineGap * 4);
+        printRow("Aadhar No.", data.aadhar, startY + lineGap * 5);
+        printRow("Father Name", data.fatherName, startY + lineGap * 6);
+        printRow("Father Aadhar", data.fatherAadhar, startY + lineGap * 7);
+        printRow("Mobile No.", data.mobile, startY + lineGap * 8);
+        printRow("Address", data.address, startY + lineGap * 9);
+        printRow("Date of Birth", data.dob, startY + lineGap * 10);
+
+        doc.setDrawColor(200); doc.line(20, startY + lineGap * 11, 190, startY + lineGap * 11);
         
         doc.setFontSize(10); doc.setTextColor(100);
-        doc.text("VRUNDAVANDHAM SHREE SWAMINARAYAN GURUKUL-KHIRASARA", 105, 130, {align:"center"});
+        doc.text("Vrundavandham Shree Swaminarayan Gurukul - Khirasara", 105, startY + lineGap * 12, {align:"center"});
+        doc.text("Generated on: " + new Date().toLocaleString(), 105, startY + lineGap * 13, {align:"center"});
         
         doc.save(`Receipt_${data.studentName}.pdf`);
     }
