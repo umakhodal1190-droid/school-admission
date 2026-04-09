@@ -28,19 +28,18 @@
     <div id="mainView" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
-        <button class="btn-submit" style="max-width: 400px;" onclick="toggleForm(true)">પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
+        <button class="btn-submit" style="max-width: 400px;" onclick="toggleForm(true)">પ્રવેશ ફોર્મ ભરવા ક્લિક કરો</button>
     </div>
 
     <div id="statusBox">
-        <h2 style="color: #16a34a;">✅ પ્રવેશ ફોર્મ સફળતાપૂર્વક સબમિટ થયું!</h2>
-        <p>નીચેના બટન પર ક્લિક કરીને રસીદ સેવ કરી લો.</p>
+        <h2 style="color: #16a34a;">✅ ફોર્મ સફળતાપૂર્વક સબમિટ થયું!</h2>
         <button class="btn-submit" style="background: #16a34a;" onclick="generatePDF()">📄 રસીદ ડાઉનલોડ કરો</button>
         <button class="btn-submit" onclick="resetApp()">➕ નવું ફોર્મ ભરો</button>
     </div>
 
     <div id="formSection">
         <div class="p-content">
-            <h2 style="text-align:center; color:var(--primary); margin-top:0;">લોકલ અને અપડાઉન પ્રવેશ ફોર્મ</h2>
+            <h2 style="text-align:center; color:var(--primary); margin:0 0 20px 0;">લોકલ અને અપડાઉન પ્રવેશ ફોર્મ</h2>
             <form id="admissionForm">
                 <div class="grid">
                     <div style="text-align: center;">
@@ -48,15 +47,21 @@
                         <input type="file" accept="image/*" onchange="handleImg(event, 'preview', 'uPhotoData')" required>
                     </div>
                     <div class="field" style="grid-column: span 2;">
-                        <label>વિદ્યાર્થીનું પૂરું નામ (અટક પ્રથમ)</label>
-                        <input type="text" id="uName" placeholder="દા.ત. પટેલ આર્યન રાજેશભાઈ" required>
+                        <label>વિદ્યાર્થીનું પૂરું નામ</label>
+                        <input type="text" id="uName" placeholder="અટક નામ પિતાનું નામ" required>
                     </div>
                 </div>
 
                 <div class="section-bar">૧. પ્રવેશ વિગતો</div>
                 <div class="grid">
                     <div class="field"><label>ધોરણ</label><input type="text" id="uGrade" required></div>
-                    <div class="field"><label>લિંગ</label><select id="uGender"><option>કુમાર</option><option>કન્યા</option></select></div>
+                    <div class="field">
+                        <label>લિંગ</label>
+                        <select id="uGender">
+                            <option value="કુમાર">કુમાર</option>
+                            <option value="કન્યા">કન્યા</option>
+                        </select>
+                    </div>
                     <div class="field"><label>જ્ઞાતિ</label><select id="uCaste"><option>Open</option><option>OBC</option><option>SC</option><option>ST</option></select></div>
                     <div class="field"><label>પ્રવેશ પ્રકાર</label><select id="uType"><option>Local</option><option>Up-Down</option></select></div>
                     <div class="field"><label>આધાર નંબર</label><input type="text" id="uAadhar" maxlength="12" required></div>
@@ -71,7 +76,7 @@
 
                 <div class="section-bar">૩. વાલી વિગત</div>
                 <div class="grid">
-                    <div class="field" style="grid-column: span 2;"><label>પિતાનું પૂરું નામ</label><input type="text" id="uFather" required></div>
+                    <div class="field" style="grid-column: span 2;"><label>પિતાનું નામ</label><input type="text" id="uFather" required></div>
                     <div class="field"><label>પિતાનો આધાર નંબર</label><input type="text" id="uFatherAadhar" maxlength="12" required></div>
                     <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" id="uMobile" maxlength="10" required></div>
                     <div class="field" style="grid-column: span 2;"><label>સરનામું</label><input type="text" id="uAddress" required></div>
@@ -79,7 +84,7 @@
 
                 <input type="hidden" id="uPhotoData"><input type="hidden" id="uAadharImgData"><input type="hidden" id="uFatherImgData">
                 <button type="submit" id="submitBtn" class="btn-submit">સબમિટ કરો</button>
-                <button type="button" class="btn-submit btn-cancel" onclick="toggleForm(false)">પાછા જાઓ (Cancel)</button>
+                <button type="button" class="btn-submit btn-cancel" onclick="toggleForm(false)">પાછા જાઓ</button>
             </form>
         </div>
     </div>
@@ -90,7 +95,6 @@
     function toggleForm(show) {
         document.getElementById('formSection').style.display = show ? 'block' : 'none';
         document.getElementById('mainView').style.display = show ? 'none' : 'block';
-        window.scrollTo(0,0);
     }
 
     async function handleImg(e, prevId, hiddenId) {
@@ -119,7 +123,8 @@
             fatherAadhar: document.getElementById('uFatherAadhar').value,
             mobile: document.getElementById('uMobile').value,
             address: document.getElementById('uAddress').value,
-            dob: document.getElementById('uDob').value
+            dob: document.getElementById('uDob').value,
+            photoData: document.getElementById('uPhotoData').value
         };
 
         localStorage.setItem("tempData", JSON.stringify(data));
@@ -140,40 +145,53 @@
         const doc = new jsPDF();
         const data = JSON.parse(localStorage.getItem("tempData"));
         
-        // --- રસીદની ડિઝાઇન ---
+        // --- હેડર ---
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 40, 'F');
         doc.setTextColor(255, 255, 255);
-        doc.setFontSize(20); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, {align:"center"});
-        doc.setFontSize(12); doc.text("ADMISSION RECEIPT (2026-2027)", 105, 28, {align:"center"});
-        
-        doc.setTextColor(0, 0, 0);
-        let startY = 55;
-        let lineGap = 12;
+        doc.setFontSize(18); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, {align:"center"});
+        doc.setFontSize(12); doc.text("ADMISSION RECEIPT (2026-27)", 105, 28, {align:"center"});
 
-        const printRow = (label, value, y) => {
-            doc.setFont("helvetica", "bold");
-            doc.text(label, 25, y);
-            doc.setFont("helvetica", "normal");
-            doc.text(": " + value, 70, y);
+        // --- વિદ્યાર્થીનો ફોટો રિસીપ્ટમાં ---
+        if(data.photoData) {
+            try {
+                doc.addImage(data.photoData, 'JPEG', 160, 45, 30, 35);
+                doc.setDrawColor(200); doc.rect(160, 45, 30, 35); // Border for photo
+            } catch(e) { console.log("Photo error"); }
+        }
+
+        // --- વિગતો ---
+        doc.setTextColor(0, 0, 0);
+        let y = 55;
+        const row = (label, val) => {
+            doc.setFont("helvetica", "bold"); doc.text(label + ":", 20, y);
+            doc.setFont("helvetica", "normal"); doc.text(val, 65, y);
+            y += 10;
         };
 
-        printRow("Student Name", data.studentName, startY);
-        printRow("Grade", data.grade, startY + lineGap);
-        printRow("Gender", data.gender, startY + lineGap * 2);
-        printRow("Caste", data.caste, startY + lineGap * 3);
-        printRow("Type", data.studentType, startY + lineGap * 4);
-        printRow("Aadhar No.", data.aadhar, startY + lineGap * 5);
-        printRow("Father Name", data.fatherName, startY + lineGap * 6);
-        printRow("Father Aadhar", data.fatherAadhar, startY + lineGap * 7);
-        printRow("Mobile No.", data.mobile, startY + lineGap * 8);
-        printRow("Address", data.address, startY + lineGap * 9);
-        printRow("Date of Birth", data.dob, startY + lineGap * 10);
+        row("Student Name", data.studentName);
+        row("Grade", data.grade);
+        row("Gender", data.gender); // અહીં કુમાર/કન્યા દેખાશે
+        row("Caste", data.caste);
+        row("Admission Type", data.studentType);
+        row("Aadhar No.", "[Aadhaar Redacted]");
+        row("Father Name", data.fatherName);
+        row("Father Aadhar", "[Aadhaar Redacted]");
+        row("Mobile No.", data.mobile);
+        row("Address", data.address);
+        row("Date of Birth", data.dob);
 
-        doc.setDrawColor(200); doc.line(20, startY + lineGap * 11, 190, startY + lineGap * 11);
-        
+        // --- ડોક્યુમેન્ટ સેક્શન (માત્ર લખાણ) ---
+        y += 5;
+        doc.setFont("helvetica", "bold");
+        doc.text("Documents Uploaded:", 20, y);
+        doc.setFont("helvetica", "normal");
+        doc.text("- Student Aadhar Card Photo (Verified)", 25, y + 7);
+        doc.text("- Father Aadhar Card Photo (Verified)", 25, y + 14);
+
+        // --- ફૂટર ---
         doc.setFontSize(10); doc.setTextColor(100);
-        doc.text("Vrundavandham Shree Swaminarayan Gurukul - Khirasara", 105, startY + lineGap * 12, {align:"center"});
-        doc.text("Generated on: " + new Date().toLocaleString(), 105, startY + lineGap * 13, {align:"center"});
+        doc.text("Generated on: " + new Date().toLocaleString(), 105, 190, {align:"center"});
+        doc.text("Vrundavandham Shree Swaminarayan Gurukul - Khirasara", 105, 195, {align:"center"});
         
         doc.save(`Receipt_${data.studentName}.pdf`);
     }
