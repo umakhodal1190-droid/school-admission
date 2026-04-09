@@ -3,225 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VSGK - પ્રવેશ ફોર્મ</title>
+    <title>લોકલ અને અપડાઉન પ્રવેશ ફોર્મ - VSGK</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root { --primary: #0e1e60; --golden: #d4af37; --bg: #f1f5f9; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
-        
-        #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; transition: 0.5s; }
-        
-        .info-title { width: 100%; max-width: 900px; color: var(--primary); font-size: 18px; font-weight: 700; margin: 15px 0 10px 0; border-left: 5px solid var(--golden); padding-left: 10px; }
-        .pdf-box { width: 100%; max-width: 900px; height: 300px; border-radius: 12px; border: 1px solid #cbd5e1; margin-bottom: 20px; background: white; }
 
-        .container { width: 100%; max-width: 900px; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; margin-top: 20px; display: none; }
-        .header-img { width: 100%; height: auto; display: block; border-bottom: 4px solid var(--golden); }
-        
-        .form-body { padding: 25px; }
-        .section-bar { background: var(--primary); color: white; padding: 12px; border-radius: 8px; margin: 20px 0 10px 0; font-weight: bold; }
-        
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .field { display: flex; flex-direction: column; margin-bottom: 12px; }
-        label { font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #444; }
-        input, select, textarea { padding: 11px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; }
-
-        .btn-submit { background: var(--primary); color: white; padding: 18px; border: none; width: 100%; border-radius: 50px; font-size: 18px; cursor: pointer; font-weight: bold; margin-top: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        .btn-submit:disabled { background: #64748b; cursor: not-allowed; }
-        
-        #status-box { display: none; text-align: center; padding: 40px; background: white; border-radius: 15px; margin-top: 20px; width: 100%; max-width: 800px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
-        
-        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
-    </style>
-</head>
-<body>
-
-    <div id="splash-screen">
-        <div style="font-size: 60px;">🙏</div>
-        <div style="font-size: 24px; font-weight: bold; color: var(--primary);">જય સ્વામિનારાયણ</div>
-    </div>
-
-    <div class="info-title">૧. ફી માળખું</div>
-    <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
-
-    <div class="info-title">૨. VSGK માહિતી પત્રક</div> 
-    <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
-
-    <button id="openBtn" class="btn-submit" style="max-width: 900px;" onclick="showForm()">પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
-
-    <div id="form-container" class="container">
-        <img src="header.jpeg" class="header-img" alt="Header">
-        <div class="form-body">
-            <form id="admissionForm">
-                <div class="section-bar">૧. વિદ્યાર્થીની વિગતો</div>
-                <div class="field">
-                    <label>વિદ્યાર્થીનું પૂરું નામ (અટક પ્રથમ)</label>
-                    <input type="text" id="uName" placeholder="અટક નામ પિતાનું નામ" required>
-                </div>
-                <div class="grid">
-                    <div class="field"><label>ધોરણ</label><input type="text" id="uGrade" placeholder="દા.ત. 5" required></div>
-                    <div class="field">
-                        <label>લિંગ</label>
-                        <select id="uGender">
-                            <option value="કુમાર">કુમાર</option>
-                            <option value="કન્યા">કન્યા</option>
-                        </select>
-                    </div>
-                    <div class="field"><label>જન્મ તારીખ</label><input type="text" id="uDob" placeholder="DD/MM/YYYY" required></div>
-                    <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" id="uMobile" pattern="[0-9]{10}" maxlength="10" required></div>
-                    <div class="field span-2"><label>આધાર નંબર</label><input type="text" id="uAadhar" maxlength="12" required></div>
-                </div>
-
-                <div class="section-bar">૨. ફોટો અપલોડ (Photo Upload)</div>
-                <div class="field">
-                    <label>વિદ્યાર્થીનો પાસપોર્ટ સાઈઝ ફોટો</label>
-                    <input type="file" id="uPhoto" accept="image/*" required>
-                </div>
-
-                <div class="section-bar">૩. વાલી અને સરનામું</div>
-                <div class="field"><label>પિતાનું પૂરું નામ</label><input type="text" id="uFather" required></div>
-                <div class="field"><label>રહેઠાણનું સરનામું</label><textarea id="uAddress" rows="2" required></textarea></div>
-
-                <button type="submit" id="subBtn" class="btn-submit">ફોર્મ સબમિટ કરો</button>
-            </form>
-        </div>
-    </div>
-
-    <div id="status-box">
-        <div style="font-size: 50px; color: green;">✅</div>
-        <h2 style="color: var(--primary);">સફળતાપૂર્વક સબમિટ થઈ ગયું!</h2>
-        <p>તમારી રસીદ ફોટા સાથે તૈયાર છે.</p>
-        <button onclick="downloadPDF()" style="padding: 15px; width: 85%; background: #059669; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px;">📄 રસીદ (ફોટા સાથે) ડાઉનલોડ કરો</button>
-        <br><br>
-        <button onclick="resetForm()" style="color:var(--primary); background:none; border:none; cursor:pointer; font-weight:bold; text-decoration: underline;">🔄 નવું ફોર્મ ભરો</button>
-    </div>
-
-    <script>
-        // નવી URL સેટ કરી દીધી છે
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbz7OpsGKLbE1QrlXnsz6IiQ0eVw9tqThjg60LW-K-fggM3nWmhj36Btp_uHJifP1i6C/exec';
-
-        window.onload = () => { 
-            setTimeout(() => { document.getElementById('splash-screen').style.display = 'none'; }, 1000); 
-            if(localStorage.getItem("vsgk_done") === "true") {
-                document.getElementById('status-box').style.display = 'block';
-                document.getElementById('openBtn').style.display = 'none';
-                document.getElementById('form-container').style.display = 'none';
-            }
-        };
-
-        function showForm() { 
-            document.getElementById('form-container').style.display = 'block'; 
-            document.getElementById('openBtn').style.display = 'none'; 
-            window.scrollTo({top: document.getElementById('form-container').offsetTop, behavior: 'smooth'});
+        /* Splash Screen Style */
+        #splashScreen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: white; display: flex; justify-content: center;
+            align-items: center; z-index: 99999;
         }
+        .splash-content { text-align: center; }
+        .splash-emoji { font-size: 80px; margin-bottom: 15px; }
+        .splash-text { font-size: 28px; font-weight: bold; color: var(--primary); }
 
-        function resetForm() {
-            localStorage.removeItem("vsgk_done");
-            localStorage.removeItem("vsgk_data");
-            location.reload();
-        }
-
-        const toBase64 = file => new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
-        });
-
-        document.getElementById('admissionForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const btn = document.getElementById('subBtn');
-            btn.disabled = true; 
-            btn.innerText = "સેવ થઈ રહ્યું છે...";
-
-            try {
-                // ફક્ત વિદ્યાર્થીનો ફોટો જ પ્રોસેસ થશે
-                const sPhotoFile = document.getElementById('uPhoto').files[0];
-                const sPhotoData = sPhotoFile ? await toBase64(sPhotoFile) : "";
-
-                const data = {
-                    studentName: document.getElementById('uName').value,
-                    grade: document.getElementById('uGrade').value,
-                    gender: document.getElementById('uGender').value,
-                    dob: document.getElementById('uDob').value,
-                    mobile: document.getElementById('uMobile').value,
-                    aadhar: document.getElementById('uAadhar').value,
-                    fatherName: document.getElementById('uFather').value,
-                    address: document.getElementById('uAddress').value,
-                    studentPhoto: sPhotoData
-                };
-
-                // Apps Script પર મોકલો
-                await fetch(scriptURL, { 
-                    method: 'POST', 
-                    mode: 'no-cors', 
-                    body: JSON.stringify(data) 
-                });
-
-                localStorage.setItem("vsgk_done", "true");
-                localStorage.setItem("vsgk_data", JSON.stringify(data));
-                
-                // Show success UI
-                document.getElementById('form-container').style.display = 'none';
-                document.getElementById('status-box').style.display = 'block';
-                window.scrollTo(0,0);
-
-            } catch (err) {
-                alert("ભૂલ થઈ, ફરી પ્રયાસ કરો.");
-                btn.disabled = false;
-                btn.innerText = "ફોર્મ સબમિટ કરો";
-            }
-        });
-
-        function downloadPDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            const d = JSON.parse(localStorage.getItem("vsgk_data"));
-
-            if(!d) return alert("ડેટા મળ્યો નથી!");
-
-            // Header Background
-            doc.setFillColor(14, 30, 96);
-            doc.rect(0, 0, 210, 45, 'F');
-
-            // Header Text
-            doc.setTextColor(212, 175, 55);
-            doc.setFontSize(22);
-            doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, {align:"center"});
-            doc.setTextColor(255);
-            doc.setFontSize(11);
-            doc.text("Admission Receipt : 2026-27", 105, 28, {align:"center"});
-
-            // Body Text
-            doc.setTextColor(0);
-            doc.setFontSize(13);
-            let y = 60;
-            const content = [
-                ["વિદ્યાર્થીનું નામ", d.studentName],
-                ["ધોરણ", d.grade],
-                ["લિંગ", d.gender],
-                ["જન્મ તારીખ", d.dob],
-                ["મોબાઈલ નંબર", d.mobile],
-                ["આધાર નંબર", d.aadhar],
-                ["પિતાનું નામ", d.fatherName]
-            ];
-
-            content.forEach(row => {
-                doc.setFont(undefined, 'bold'); doc.text(row[0] + ":", 20, y);
-                doc.setFont(undefined, 'normal'); doc.text(row[1], 70, y);
-                y += 12;
-            });
-
-            // Student Passport Photo (Top Right)
-            if(d.studentPhoto) {
-                doc.addImage(d.studentPhoto, 'JPEG', 150, 48, 40, 50);
-            }
-
-            // Footer
-            doc.setFontSize(10); doc.setTextColor(150);
-            doc.text("Official Vrundavandham Khirasara Digital Receipt", 105, 285, {align:"center"});
-
-            doc.save(`Receipt_${d.studentName}.pdf`);
-        }
-    </script>
-</body>
-</html>
+        .info-title { width: 100%; max-width: 900px; color: var(--primary); font-size: 18px; font-weight: 700; margin: 15px 0 10px 0; border-left: 5px solid var(--golden); padding-left: 10px; text-align: left; }
+        .pdf-box { width: 100%; max-width: 900px; height: 380px; border-radius: 12px; border: 1px solid #cbd5e1; margin-bottom: 20px; background: white; }
+        .btn-main { width: 100%; max-width: 900px; padding: 18px; background: linear-gradient(135deg, var(--primary), #1e3a8a); color: white; border: none; border-radius: 50px; font-size: 19px; font-weight: 800; cursor: pointer; margin: 20px 0; box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
+        
+        #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 40px 20px; border-radius: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.1); text-align: center; margin: 40px 0; border: 2px solid var(--golden); }
+        .btn-action { color: white; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 10px; font-size: 16px; width: 85%; }
+        .btn-download { background: #059669; } .btn-cancel { background: #dc2626; margin-top: 15px; }
+        
+        #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 50px; }
+        .header-img { width: 100%; height: auto; display: block; border
