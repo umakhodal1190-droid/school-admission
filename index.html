@@ -112,8 +112,7 @@
     </div>
 
 <script>
-    // તમારી નવી URL અહીં મૂકી છે
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbyqMmLNS5O98rLx4oIU42ZD1x_oSy2m_g-6liha1yq11dUU43aduqpUw_KoDFnm5cKV/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwP7EYzW4GBehXrJiGNvsJ35BlEdkLGRiuhBpe808qJDd3tC5YmagPvpuJEEmc0PFfT/exec';
     const dbName = "VrundavandhamDB";
 
     async function initDB() {
@@ -153,8 +152,8 @@
 
     function loadFile(e) { if(e.target.files[0]) document.getElementById('preview').innerHTML = `<img id="studentImg" src="${URL.createObjectURL(e.target.files[0])}">`; }
 
-    // ફોટાને નાનો કરીને મોકલવા માટેનું ફંક્શન
     async function toBase64(file) {
+        if (!file) return "";
         return new Promise((res) => {
             const r = new FileReader();
             r.readAsDataURL(file);
@@ -164,12 +163,12 @@
                 img.onload = () => {
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
-                    const maxWidth = 500; // ફોટાની પહોળાઈ ફિક્સ કરી
+                    const maxWidth = 600; 
                     const scale = maxWidth / img.width;
                     canvas.width = maxWidth;
                     canvas.height = img.height * scale;
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    res(canvas.toDataURL('image/jpeg', 0.7)); // 70% ક્વોલિટી સાથે સેવ થશે
+                    res(canvas.toDataURL('image/jpeg', 0.6)); 
                 };
             };
         });
@@ -190,7 +189,6 @@
         }
 
         const data = {
-            action: "add",
             studentName: document.getElementById('uName').value,
             grade: document.getElementById('uGrade').value,
             gender: document.getElementById('uGender').value,
@@ -210,37 +208,35 @@
         const db = await initDB();
         db.transaction("store", "readwrite").objectStore("store").put(data, "studentData");
 
-        // JSONP રિક્વેસ્ટ
-        const finalURL = scriptURL + "?callback=ctrlRes&action=add&data=" + encodeURIComponent(JSON.stringify(data));
-        const script = document.createElement('script'); 
-        script.src = finalURL; 
-        document.body.appendChild(script);
+        // Fetch POST Method (વધુ સુરક્ષિત અને ફાસ્ટ)
+        fetch(scriptURL, {
+            method: 'POST',
+            mode: 'no-cors',
+            body: JSON.stringify(data)
+        }).then(() => {
+            localStorage.setItem("submitted", "true");
+            localStorage.setItem("status", "Confirmed");
+            location.reload();
+        }).catch(err => {
+            alert("ભૂલ આવી: " + err);
+            btn.disabled = false;
+            btn.innerHTML = "ફોર્મ સબમિટ કરો";
+        });
     });
-
-    window.ctrlRes = function(res) { 
-        if(res.status === "Success") { 
-            localStorage.setItem("submitted", "true"); 
-            localStorage.setItem("status", "Confirmed"); 
-            location.reload(); 
-        } else {
-            alert("Error: " + res.message);
-            document.getElementById('submitBtn').disabled = false;
-            document.getElementById('submitBtn').innerHTML = "ફોર્મ સબમિટ કરો";
-        }
-    };
 
     async function handleCancel() {
         if(confirm("શું તમે આ એડમિશન રદ કરવા માંગો છો?")) {
             const db = await initDB();
             const req = db.transaction("store").objectStore("store").get("studentData");
             req.onsuccess = () => {
-                const cancelURL = scriptURL + "?callback=cancelRes&action=cancel&aadhar=" + req.result.aadhar;
-                const script = document.createElement('script'); script.src = cancelURL; document.body.appendChild(script);
+                const cancelURL = scriptURL + "?action=cancel&aadhar=" + req.result.aadhar;
+                fetch(cancelURL, { mode: 'no-cors' }).then(() => {
+                    localStorage.setItem("status", "Cancelled");
+                    location.reload();
+                });
             };
         }
     }
-
-    window.cancelRes = function(res) { if(res.status === "Updated") { localStorage.setItem("status", "Cancelled"); location.reload(); } };
 
     function resetApp() { localStorage.clear(); indexedDB.deleteDatabase(dbName); location.reload(); }
 
@@ -266,13 +262,12 @@
         ];
 
         info.forEach(row => {
-            doc.setFont(undefined, 'bold'); doc.text(row[0] + ":", 20, y);
-            doc.setFont(undefined, 'normal'); doc.text(String(row[1]), 65, y);
+            doc.text(row[0] + ": " + String(row[1]), 20, y);
             y += 10;
         });
 
         y += 5;
-        doc.setFont(undefined, 'bold'); doc.text("ડોક્યુમેન્ટ્સ:", 20, y);
+        doc.text("Uploaded Documents:", 20, y);
         if(data.studentAadharData) doc.addImage(data.studentAadharData, 'JPEG', 20, y+5, 80, 50);
         if(data.fatherAadharData) doc.addImage(data.fatherAadharData, 'JPEG', 110, y+5, 80, 50);
 
