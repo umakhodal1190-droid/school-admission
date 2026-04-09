@@ -11,9 +11,11 @@
         
         #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; display: flex; justify-content: center; align-items: center; z-index: 99999; }
         
+        /* PDF Viewer Styling */
         .info-title { width: 100%; max-width: 900px; color: var(--primary); font-size: 18px; font-weight: 700; margin: 15px 0 10px 0; border-left: 5px solid var(--golden); padding-left: 10px; text-align: left; }
         .pdf-box { width: 100%; max-width: 900px; height: 350px; border-radius: 12px; border: 1px solid #cbd5e1; margin-bottom: 20px; background: white; }
 
+        /* Status Box */
         #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; text-align: center; margin: 40px 0; border: 2px solid var(--golden); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         .status-indicator { padding: 15px; border-radius: 12px; margin-bottom: 20px; font-weight: bold; font-size: 18px; }
         
@@ -22,6 +24,7 @@
         .btn-cancel { background: var(--danger); }
         .btn-new { background: #64748b; }
 
+        /* Form Styling */
         #formSection { display: none; width: 100%; max-width: 900px; background: #fff; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 50px; }
         .header-img { width: 100%; height: auto; display: block; border-bottom: 4px solid var(--golden); }
         .p-content { padding: 25px; }
@@ -112,7 +115,7 @@
     </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwP7EYzW4GBehXrJiGNvsJ35BlEdkLGRiuhBpe808qJDd3tC5YmagPvpuJEEmc0PFfT/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbw2tJSay79xu0H7pKWg1pc_KzsXreBP6H12nJWSzZ6RBOEhCgZysZfABzwp6f2zZEXN/exec';
     const dbName = "VrundavandhamDB";
 
     async function initDB() {
@@ -163,7 +166,7 @@
                 img.onload = () => {
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
-                    const maxWidth = 600; 
+                    const maxWidth = 500; 
                     const scale = maxWidth / img.width;
                     canvas.width = maxWidth;
                     canvas.height = img.height * scale;
@@ -205,18 +208,22 @@
             fatherAadharData: await toBase64(document.getElementById('uFatherAadharFile').files[0])
         };
 
+        // IndexedDB માં લોકલ સેવ
         const db = await initDB();
         db.transaction("store", "readwrite").objectStore("store").put(data, "studentData");
 
-        // Fetch POST Method (વધુ સુરક્ષિત અને ફાસ્ટ)
+        // Fetch POST મારફતે ડેટા મોકલવો
         fetch(scriptURL, {
             method: 'POST',
             mode: 'no-cors',
             body: JSON.stringify(data)
         }).then(() => {
-            localStorage.setItem("submitted", "true");
-            localStorage.setItem("status", "Confirmed");
-            location.reload();
+            // ૩ સેકન્ડ રાહ જુઓ જેથી સર્વર પ્રોસેસ પૂરી કરે
+            setTimeout(() => {
+                localStorage.setItem("submitted", "true");
+                localStorage.setItem("status", "Confirmed");
+                location.reload();
+            }, 3000);
         }).catch(err => {
             alert("ભૂલ આવી: " + err);
             btn.disabled = false;
@@ -246,6 +253,8 @@
         const db = await initDB();
         const data = await new Promise(res => { const req = db.transaction("store").objectStore("store").get("studentData"); req.onsuccess = () => res(req.result); });
 
+        if(!data) return alert("ડેટા મળ્યો નથી!");
+
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 40, 'F');
         doc.setTextColor(255); doc.setFontSize(22); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, {align:"center"});
         doc.setFontSize(12); doc.text("Admission Receipt : 2026-27", 105, 28, {align:"center"});
@@ -258,7 +267,7 @@
             ["વિદ્યાર્થીનું નામ", data.studentName], ["ધોરણ", data.grade], ["લિંગ", data.gender],
             ["જ્ઞાતિ", data.caste], ["પ્રવેશ પ્રકાર", data.studentType], ["જન્મ તારીખ", data.dob],
             ["આધાર નંબર", data.aadhar], ["મોબાઈલ નંબર", data.mobile], ["પિતાનું નામ", data.fatherName],
-            ["પિતાનો આધાર", data.fatherAadhar], ["સરનામું", data.address], ["સ્ટેટસ", localStorage.getItem("status") || "Confirmed"]
+            ["પિતાનો આધાર", data.fatherAadhar], ["સરનામું", data.address]
         ];
 
         info.forEach(row => {
@@ -271,7 +280,7 @@
         if(data.studentAadharData) doc.addImage(data.studentAadharData, 'JPEG', 20, y+5, 80, 50);
         if(data.fatherAadharData) doc.addImage(data.fatherAadharData, 'JPEG', 110, y+5, 80, 50);
 
-        doc.save(`Admission_${data.studentName}.pdf`);
+        doc.save(`Receipt_${data.studentName}.pdf`);
     }
 </script>
 </body>
