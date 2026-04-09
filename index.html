@@ -18,7 +18,7 @@
         label { font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #444; }
         input, select { padding: 12px; border: 1px solid #ccc; border-radius: 8px; width: 100%; box-sizing: border-box; }
         .btn-submit { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; }
-        .btn-cancel { background: #666; margin-top: 10px; }
+        .btn-cancel { background: #64748b; margin-top: 10px; }
         #preview { width: 110px; height: 130px; background: #eee; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 10px; }
         @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
     </style>
@@ -32,9 +32,10 @@
     </div>
 
     <div id="statusBox">
-        <h2 style="color: #16a34a;">✅ ફોર્મ સફળતાપૂર્વક સબમિટ થયું!</h2>
+        <h2 style="color: #16a34a;">✅ પ્રવેશ ફોર્મ સફળતાપૂર્વક સબમિટ થયું!</h2>
         <button class="btn-submit" style="background: #16a34a;" onclick="generatePDF()">📄 રસીદ ડાઉનલોડ કરો</button>
-        <button class="btn-submit" onclick="resetApp()">➕ નવું ફોર્મ ભરો</button>
+        <button class="btn-submit btn-cancel" onclick="resetApp()">ફોર્મ રદ કરો (Home)</button>
+        <button class="btn-submit" style="margin-top:20px; background: var(--golden);" onclick="resetApp()">➕ નવું ફોર્મ ભરો</button>
     </div>
 
     <div id="formSection">
@@ -84,7 +85,6 @@
 
                 <input type="hidden" id="uPhotoData"><input type="hidden" id="uAadharImgData"><input type="hidden" id="uFatherImgData">
                 <button type="submit" id="submitBtn" class="btn-submit">સબમિટ કરો</button>
-                <button type="button" class="btn-submit btn-cancel" onclick="toggleForm(false)">પાછા જાઓ</button>
             </form>
         </div>
     </div>
@@ -145,21 +145,16 @@
         const doc = new jsPDF();
         const data = JSON.parse(localStorage.getItem("tempData"));
         
-        // --- હેડર ---
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 40, 'F');
         doc.setTextColor(255, 255, 255);
         doc.setFontSize(18); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, {align:"center"});
         doc.setFontSize(12); doc.text("ADMISSION RECEIPT (2026-27)", 105, 28, {align:"center"});
 
-        // --- વિદ્યાર્થીનો ફોટો રિસીપ્ટમાં ---
+        // રસીદમાં માત્ર વિદ્યાર્થીનો ફોટો
         if(data.photoData) {
-            try {
-                doc.addImage(data.photoData, 'JPEG', 160, 45, 30, 35);
-                doc.setDrawColor(200); doc.rect(160, 45, 30, 35); // Border for photo
-            } catch(e) { console.log("Photo error"); }
+            try { doc.addImage(data.photoData, 'JPEG', 160, 45, 30, 35); } catch(e) {}
         }
 
-        // --- વિગતો ---
         doc.setTextColor(0, 0, 0);
         let y = 55;
         const row = (label, val) => {
@@ -170,7 +165,7 @@
 
         row("Student Name", data.studentName);
         row("Grade", data.grade);
-        row("Gender", data.gender); // અહીં કુમાર/કન્યા દેખાશે
+        row("Gender", data.gender);
         row("Caste", data.caste);
         row("Admission Type", data.studentType);
         row("Aadhar No.", "[Aadhaar Redacted]");
@@ -180,19 +175,8 @@
         row("Address", data.address);
         row("Date of Birth", data.dob);
 
-        // --- ડોક્યુમેન્ટ સેક્શન (માત્ર લખાણ) ---
-        y += 5;
-        doc.setFont("helvetica", "bold");
-        doc.text("Documents Uploaded:", 20, y);
-        doc.setFont("helvetica", "normal");
-        doc.text("- Student Aadhar Card Photo (Verified)", 25, y + 7);
-        doc.text("- Father Aadhar Card Photo (Verified)", 25, y + 14);
-
-        // --- ફૂટર ---
         doc.setFontSize(10); doc.setTextColor(100);
-        doc.text("Generated on: " + new Date().toLocaleString(), 105, 190, {align:"center"});
-        doc.text("Vrundavandham Shree Swaminarayan Gurukul - Khirasara", 105, 195, {align:"center"});
-        
+        doc.text("Vrundavandham Shree Swaminarayan Gurukul - Khirasara", 105, 190, {align:"center"});
         doc.save(`Receipt_${data.studentName}.pdf`);
     }
 
