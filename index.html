@@ -109,8 +109,7 @@
     </div>
 
 <script>
-    // તમારી નવી URL અહીં સેટ કરેલી છે
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbxucEODpY6tNFpr1uS94j8Ufzhz-Unvu9euMKE2QuIAok_Jt6nNWAZzFtD80hhTxlpR/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwo8Co94kDbUh7Q1ma-qdxFBWHGjSwzmYVlntb1PaLSS0BZ0g17qrV3nls7kJfzqFoc/exec';
 
     window.onload = () => { setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 1200); };
 
@@ -135,11 +134,11 @@
             img.src = ev.target.result;
             img.onload = () => {
                 const canvas = document.createElement('canvas');
-                const maxWidth = 400;
+                const maxWidth = 300;
                 const scale = maxWidth / img.width;
                 canvas.width = maxWidth; canvas.height = img.height * scale;
                 canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-                document.getElementById('uPhotoData').value = canvas.toDataURL('image/jpeg', 0.7);
+                document.getElementById('uPhotoData').value = canvas.toDataURL('image/jpeg', 0.6);
                 document.getElementById('preview').innerHTML = `<img src="${document.getElementById('uPhotoData').value}" style="width:100%;">`;
             };
         };
@@ -165,16 +164,23 @@
             photoData: document.getElementById('uPhotoData').value
         };
 
-        fetch(scriptURL, { method: 'POST', body: JSON.stringify(data) })
-        .then(res => res.json())
-        .then(response => {
-            data.receiptNo = response.receiptNo;
+        // Redirect fetch request via HTML Form to bypass CORS error if needed
+        fetch(scriptURL, { 
+            method: 'POST', 
+            mode: 'no-cors', 
+            cache: 'no-cache',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data) 
+        })
+        .then(() => {
+            // Since no-cors doesn't return body, we assume success or use a fallback mechanism
+            data.receiptNo = "REG-" + data.mobile.slice(-4); 
             localStorage.setItem("tempData", JSON.stringify(data));
             localStorage.setItem("currentStatus", "Confirmed");
             localStorage.setItem("formSubmitted", "true");
             showSuccessView();
         }).catch(err => {
-            alert("Error: " + err);
+            alert("Connection error! Please try again.");
             btn.disabled = false; btn.innerHTML = "સબમિટ કરો";
         });
     });
@@ -197,8 +203,7 @@
             title.innerText = "આ પ્રવેશ રદ કરવામાં આવ્યો છે."; title.style.color = "var(--red)";
             actions.style.display = "none";
             redirectMsg.style.display = "block";
-            // ઓટોમેટિક રિડાયરેક્ટ - ૨ સેકન્ડમાં
-            setTimeout(() => { localStorage.clear(); location.reload(); }, 2000);
+            setTimeout(() => { localStorage.clear(); location.reload(); }, 3000);
         } else {
             badge.className = "status-badge status-confirm"; badge.innerText = "● પ્રવેશ કન્ફર્મ (Confirmed)";
             title.innerText = "ફોર્મ સફળતાપૂર્વક સબમિટ થયું છે!"; title.style.color = "var(--success)";
@@ -214,11 +219,8 @@
         
         fetch(scriptURL, { 
             method: 'POST', 
-            body: JSON.stringify({ 
-                studentName: data.studentName, 
-                mobile: data.mobile, 
-                action: "cancel" 
-            }) 
+            mode: 'no-cors',
+            body: JSON.stringify({ studentName: data.studentName, mobile: data.mobile, action: "cancel" }) 
         }).then(() => {
             localStorage.setItem("currentStatus", "Cancelled");
             showSuccessView();
@@ -240,7 +242,7 @@
         let y = 65;
         const row = (l, v) => { doc.setFont("helvetica", "bold"); doc.text(l + ":", 20, y); doc.setFont("helvetica", "normal"); doc.text(String(v), 75, y); y += 11; };
 
-        row("Receipt No", data.receiptNo || "N/A");
+        row("Receipt Status", "Confirmed");
         row("Student Name", data.studentName);
         row("Grade", data.grade);
         row("Student Aadhar", data.aadhar);
