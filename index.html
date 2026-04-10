@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>પ્રવેશ ફોર્મ - VRUNDAVANDHAM KHIRASARA</title>
+    <title>એડમિશન ફોર્મ - વૃંદાવનધામ ખીરસરા</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root { --primary: #0e1e60; --golden: #d4af37; --bg: #f1f5f9; --success: #16a34a; --red: #dc2626; }
@@ -16,11 +16,6 @@
 
         #statusBox { display: none; width: 95%; max-width: 650px; background: white; padding: 25px; border-radius: 25px; text-align: center; margin: 20px auto 40px auto; border: 1px solid var(--golden); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
         .status-badge { display: inline-block; padding: 8px 20px; border-radius: 50px; font-weight: bold; margin-bottom: 15px; font-size: 16px; border: 2px solid var(--success); color: var(--success); background: #dcfce7; }
-        
-        .helpline-container { border: 2px solid var(--golden); border-radius: 15px; padding: 15px; margin: 20px 0; background: #fffcf0; }
-        .helpline-numbers { color: var(--primary); font-size: 20px; font-weight: 800; }
-        
-        .nondh-box { background: #fee2e2; border: 1px dashed var(--red); padding: 12px; border-radius: 8px; color: var(--red); font-weight: bold; margin: 15px 0; font-size: 14px; }
         
         #formHeader, #formSection { display: none; width: 100%; max-width: 900px; }
         .header-img { width: 100%; height: auto; border-radius: 15px 15px 0 0; display: block; }
@@ -35,7 +30,6 @@
         input, select { padding: 12px; border: 1px solid #ccc; border-radius: 8px; width: 100%; box-sizing: border-box; font-size: 16px; outline: none; }
         
         .btn-submit { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.3s; }
-        .btn-submit:hover { opacity: 0.9; }
         
         #preview { width: 110px; height: 130px; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; border-radius: 8px; background: #eee; margin: 0 auto 10px auto; overflow: hidden; }
         #preview img { width: 100%; height: 100%; object-fit: cover; }
@@ -64,13 +58,8 @@
         <p id="userNameDisplay" style="font-weight: bold; font-size: 18px; color: var(--primary);"></p>
         
         <div id="receiptActions">
-            <div class="helpline-container">
-                <p style="margin:0; font-weight:bold;">વધારે માહિતી માટે સંપર્ક કરો</p>
-                <div class="helpline-numbers">📞 81550 11811 / 11711</div>
-            </div>
             <button class="btn-submit" style="background: var(--success);" onclick="generatePDF()">📄 રસીદ (Receipt) ડાઉનલોડ કરો</button>
-            <div class="nondh-box">⚠️ નોંધ: ઓનલાઇન ભરેલ પ્રવેશ ફોર્મની રીસીપ્ટની પ્રિન્ટ સાથે લાવવી અનિવાર્ય છે.</div>
-            <button id="cancelBtn" class="btn-submit" style="background: var(--red);" onclick="cancelAdmission()">❌ આ પ્રવેશ રદ કરો</button>
+            <button id="cancelBtn" class="btn-submit" style="background: var(--red); margin-top: 15px;" onclick="cancelAdmission()">❌ આ પ્રવેશ રદ કરો</button>
         </div>
         <p id="redirectMsg" style="display:none; color:var(--red); font-weight:bold; margin-top:20px;"></p>
     </div>
@@ -126,7 +115,7 @@
     </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbyfUyssnyOinNpDdkQWGpYV5YrwuJwInQnDV85TfYO766UGX5dqMuVWkgXeSE9tX3DK/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwJbT1rUhqkgXtv8gpTfB2iKy6TirR5dh_91QGi9Lt2V6BLAPBd3DbdYtyJzVM-c5eG/exec';
 
     window.onload = () => { 
         setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 1000);
@@ -137,7 +126,6 @@
         document.getElementById('mainView').style.display = 'none';
         document.getElementById('formHeader').style.display = 'block';
         document.getElementById('formSection').style.display = 'block';
-        window.scrollTo(0,0);
     }
 
     function processImg(e) {
@@ -220,7 +208,7 @@
         msg.innerHTML = "સર્વર સાથે સંપર્ક થઈ રહ્યો છે, રાહ જુઓ...";
 
         const data = JSON.parse(localStorage.getItem("tempData"));
-        const failsafe = setTimeout(() => clearAndReload(), 15000);
+        const failsafe = setTimeout(() => clearAndReload(), 20000);
 
         fetch(scriptURL, { method: 'POST', body: JSON.stringify({ 
             studentName: data.studentName, mobile: data.mobile, action: "cancel" 
@@ -243,7 +231,7 @@
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 40, 'F');
         doc.setTextColor(255); doc.setFontSize(20); doc.text("VRUNDAVANDHAM KHIRASARA GURUKUL", 105, 20, {align:"center"});
         doc.setFontSize(14); doc.text("ADMISSION RECEIPT", 105, 32, {align:"center"});
-        doc.setTextColor(0); doc.text("Name: " + data.studentName, 20, 60);
+        doc.setTextColor(0); doc.text("Student: " + data.studentName, 20, 60);
         doc.text("Grade: " + data.grade, 20, 70);
         doc.text("Mobile: " + data.mobile, 20, 80);
         doc.save(`Receipt_${data.studentName}.pdf`);
