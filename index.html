@@ -129,7 +129,8 @@
     </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbw5TPcjeOg-NMgFRuvj6M8kQXG-w8w6iXeYaAv3uuRgTvGnCCwlTXdOX9J6Elt3hXhX/exec';
+    // તમારી નવી URL અહીં અપડેટ કરી છે
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzTftedB6NSAflsKsP66pYcfbMf9UKbAbk8s9-NtUCuZpQowlRrYU-zAb9oKJ6ku0hk/exec';
 
     window.onload = () => { setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 1200); };
 
@@ -191,8 +192,8 @@
             caste: document.getElementById('uCaste').value,
             studentType: document.getElementById('uType').value,
             aadhar: document.getElementById('uAadhar').value,
-            fatherAadhar: document.getElementById('fAadhar').value, // નવો ડેટા
             fatherName: document.getElementById('uFather').value,
+            fatherAadhar: document.getElementById('fAadhar').value,
             mobile: document.getElementById('uMobile').value,
             address: document.getElementById('uAddress').value,
             dob: document.getElementById('uDob').value,
@@ -243,7 +244,6 @@
         if(!confirm("શું તમે આ પ્રવેશ રદ કરવા માંગો છો?")) return;
         const data = JSON.parse(localStorage.getItem("tempData"));
         
-        // કેન્સલ કરવા માટે સર્વર પર વિનંતી
         fetch(scriptURL, { 
             method: 'POST', 
             mode: 'no-cors',
@@ -276,13 +276,14 @@
         row("Student Name", data.studentName);
         row("Grade", data.grade);
         row("Gender", data.gender);
-        row("Student Type", data.studentType);
         row("Caste", data.caste);
+        row("Student Type", data.studentType);
         row("Student Aadhar", data.aadhar);
         row("Father Name", data.fatherName);
-        row("Father Aadhar", data.fatherAadhar); // રસીદમાં ઉમેર્યું
+        row("Father Aadhar", data.fatherAadhar);
         row("Mobile Number", data.mobile);
         row("Address", data.address);
+        row("Date of Birth", data.dob);
 
         y += 10; doc.setTextColor(220, 0, 0); doc.setFont("helvetica", "bold");
         doc.text("નોંધ: ઓનલાઇન ભરેલ પ્રવેશ ફોર્મની રીસીપ્ટની પ્રિન્ટ શાળામાં જમા કરવા માટે સાથે લાવવી.", 105, y, {align:"center", maxWidth: 180});
