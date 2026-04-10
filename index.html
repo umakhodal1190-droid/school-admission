@@ -66,7 +66,7 @@
         
         <div id="receiptActions">
             <button class="btn-submit" style="background: var(--success);" onclick="generatePDF()">📄 રસીદ (Receipt) ડાઉનલોડ કરો</button>
-            <div class="nondh-box">નોંધ: ઓનલાઇન ભરેલ પ્રવેશ ફોર્મની રીસીપ્ટની પ્રિન્ટ સાથે લાવવી.</div>
+            <div class="nondh-box">નોંધ: ઓનલાઇન ભરેલ પ્રવેશ ફોર્મની રીસીપ્ટની પ્રિન્ટ શાળામાં જમા કરાવવા માટે સાથે લાવવી.</div>
             <button id="cancelBtn" class="btn-submit" style="background: var(--red); margin-top: 10px;" onclick="cancelAdmission()">❌ આ પ્રવેશ રદ કરો</button>
         </div>
         <p id="redirectMsg" style="display:none; color:var(--red); font-weight:bold; margin-top:20px;">પ્રવેશ રદ થઈ રહ્યો છે... કૃપા કરીને રાહ જુઓ.</p>
@@ -130,7 +130,7 @@
 
 <script>
     // તમારી નવી URL
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzThh_4asZrPlDLRnfAFoZk-U3ywI5lmPv2IEV90lAuwYCIZnbC1Xnizz2JAqBDEwIS/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxRc1bz2oZXNusTJEozNbtixxHHze4rA2Q59c7Z2_axHdD1oNxm8IFoEgOOhLDCURBH/exec';
 
     window.onload = () => { setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 1200); };
 
@@ -261,7 +261,7 @@
             localStorage.setItem("currentStatus", "Cancelled");
             showSuccessView();
         }).catch(err => {
-            alert("કોઈ ભૂલ આવી છે. કૃપા કરીને ફરી પ્રયાસ કરો.");
+            alert("ભૂલ આવી! ફરી પ્રયાસ કરો.");
             cancelBtn.disabled = false;
             cancelBtn.innerHTML = "❌ આ પ્રવેશ રદ કરો";
         });
@@ -280,7 +280,7 @@
         // Student Photo
         if(data.photoData) { try { doc.addImage(data.photoData, 'JPEG', 160, 50, 35, 40); } catch(e) {} }
 
-        // Data Display
+        // Content Display
         doc.setTextColor(0); doc.setFontSize(12);
         let y = 65;
         const row = (l, v) => { doc.setFont("helvetica", "bold"); doc.text(l + ":", 20, y); doc.setFont("helvetica", "normal"); doc.text(String(v), 80, y); y += 10; };
@@ -301,16 +301,16 @@
         y += 10; doc.setTextColor(220, 0, 0); doc.setFont("helvetica", "bold");
         doc.text("Note: Online Bharel Pravesh Form Ni Print Sathe Lavvi.", 105, y, {align:"center", maxWidth: 180});
 
-        // Signature Section (English)
+        // Signature Section
         y += 40; 
         doc.setTextColor(0); doc.setFont("helvetica", "bold");
         
-        // Parent Signature
-        doc.line(20, y, 80, y);
+        // Left Side: Parent Signature
+        doc.line(20, y, 80, y); 
         doc.text("Parent's Signature", 50, y + 7, {align:"center"});
         
-        // Principal Signature
-        doc.line(130, y, 190, y);
+        // Right Side: Principal Signature
+        doc.line(130, y, 190, y); 
         doc.text("Principal's Signature", 160, y + 7, {align:"center"});
         
         doc.save(`Receipt_${data.studentName}.pdf`);
