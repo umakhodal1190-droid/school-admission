@@ -17,6 +17,13 @@
         #statusBox { display: none; width: 95%; max-width: 650px; background: white; padding: 25px; border-radius: 25px; text-align: center; margin: 20px auto 40px auto; border: 1px solid var(--golden); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
         .status-badge { display: inline-block; padding: 8px 20px; border-radius: 50px; font-weight: bold; margin-bottom: 15px; font-size: 16px; border: 2px solid var(--success); color: var(--success); background: #dcfce7; }
         
+        /* Contact Section Above Button */
+        .helpline-container { border: 2px solid var(--golden); border-radius: 15px; padding: 15px; margin: 20px 0; background: #fffcf0; }
+        .helpline-numbers { color: var(--primary); font-size: 22px; font-weight: 800; letter-spacing: 1px; }
+        
+        /* Note Below Button */
+        .nondh-box { background: #fee2e2; border: 1px dashed var(--red); padding: 15px; border-radius: 10px; color: var(--red); font-weight: bold; margin: 20px 0; font-size: 15px; line-height: 1.5; }
+        
         #formHeader, #formSection { display: none; width: 100%; max-width: 900px; }
         .header-img { width: 100%; height: auto; border-radius: 15px 15px 0 0; display: block; }
         
@@ -29,7 +36,7 @@
         label { font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #444; }
         input, select { padding: 12px; border: 1px solid #ccc; border-radius: 8px; width: 100%; box-sizing: border-box; font-size: 16px; outline: none; }
         
-        .btn-submit { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.3s; }
+        .btn-submit { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.3s; }
         
         #preview { width: 110px; height: 130px; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; border-radius: 8px; background: #eee; margin: 0 auto 10px auto; overflow: hidden; }
         #preview img { width: 100%; height: 100%; object-fit: cover; }
@@ -49,17 +56,27 @@
         <div class="pdf-title">૩. ફી માળખું (Fees Details)</div>
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
         
-        <button id="applyFormBtn" class="btn-submit" style="max-width: 400px; margin-bottom: 40px;" onclick="showForm()">પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
+        <button class="btn-submit" style="max-width: 400px; margin-bottom: 40px;" onclick="showForm()">પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
     </div>
 
     <div id="statusBox">
         <div class="status-badge">● પ્રવેશ કન્ફર્મ (Confirmed)</div>
         <h2 style="color: var(--success); margin: 10px 0;">ફોર્મ સફળતાપૂર્વક સબમિટ થયું છે!</h2>
-        <p id="userNameDisplay" style="font-weight: bold; font-size: 18px; color: var(--primary);"></p>
+        <p id="userNameDisplay" style="font-weight: bold; font-size: 20px; color: var(--primary); margin-bottom: 20px;"></p>
         
         <div id="receiptActions">
+            <div class="helpline-container">
+                <p style="margin:0; font-weight:bold; color: #444;">વધારે માહિતી માટે સંપર્ક કરો</p>
+                <div class="helpline-numbers">📞 81550 11811 / 11711</div>
+            </div>
+
             <button class="btn-submit" style="background: var(--success);" onclick="generatePDF()">📄 રસીદ (Receipt) ડાઉનલોડ કરો</button>
-            <button id="cancelBtn" class="btn-submit" style="background: var(--red); margin-top: 15px;" onclick="cancelAdmission()">❌ આ પ્રવેશ રદ કરો</button>
+            
+            <div class="nondh-box">
+                ⚠️ ખાસ નોંધ: ઓનલાઇન ભરેલ પ્રવેશ ફોર્મની આ રીસીપ્ટની પ્રિન્ટ કાઢીને સ્કૂલ પર વેરીફીકેશન માટે સાથે લાવવી અનિવાર્ય છે.
+            </div>
+
+            <button id="cancelBtn" class="btn-submit" style="background: var(--red);" onclick="cancelAdmission()">❌ આ પ્રવેશ રદ કરો</button>
         </div>
         <p id="redirectMsg" style="display:none; color:var(--red); font-weight:bold; margin-top:20px;"></p>
     </div>
@@ -85,10 +102,8 @@
                     <div class="field"><label>ધોરણ</label><input type="text" id="uGrade" required></div>
                     <div class="field"><label>લિંગ</label><select id="uGender"><option value="Kumar">કુમાર</option><option value="Kanya">કન્યા</option></select></div>
                     <div class="field"><label>પ્રવેશ પ્રકાર</label>
-                        <select id="uType" onchange="filterCaste()">
-                            <option value="Local">Local</option>
-                            <option value="Up-Down">Up-Down</option>
-                            <option value="Chatralay">Chatralay</option>
+                        <select id="uType">
+                            <option value="Local">Local</option><option value="Up-Down">Up-Down</option><option value="Chatralay">Chatralay</option>
                         </select>
                     </div>
                     <div class="field"><label>જ્ઞાતિ</label>
@@ -96,15 +111,15 @@
                             <option>Open</option><option>OBC</option><option>SC</option><option>ST</option>
                         </select>
                     </div>
-                    <div class="field"><label>વિદ્યાર્થી આધાર નંબર</label><input type="text" id="uAadhar" maxlength="12" pattern="\d{12}" required></div>
+                    <div class="field"><label>વિદ્યાર્થી આધાર નંબર</label><input type="text" id="uAadhar" maxlength="12" required></div>
                     <div class="field"><label>જન્મ તારીખ</label><input type="text" id="uDob" placeholder="DD/MM/YYYY" required></div>
                 </div>
 
                 <div class="section-bar">૨. વાલી વિગત</div>
                 <div class="grid">
                     <div class="field" style="grid-column: span 3;"><label>પિતાનું નામ</label><input type="text" id="uFather" required></div>
-                    <div class="field" style="grid-column: span 3;"><label>પિતાનો આધાર નંબર</label><input type="text" id="fAadhar" maxlength="12" pattern="\d{12}" required></div>
-                    <div class="field" style="grid-column: span 3;"><label>મોબાઈલ નંબર</label><input type="tel" id="uMobile" maxlength="10" pattern="\d{10}" required></div>
+                    <div class="field" style="grid-column: span 3;"><label>પિતાનો આધાર નંબર</label><input type="text" id="fAadhar" maxlength="12" required></div>
+                    <div class="field" style="grid-column: span 3;"><label>મોબાઈલ નંબર</label><input type="tel" id="uMobile" maxlength="10" required></div>
                     <div class="field" style="grid-column: span 3;"><label>સરનામું</label><input type="text" id="uAddress" required></div>
                 </div>
                 
@@ -115,7 +130,7 @@
     </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwJbT1rUhqkgXtv8gpTfB2iKy6TirR5dh_91QGi9Lt2V6BLAPBd3DbdYtyJzVM-c5eG/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxmGcnt5afYeBwQCO_Czcz1UtMBidWNsM8j7oGE7irQzK9YfoPt7raYymcq0n2u7UWc/exec';
 
     window.onload = () => { 
         setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 1000);
@@ -126,6 +141,7 @@
         document.getElementById('mainView').style.display = 'none';
         document.getElementById('formHeader').style.display = 'block';
         document.getElementById('formSection').style.display = 'block';
+        window.scrollTo(0,0);
     }
 
     function processImg(e) {
@@ -140,20 +156,11 @@
                 const scale = maxWidth / img.width;
                 canvas.width = maxWidth; canvas.height = img.height * scale;
                 canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-                const base64 = canvas.toDataURL('image/jpeg', 0.6);
-                document.getElementById('uPhotoData').value = base64;
-                document.getElementById('preview').innerHTML = `<img src="${base64}">`;
+                document.getElementById('uPhotoData').value = canvas.toDataURL('image/jpeg', 0.7);
+                document.getElementById('preview').innerHTML = `<img src="${canvas.toDataURL('image/jpeg', 0.7)}">`;
             };
         };
         reader.readAsDataURL(file);
-    }
-
-    function filterCaste() {
-        const type = document.getElementById('uType').value;
-        const casteSelect = document.getElementById('uCaste');
-        casteSelect.innerHTML = "";
-        const options = (type === "Chatralay") ? ["Open", "OBC"] : ["Open", "OBC", "SC", "ST"];
-        options.forEach(opt => casteSelect.add(new Option(opt, opt)));
     }
 
     document.getElementById('admissionForm').addEventListener('submit', function(e) {
@@ -178,7 +185,9 @@
         };
 
         fetch(scriptURL, { method: 'POST', body: JSON.stringify(data)})
-        .then(() => {
+        .then(res => res.json())
+        .then(response => {
+            data.receiptNo = response.receiptNo;
             localStorage.setItem("tempData", JSON.stringify(data));
             localStorage.setItem("formSubmitted", "true");
             showSuccessView();
@@ -208,32 +217,62 @@
         msg.innerHTML = "સર્વર સાથે સંપર્ક થઈ રહ્યો છે, રાહ જુઓ...";
 
         const data = JSON.parse(localStorage.getItem("tempData"));
-        const failsafe = setTimeout(() => clearAndReload(), 20000);
-
         fetch(scriptURL, { method: 'POST', body: JSON.stringify({ 
             studentName: data.studentName, mobile: data.mobile, action: "cancel" 
         })})
-        .then(() => { clearTimeout(failsafe); clearAndReload(); })
-        .catch(() => { clearTimeout(failsafe); clearAndReload(); });
+        .finally(() => { clearAndReload(); });
     }
 
     function clearAndReload() {
         localStorage.removeItem("formSubmitted");
         localStorage.removeItem("tempData");
-        document.getElementById('redirectMsg').innerHTML = "✅ સફળતાપૂર્વક રદ થયું છે. પેજ રીલોડ થઈ રહ્યું છે...";
-        setTimeout(() => location.reload(), 2000);
+        location.reload();
     }
 
     function generatePDF() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         const data = JSON.parse(localStorage.getItem("tempData"));
-        doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 40, 'F');
-        doc.setTextColor(255); doc.setFontSize(20); doc.text("VRUNDAVANDHAM KHIRASARA GURUKUL", 105, 20, {align:"center"});
-        doc.setFontSize(14); doc.text("ADMISSION RECEIPT", 105, 32, {align:"center"});
-        doc.setTextColor(0); doc.text("Student: " + data.studentName, 20, 60);
-        doc.text("Grade: " + data.grade, 20, 70);
-        doc.text("Mobile: " + data.mobile, 20, 80);
+
+        // Header Design
+        doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 45, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(20); doc.text("VRUNDAVANDHAM KHIRASARA GURUKUL", 105, 18, {align:"center"});
+        doc.setFontSize(12); doc.text("Online Admission Receipt (2026-27)", 105, 28, {align:"center"});
+        doc.setFontSize(15); doc.text("Receipt No: " + (data.receiptNo || "1001"), 105, 40, {align:"center"});
+
+        // Student Data
+        doc.setTextColor(0, 0, 0); doc.setFontSize(12);
+        let y = 60;
+        const fields = [
+            ["Student Name:", data.studentName],
+            ["Father Name:", data.fatherName],
+            ["Grade:", data.grade],
+            ["Mobile No:", data.mobile],
+            ["Gender:", data.gender],
+            ["Caste:", data.caste],
+            ["Admission Type:", data.studentType],
+            ["Student Aadhar:", data.aadhar],
+            ["Father Aadhar:", data.fatherAadhar],
+            ["Date of Birth:", data.dob],
+            ["Address:", data.address]
+        ];
+
+        fields.forEach(f => {
+            doc.setFont("helvetica", "bold"); doc.text(f[0], 25, y);
+            doc.setFont("helvetica", "normal"); doc.text(f[1], 75, y);
+            y += 10;
+        });
+
+        // Bottom Line & Contact
+        doc.setDrawColor(212, 175, 55); doc.setLineWidth(1); doc.line(20, y+5, 190, y+5);
+        
+        doc.setTextColor(220, 38, 38); doc.setFontSize(11);
+        doc.text("NOTE: Please bring a printout of this receipt for school verification.", 105, y+15, {align:"center"});
+        
+        doc.setTextColor(14, 30, 96); doc.setFontSize(12);
+        doc.text("Helpline: 81550 11811 / 11711", 105, y+25, {align:"center"});
+
         doc.save(`Receipt_${data.studentName}.pdf`);
     }
 </script>
