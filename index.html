@@ -67,7 +67,7 @@
         <div id="receiptActions">
             <button class="btn-submit" style="background: var(--success);" onclick="generatePDF()">📄 રસીદ (Receipt) ડાઉનલોડ કરો</button>
             <div class="nondh-box">નોંધ: ઓનલાઇન ભરેલ પ્રવેશ ફોર્મની રીસીપ્ટની પ્રિન્ટ શાળામાં જમા કરવા માટે સાથે લાવવી.</div>
-            <button class="btn-submit" style="background: var(--red); margin-top: 10px;" onclick="cancelAdmission()">❌ આ પ્રવેશ રદ કરો</button>
+            <button id="cancelBtn" class="btn-submit" style="background: var(--red); margin-top: 10px;" onclick="cancelAdmission()">❌ આ પ્રવેશ રદ કરો</button>
         </div>
         <p id="redirectMsg" style="display:none; color:var(--red); font-weight:bold; margin-top:20px;">પ્રવેશ રદ થઈ રહ્યો છે... કૃપા કરીને રાહ જુઓ.</p>
     </div>
@@ -81,7 +81,7 @@
                 <div class="grid">
                     <div style="text-align: center;">
                         <div id="preview">વિદ્યાર્થી ફોટો</div>
-                        <input type="file" accept="image/*" onchange="processImg(event)" required>
+                        <input type="file" id="uPhotoInput" accept="image/*" onchange="processImg(event)" required>
                     </div>
                     <div class="field" style="grid-column: span 2;">
                         <label>વિદ્યાર્થીનું પૂરું નામ (અટક પ્રથમ)</label>
@@ -129,8 +129,8 @@
     </div>
 
 <script>
-    // તમારી નવી URL અહીં અપડેટ કરી છે
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzTftedB6NSAflsKsP66pYcfbMf9UKbAbk8s9-NtUCuZpQowlRrYU-zAb9oKJ6ku0hk/exec';
+    // તમારી નવી URL
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyeynN1JG32Ry7Eeu1iAYAspvkunb0QajWnp97vPJZOLGHn1wePi-7QJOh7rHzMLPPo/exec';
 
     window.onload = () => { setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 1200); };
 
@@ -242,8 +242,14 @@
 
     function cancelAdmission() {
         if(!confirm("શું તમે આ પ્રવેશ રદ કરવા માંગો છો?")) return;
+        
+        const cancelBtn = document.getElementById('cancelBtn');
+        cancelBtn.disabled = true;
+        cancelBtn.innerHTML = "રદ થઈ રહ્યું છે... ⏳";
+
         const data = JSON.parse(localStorage.getItem("tempData"));
         
+        // કેન્સલ વિનંતી મોકલી રહ્યા છીએ
         fetch(scriptURL, { 
             method: 'POST', 
             mode: 'no-cors',
@@ -255,6 +261,10 @@
         }).then(() => {
             localStorage.setItem("currentStatus", "Cancelled");
             showSuccessView();
+        }).catch(err => {
+            alert("ભૂલ આવી છે, ફરી પ્રયત્ન કરો.");
+            cancelBtn.disabled = false;
+            cancelBtn.innerHTML = "❌ આ પ્રવેશ રદ કરો";
         });
     }
 
