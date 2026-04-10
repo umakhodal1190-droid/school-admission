@@ -103,13 +103,14 @@
                 </div>
                 
                 <input type="hidden" id="uPhotoData">
-                <button type="submit" id="submitBtn" class="btn-submit">Submit</button>
+                <button type="submit" id="submitBtn" class="btn-submit">સબમિટ કરો</button>
             </form>
         </div>
     </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbw26Cb4OPP2GYG_6t7PdyetJ2ZueeZl3I4Jq7-SuAke6z3VtwBv5AdM6iNILCOqUXIJ/exec';
+    // તમારી નવી URL અહીં સેટ કરેલી છે
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxucEODpY6tNFpr1uS94j8Ufzhz-Unvu9euMKE2QuIAok_Jt6nNWAZzFtD80hhTxlpR/exec';
 
     window.onload = () => { setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 1200); };
 
@@ -164,7 +165,7 @@
             photoData: document.getElementById('uPhotoData').value
         };
 
-        fetch(scriptURL, { method: 'POST', mode: 'cors', body: JSON.stringify(data) })
+        fetch(scriptURL, { method: 'POST', body: JSON.stringify(data) })
         .then(res => res.json())
         .then(response => {
             data.receiptNo = response.receiptNo;
@@ -172,12 +173,9 @@
             localStorage.setItem("currentStatus", "Confirmed");
             localStorage.setItem("formSubmitted", "true");
             showSuccessView();
-        }).catch(() => {
-            data.receiptNo = "Pending";
-            localStorage.setItem("tempData", JSON.stringify(data));
-            localStorage.setItem("currentStatus", "Confirmed");
-            localStorage.setItem("formSubmitted", "true");
-            showSuccessView();
+        }).catch(err => {
+            alert("Error: " + err);
+            btn.disabled = false; btn.innerHTML = "સબમિટ કરો";
         });
     });
 
@@ -199,12 +197,11 @@
             title.innerText = "આ પ્રવેશ રદ કરવામાં આવ્યો છે."; title.style.color = "var(--red)";
             actions.style.display = "none";
             redirectMsg.style.display = "block";
-            
             // ઓટોમેટિક રિડાયરેક્ટ - ૨ સેકન્ડમાં
             setTimeout(() => { localStorage.clear(); location.reload(); }, 2000);
         } else {
             badge.className = "status-badge status-confirm"; badge.innerText = "● પ્રવેશ કન્ફર્મ (Confirmed)";
-            title.innerText = "ફોર્મ સફળતાપૂર્વક SUBMIT થયું છે!"; title.style.color = "var(--success)";
+            title.innerText = "ફોર્મ સફળતાપૂર્વક સબમિટ થયું છે!"; title.style.color = "var(--success)";
             actions.style.display = "block";
             redirectMsg.style.display = "none";
         }
@@ -214,9 +211,18 @@
     function cancelAdmission() {
         if(!confirm("શું તમે આ પ્રવેશ રદ કરવા માંગો છો?")) return;
         const data = JSON.parse(localStorage.getItem("tempData"));
-        fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ studentName: data.studentName, mobile: data.mobile, action: "cancel" }) });
-        localStorage.setItem("currentStatus", "Cancelled");
-        showSuccessView();
+        
+        fetch(scriptURL, { 
+            method: 'POST', 
+            body: JSON.stringify({ 
+                studentName: data.studentName, 
+                mobile: data.mobile, 
+                action: "cancel" 
+            }) 
+        }).then(() => {
+            localStorage.setItem("currentStatus", "Cancelled");
+            showSuccessView();
+        });
     }
 
     function generatePDF() {
@@ -237,9 +243,9 @@
         row("Receipt No", data.receiptNo || "N/A");
         row("Student Name", data.studentName);
         row("Grade", data.grade);
-        row("Student Aadhar", data.aadhar); // હવે અહીં સાચો આધાર નંબર દેખાશે
+        row("Student Aadhar", data.aadhar);
         row("Father Name", data.fatherName);
-        row("Father Aadhar", data.fatherAadhar); // અહીં પિતાનો સાચો આધાર નંબર દેખાશે
+        row("Father Aadhar", data.fatherAadhar);
         row("Mobile Number", data.mobile);
         row("Address", data.address);
 
