@@ -89,7 +89,14 @@
                     <div class="field"><label>ધોરણ</label><input type="text" id="uGrade" required></div>
                     <div class="field"><label>લિંગ</label><select id="uGender"><option value="Kumar">કુમાર</option><option value="Kanya">કન્યા</option></select></div>
                     <div class="field"><label>જ્ઞાતિ</label><select id="uCaste"><option>Open</option><option>OBC</option><option>SC</option><option>ST</option></select></div>
-                    <div class="field"><label>પ્રવેશ પ્રકાર</label><select id="uType"><option>Local</option><option>Up-Down</option></select></div>
+                    <div class="field">
+                        <label>પ્રવેશ પ્રકાર</label>
+                        <select id="uType">
+                            <option value="Local">Local</option>
+                            <option value="Up-Down">Up-Down</option>
+                            <option value="Chatralay">Chatralay</option>
+                        </select>
+                    </div>
                     <div class="field"><label>વિદ્યાર્થી આધાર નંબર</label><input type="text" id="uAadhar" maxlength="12" pattern="\d{12}" required></div>
                     <div class="field"><label>જન્મ તારીખ</label><input type="text" id="uDob" placeholder="DD/MM/YYYY" required></div>
                 </div>
@@ -164,23 +171,19 @@
             photoData: document.getElementById('uPhotoData').value
         };
 
-        // Redirect fetch request via HTML Form to bypass CORS error if needed
         fetch(scriptURL, { 
             method: 'POST', 
             mode: 'no-cors', 
-            cache: 'no-cache',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data) 
         })
         .then(() => {
-            // Since no-cors doesn't return body, we assume success or use a fallback mechanism
-            data.receiptNo = "REG-" + data.mobile.slice(-4); 
+            data.receiptNo = "VSGK-" + data.mobile.slice(-4); 
             localStorage.setItem("tempData", JSON.stringify(data));
             localStorage.setItem("currentStatus", "Confirmed");
             localStorage.setItem("formSubmitted", "true");
             showSuccessView();
         }).catch(err => {
-            alert("Connection error! Please try again.");
+            alert("કનેક્શન એરર! ફરી પ્રયાસ કરો.");
             btn.disabled = false; btn.innerHTML = "સબમિટ કરો";
         });
     });
@@ -203,7 +206,7 @@
             title.innerText = "આ પ્રવેશ રદ કરવામાં આવ્યો છે."; title.style.color = "var(--red)";
             actions.style.display = "none";
             redirectMsg.style.display = "block";
-            setTimeout(() => { localStorage.clear(); location.reload(); }, 3000);
+            setTimeout(() => { localStorage.clear(); location.reload(); }, 2500);
         } else {
             badge.className = "status-badge status-confirm"; badge.innerText = "● પ્રવેશ કન્ફર્મ (Confirmed)";
             title.innerText = "ફોર્મ સફળતાપૂર્વક સબમિટ થયું છે!"; title.style.color = "var(--success)";
@@ -242,9 +245,10 @@
         let y = 65;
         const row = (l, v) => { doc.setFont("helvetica", "bold"); doc.text(l + ":", 20, y); doc.setFont("helvetica", "normal"); doc.text(String(v), 75, y); y += 11; };
 
-        row("Receipt Status", "Confirmed");
+        row("Registration ID", data.receiptNo);
         row("Student Name", data.studentName);
         row("Grade", data.grade);
+        row("Student Type", data.studentType);
         row("Student Aadhar", data.aadhar);
         row("Father Name", data.fatherName);
         row("Father Aadhar", data.fatherAadhar);
