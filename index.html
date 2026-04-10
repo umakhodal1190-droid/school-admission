@@ -10,9 +10,9 @@
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
         
         #introOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary); color: white; display: flex; justify-content: center; align-items: center; z-index: 9999; text-align: center; }
-        .intro-text { font-size: 26px; font-weight: bold; line-height: 1.5; }
+        .intro-text { font-size: 26px; font-weight: bold; }
 
-        .pdf-box { width: 100%; max-width: 900px; height: 350px; border-radius: 12px; border: 2px solid #cbd5e1; margin-bottom: 20px; background: white; }
+        .pdf-box { width: 100%; max-width: 900px; height: 400px; border-radius: 12px; border: 2px solid #cbd5e1; margin-bottom: 20px; background: white; }
         .pdf-title { width: 100%; max-width: 900px; color: var(--primary); background: #e2e8f0; padding: 12px; border-radius: 8px; border-left: 5px solid var(--golden); margin: 20px 0 10px 0; font-size: 1.1rem; font-weight: bold; box-sizing: border-box; }
 
         #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; text-align: center; margin: 40px 0; border: 2px solid var(--golden); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
@@ -33,7 +33,7 @@
         .btn-submit { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.3s; }
         .btn-submit:disabled { background: #94a3b8; }
         
-        #preview { width: 110px; height: 130px; background: #eee; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 10px; border-radius: 8px; font-size: 12px; color: #888; }
+        #preview { width: 110px; height: 130px; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 10px; border-radius: 8px; background: #eee; }
         #preview img { width: 100%; height: 100%; object-fit: cover; }
         
         @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
@@ -44,15 +44,19 @@
     <div id="introOverlay"><div class="intro-text">🙏 જય સ્વામિનારાયણ 🙏<br>VRUNDAVANDHAM KHIRASARA</div></div>
 
     <div id="mainView" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
-        <div class="pdf-title">૧. સંસ્થા પરિચય અને એડમિશન માહિતી (૨૦૨૬-૨૭)</div>
+        
+        <div class="pdf-title">૧. સંસ્થા પરિચય (VSGK)</div>
+        <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
+
+        <div class="pdf-title">૨. એડમિશન માહિતી અને ફી સ્ટ્રક્ચર (૨૦૨૬-૨૭)</div>
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
-        <button class="btn-submit" style="max-width: 400px; margin-bottom: 30px;" onclick="checkExistingForm()">પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
+
+        <button class="btn-submit" style="max-width: 400px; margin-bottom: 40px;" onclick="checkExistingForm()">પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
     </div>
 
     <div id="statusBox">
         <h2 style="color: var(--success);">✅ ફોર્મ સફળતાપૂર્વક સેવ થયું છે!</h2>
         <p id="userNameDisplay" style="font-weight: bold; font-size: 18px; color: var(--primary); margin: 10px 0;"></p>
-        <p id="receiptNoDisplay" style="font-weight: bold; color: #334155; margin-bottom: 15px;"></p>
         
         <button class="btn-submit" style="background: var(--success);" onclick="generatePDF()">📄 રસીદ (Receipt) ડાઉનલોડ કરો</button>
         
@@ -60,8 +64,7 @@
             નોંધ: ઓનલાઇન ભરેલ પ્રવેશ ફોર્મની રીસીપ્ટની પ્રિન્ટ સાથે લાવવી.
         </div>
 
-        <button id="cancelBtn" class="btn-submit" style="background: var(--red); margin-top: 10px;" onclick="cancelFormAction()">❌ આ પ્રવેશ રદ કરો</button>
-        <button class="btn-submit" style="margin-top:20px; background: var(--golden);" onclick="resetApp()">➕ નવું ફોર્મ ભરો</button>
+        <button class="btn-submit" style="background: var(--red); margin-top: 10px;" onclick="resetApp()">❌ નવું ફોર્મ ભરો</button>
     </div>
 
     <div id="formHeader"><img src="https://umakhodal1190-droid.github.io/school-admission/header.jpeg" class="header-img"></div>
@@ -145,7 +148,7 @@
     document.getElementById('admissionForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
-        btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે... (રાહ જુઓ) ⏳";
+        btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે... ⏳";
         
         const data = {
             studentName: document.getElementById('uName').value,
@@ -167,7 +170,6 @@
         fetch(scriptURL, {
             method: 'POST',
             mode: 'no-cors',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify(data)
         })
         .then(() => {
@@ -187,7 +189,6 @@
         document.getElementById('mainView').style.display = 'none';
         document.getElementById('userNameDisplay').innerText = "વિદ્યાર્થી: " + data.studentName;
         document.getElementById('statusBox').style.display = 'block';
-        window.scrollTo(0,0);
     }
 
     function generatePDF() {
@@ -195,7 +196,6 @@
         const doc = new jsPDF();
         const data = JSON.parse(localStorage.getItem("tempData"));
 
-        // Design
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 45, 'F');
         doc.setTextColor(255); doc.setFontSize(22); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, {align:"center"});
         doc.setFontSize(14); doc.text("ADMISSION RECEIPT (2026-27)", 105, 30, {align:"center"});
@@ -208,37 +208,27 @@
         let y = 65;
         const row = (l, v) => { 
             doc.setFont("helvetica", "bold"); doc.text(l + ":", 20, y); 
-            doc.setFont("helvetica", "normal"); doc.text(String(v), 70, y); y += 11; 
+            doc.setFont("helvetica", "normal"); doc.text(String(v), 75, y); y += 11; 
         };
 
         row("Student Name", data.studentName);
         row("Grade", data.grade);
         row("Gender", data.gender);
         row("Admission Type", data.studentType);
-        row("Caste", data.caste);
-        row("Aadhar Number", data.aadhar);
-        row("Father Name", data.fatherName);
         row("Mobile Number", data.mobile);
+        row("Father Name", data.fatherName);
         row("Address", data.address);
-        row("Date of Birth", data.dob);
 
-        // PDF માં ખાસ નોંધ
         y += 10;
         doc.setTextColor(220, 0, 0);
-        doc.setFontSize(13);
         doc.setFont("helvetica", "bold");
         doc.text("NOTE: Online bharel pravesh form ni receipt ni print sathe lavvi.", 105, y, {align:"center"});
 
         doc.save(`Receipt_${data.studentName}.pdf`);
     }
 
-    function cancelFormAction() {
-        if (!confirm("શું તમે આ પ્રવેશ રદ કરવા માંગો છો?")) return;
-        localStorage.clear(); location.reload();
-    }
-
     function resetApp() { 
-        if(confirm("નવું ફોર્મ ભરવા માટે જૂનો ડેટા સાફ થશે. આગળ વધવું છે?")) {
+        if(confirm("નવું ફોર્મ ભરવા માટે બધો ડેટા સાફ થઈ જશે. શું તમે તૈયાર છો?")) {
             localStorage.clear(); location.reload(); 
         }
     }
