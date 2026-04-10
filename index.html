@@ -49,7 +49,7 @@
     <div id="mainView" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
         <div class="pdf-title">૧. સંસ્થા પરિચય</div>
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
-        <div class="pdf-title">૨. ફી પત્રક અને માહિતી પત્રક </div>
+        <div class="pdf-title">૨. એડમિશન માહિતી </div>
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
         <button class="btn-submit" style="max-width: 400px; margin-bottom: 40px;" onclick="checkExistingForm()">પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
     </div>
@@ -71,7 +71,7 @@
 
     <div id="formSection">
         <div class="p-content">
-            <h3 style="text-align:center; color:var(--primary); margin:0 0 20px 0;">એડમિશન ફોર્મ</h3>
+            <h3 style="text-align:center; color:var(--primary); margin:0 0 20px 0;">લોકલ અને અપડાઉન એડમિશન ફોર્મ</h3>
             <form id="admissionForm">
                 <div class="grid">
                     <div style="text-align: center;">
@@ -92,9 +92,9 @@
                     <div class="field">
                         <label>પ્રવેશ પ્રકાર</label>
                         <select id="uType">
-                            <option value="Local">લોકલ</option>
-                            <option value="Up-Down">અપડાઉન</option>
-                            <option value="Chatralay">છાત્રાલય</option>
+                            <option value="Local">Local</option>
+                            <option value="Up-Down">Up-Down</option>
+                            <option value="Chatralay">Chatralay</option>
                         </select>
                     </div>
                     <div class="field"><label>વિદ્યાર્થી આધાર નંબર</label><input type="text" id="uAadhar" maxlength="12" pattern="\d{12}" required></div>
@@ -116,7 +116,8 @@
     </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwo8Co94kDbUh7Q1ma-qdxFBWHGjSwzmYVlntb1PaLSS0BZ0g17qrV3nls7kJfzqFoc/exec';
+    // તમારી નવી URL
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbw5TPcjeOg-NMgFRuvj6M8kQXG-w8w6iXeYaAv3uuRgTvGnCCwlTXdOX9J6Elt3hXhX/exec';
 
     window.onload = () => { setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 1200); };
 
@@ -177,7 +178,8 @@
             body: JSON.stringify(data) 
         })
         .then(() => {
-            data.receiptNo = "VSGK-" + data.mobile.slice(-4); 
+            // Register ID માટે સમય અને મોબાઈલના આધારે યુનિક નંબર
+            data.receiptNo = "REG-" + Date.now().toString().slice(-4) + "-" + data.mobile.slice(-4); 
             localStorage.setItem("tempData", JSON.stringify(data));
             localStorage.setItem("currentStatus", "Confirmed");
             localStorage.setItem("formSubmitted", "true");
