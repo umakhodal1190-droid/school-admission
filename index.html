@@ -66,7 +66,7 @@
         
         <div id="receiptActions">
             <button class="btn-submit" style="background: var(--success);" onclick="generatePDF()">📄 રસીદ (Receipt) ડાઉનલોડ કરો</button>
-            <div class="nondh-box">નોંધ: ઓનલાઇન ભરેલ પ્રવેશ ફોર્મની રીસીપ્ટની પ્રિન્ટ શાળામાં જમા કરવા માટે સાથે લાવવી.</div>
+            <div class="nondh-box">નોંધ: ઓનલાઇન ભરેલ પ્રવેશ ફોર્મની રીસીપ્ટની પ્રિન્ટ સાથે લાવવી.</div>
             <button id="cancelBtn" class="btn-submit" style="background: var(--red); margin-top: 10px;" onclick="cancelAdmission()">❌ આ પ્રવેશ રદ કરો</button>
         </div>
         <p id="redirectMsg" style="display:none; color:var(--red); font-weight:bold; margin-top:20px;">પ્રવેશ રદ થઈ રહ્યો છે... કૃપા કરીને રાહ જુઓ.</p>
@@ -129,8 +129,8 @@
     </div>
 
 <script>
-    // તમારી નવી URL અપડેટ કરી દીધી છે
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwP-qiuwJO1BZ55RIgDWjHA17rDmsriPgxlggC3TTuKGvSX6QOSJnU6XhgHFc8yEl_y/exec';
+    // તમારી નવી URL
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxAt7MqZzKBasXFXEagVnHGEJrGeSWv_z-IYXj-KMCE948mCMJU0QFAOzNizOnORjrB/exec';
 
     window.onload = () => { setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 1200); };
 
@@ -272,15 +272,15 @@
         const doc = new jsPDF();
         const data = JSON.parse(localStorage.getItem("tempData"));
 
-        // હેડર
+        // Header Section
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 45, 'F');
         doc.setTextColor(255); doc.setFontSize(22); doc.text("VRUNDAVANDHAM KHIRASARA GURUKUL", 105, 18, {align:"center"});
         doc.setFontSize(14); doc.text("ADMISSION RECEIPT", 105, 30, {align:"center"});
 
-        // ફોટો ઉમેરવો
+        // Student Photo
         if(data.photoData) { try { doc.addImage(data.photoData, 'JPEG', 160, 50, 35, 40); } catch(e) {} }
 
-        // વિગતો
+        // Data Display
         doc.setTextColor(0); doc.setFontSize(12);
         let y = 65;
         const row = (l, v) => { doc.setFont("helvetica", "bold"); doc.text(l + ":", 20, y); doc.setFont("helvetica", "normal"); doc.text(String(v), 80, y); y += 10; };
@@ -297,8 +297,21 @@
         row("Address", data.address);
         row("Date of Birth", data.dob);
 
+        // Instruction Note
         y += 10; doc.setTextColor(220, 0, 0); doc.setFont("helvetica", "bold");
-        doc.text("નોંધ: ઓનલાઇન ભરેલ પ્રવેશ ફોર્મની રીસીપ્ટની પ્રિન્ટ શાળામાં જમા કરવા માટે સાથે લાવવી.", 105, y, {align:"center", maxWidth: 180});
+        doc.text("Note: Online Bharel Pravesh Form Ni Print Sathe Lavvi.", 105, y, {align:"center", maxWidth: 180});
+
+        // Signature Section (English)
+        y += 40; 
+        doc.setTextColor(0); doc.setFont("helvetica", "bold");
+        
+        // Parent Signature
+        doc.line(20, y, 80, y);
+        doc.text("Parent's Signature", 50, y + 7, {align:"center"});
+        
+        // Principal Signature
+        doc.line(130, y, 190, y);
+        doc.text("Principal's Signature", 160, y + 7, {align:"center"});
         
         doc.save(`Receipt_${data.studentName}.pdf`);
     }
