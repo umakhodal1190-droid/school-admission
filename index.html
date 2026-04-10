@@ -11,19 +11,20 @@
         
         #introOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary); color: white; display: flex; justify-content: center; align-items: center; z-index: 9999; text-align: center; }
         
+        /* PDF Layout */
         .pdf-box { width: 100%; max-width: 900px; height: 400px; border-radius: 12px; border: 2px solid #cbd5e1; margin-bottom: 20px; background: white; }
         .pdf-title { width: 100%; max-width: 900px; color: var(--primary); background: #e2e8f0; padding: 12px; border-radius: 8px; border-left: 5px solid var(--golden); margin: 20px 0 10px 0; font-size: 1.1rem; font-weight: bold; box-sizing: border-box; }
 
+        /* Status Box Style */
         #statusBox { display: none; width: 95%; max-width: 650px; background: white; padding: 25px; border-radius: 25px; text-align: center; margin: 20px auto 40px auto; border: 1px solid var(--golden); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
         .status-badge { display: inline-block; padding: 8px 20px; border-radius: 50px; font-weight: bold; margin-bottom: 15px; font-size: 16px; border: 2px solid var(--success); color: var(--success); background: #dcfce7; }
         
-        /* Contact Section Above Button */
         .helpline-container { border: 2px solid var(--golden); border-radius: 15px; padding: 15px; margin: 20px 0; background: #fffcf0; }
         .helpline-numbers { color: var(--primary); font-size: 22px; font-weight: 800; letter-spacing: 1px; }
         
-        /* Note Below Button */
         .nondh-box { background: #fee2e2; border: 1px dashed var(--red); padding: 15px; border-radius: 10px; color: var(--red); font-weight: bold; margin: 20px 0; font-size: 15px; line-height: 1.5; }
         
+        /* Form Layout */
         #formHeader, #formSection { display: none; width: 100%; max-width: 900px; }
         .header-img { width: 100%; height: auto; border-radius: 15px 15px 0 0; display: block; }
         
@@ -51,12 +52,14 @@
     <div id="mainView" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
         <div class="pdf-title">૧. સંસ્થા પરિચય</div>
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
+        
         <div class="pdf-title">૨. પ્રવેશના નિયમો અને અન્ય વિગતો</div>
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/DETAILS.pdf&embedded=true" class="pdf-box"></iframe>
+        
         <div class="pdf-title">૩. ફી માળખું (Fees Details)</div>
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
         
-        <button class="btn-submit" style="max-width: 400px; margin-bottom: 40px;" onclick="showForm()">પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
+        <button id="applyFormBtn" class="btn-submit" style="max-width: 400px; margin-bottom: 40px;" onclick="showForm()">પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
     </div>
 
     <div id="statusBox">
@@ -78,7 +81,6 @@
 
             <button id="cancelBtn" class="btn-submit" style="background: var(--red);" onclick="cancelAdmission()">❌ આ પ્રવેશ રદ કરો</button>
         </div>
-        <p id="redirectMsg" style="display:none; color:var(--red); font-weight:bold; margin-top:20px;"></p>
     </div>
 
     <div id="formHeader"><img src="https://umakhodal1190-droid.github.io/school-admission/header.jpeg" class="header-img"></div>
@@ -134,13 +136,29 @@
 
     window.onload = () => { 
         setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 1000);
-        if (localStorage.getItem("formSubmitted") === "true") { showSuccessView(); } 
+        // Check if form is already submitted
+        if (localStorage.getItem("formSubmitted") === "true") { 
+            showAlreadySubmittedView(); 
+        } 
     };
 
     function showForm() {
         document.getElementById('mainView').style.display = 'none';
         document.getElementById('formHeader').style.display = 'block';
         document.getElementById('formSection').style.display = 'block';
+        window.scrollTo(0,0);
+    }
+
+    function showAlreadySubmittedView() {
+        const data = JSON.parse(localStorage.getItem("tempData"));
+        // Keep PDFs visible, hide form components
+        document.getElementById('applyFormBtn').style.display = 'none';
+        document.getElementById('formHeader').style.display = 'none';
+        document.getElementById('formSection').style.display = 'none';
+        
+        // Show status box below PDFs
+        document.getElementById('userNameDisplay').innerText = "વિદ્યાર્થી: " + data.studentName;
+        document.getElementById('statusBox').style.display = 'block';
         window.scrollTo(0,0);
     }
 
@@ -156,8 +174,9 @@
                 const scale = maxWidth / img.width;
                 canvas.width = maxWidth; canvas.height = img.height * scale;
                 canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-                document.getElementById('uPhotoData').value = canvas.toDataURL('image/jpeg', 0.7);
-                document.getElementById('preview').innerHTML = `<img src="${canvas.toDataURL('image/jpeg', 0.7)}">`;
+                const base64 = canvas.toDataURL('image/jpeg', 0.7);
+                document.getElementById('uPhotoData').value = base64;
+                document.getElementById('preview').innerHTML = `<img src="${base64}">`;
             };
         };
         reader.readAsDataURL(file);
@@ -190,7 +209,7 @@
             data.receiptNo = response.receiptNo;
             localStorage.setItem("tempData", JSON.stringify(data));
             localStorage.setItem("formSubmitted", "true");
-            showSuccessView();
+            showAlreadySubmittedView();
         })
         .catch(() => {
             alert("ભૂલ આવી! ફરી પ્રયાસ કરો.");
@@ -198,35 +217,17 @@
         });
     });
 
-    function showSuccessView() {
-        const data = JSON.parse(localStorage.getItem("tempData"));
-        document.getElementById('mainView').style.display = 'none';
-        document.getElementById('formHeader').style.display = 'none';
-        document.getElementById('formSection').style.display = 'none';
-        document.getElementById('userNameDisplay').innerText = "વિદ્યાર્થી: " + data.studentName;
-        document.getElementById('statusBox').style.display = 'block';
-        window.scrollTo(0,0);
-    }
-
     function cancelAdmission() {
         if(!confirm("શું તમે આ પ્રવેશ રદ કરવા માંગો છો?")) return;
-        const btn = document.getElementById('cancelBtn');
-        const msg = document.getElementById('redirectMsg');
-        btn.disabled = true; btn.innerHTML = "રદ થઈ રહ્યું છે... ⏳";
-        msg.style.display = "block";
-        msg.innerHTML = "સર્વર સાથે સંપર્ક થઈ રહ્યો છે, રાહ જુઓ...";
-
         const data = JSON.parse(localStorage.getItem("tempData"));
         fetch(scriptURL, { method: 'POST', body: JSON.stringify({ 
             studentName: data.studentName, mobile: data.mobile, action: "cancel" 
         })})
-        .finally(() => { clearAndReload(); });
-    }
-
-    function clearAndReload() {
-        localStorage.removeItem("formSubmitted");
-        localStorage.removeItem("tempData");
-        location.reload();
+        .finally(() => { 
+            localStorage.removeItem("formSubmitted");
+            localStorage.removeItem("tempData");
+            location.reload();
+        });
     }
 
     function generatePDF() {
@@ -234,59 +235,46 @@
         const doc = new jsPDF();
         const data = JSON.parse(localStorage.getItem("tempData"));
 
-        // Header Design
+        // Header
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 45, 'F');
         doc.setTextColor(255, 255, 255);
-        doc.setFontSize(20); doc.text("VRUNDAVANDHAM KHIRASARA GURUKUL", 105, 18, {align:"center"});
+        doc.setFontSize(18); doc.text("VRUNDAVANDHAM KHIRASARA GURUKUL", 105, 18, {align:"center"});
         doc.setFontSize(12); doc.text("Online Admission Receipt (2026-27)", 105, 28, {align:"center"});
-        doc.setFontSize(15); doc.text("Receipt No: " + (data.receiptNo || "1001"), 105, 40, {align:"center"});
+        doc.setFontSize(14); doc.text("Receipt No: " + (data.receiptNo || "1001"), 105, 40, {align:"center"});
 
-        // Student Photo (જમણી બાજુ ઉપર)
+        // Photo
         if (data.photoData) {
-            try {
-                // JPEG ફોર્મેટમાં બેઝ-64 ઈમેજ ઉમેરો (x, y, width, height)
-                doc.addImage(data.photoData, 'JPEG', 155, 50, 35, 42);
-                // ફોટોની આસપાસ બોર્ડર
-                doc.setDrawColor(200, 200, 200); doc.rect(155, 50, 35, 42);
-            } catch (e) { console.error("Photo Error:", e); }
+            try { doc.addImage(data.photoData, 'JPEG', 160, 50, 30, 38); doc.rect(160, 50, 30, 38); } catch (e) {}
         }
 
-        // Student Data
-        doc.setTextColor(0, 0, 0); doc.setFontSize(12);
+        // Data Fields
+        doc.setTextColor(0, 0, 0); doc.setFontSize(11);
         let y = 60;
-        const fields = [
+        const info = [
             ["Student Name:", data.studentName],
             ["Father Name:", data.fatherName],
             ["Grade:", data.grade],
-            ["Mobile No:", data.mobile],
+            ["Mobile:", data.mobile],
             ["Gender:", data.gender],
             ["Caste:", data.caste],
-            ["Admission Type:", data.studentType],
+            ["Type:", data.studentType],
             ["Student Aadhar:", data.aadhar],
             ["Father Aadhar:", data.fatherAadhar],
-            ["Date of Birth:", data.dob]
+            ["DOB:", data.dob],
+            ["Address:", data.address]
         ];
 
-        // સરનામાં સિવાયનો ડેટા (જગ્યા બચાવવા માટે ફોટાની ડાબી બાજુ)
-        fields.forEach(f => {
-            doc.setFont("helvetica", "bold"); doc.text(f[0], 25, y);
-            // લાંબા નામ માટે maxWidth સેટ કરો
-            doc.setFont("helvetica", "normal"); doc.text(f[1], 70, y, { maxWidth: 80 });
-            y += 10;
+        info.forEach(item => {
+            doc.setFont("helvetica", "bold"); doc.text(item[0], 20, y);
+            doc.setFont("helvetica", "normal"); doc.text(String(item[1]), 65, y, { maxWidth: 90 });
+            y += 9;
         });
 
-        // સરનામું (ફોટાની નીચે આખા પેજમાં)
-        doc.setFont("helvetica", "bold"); doc.text("Address:", 25, y);
-        doc.setFont("helvetica", "normal"); doc.text(data.address, 70, y, { maxWidth: 120 });
-        y += 15;
-
-        // Bottom Line & Contact
-        doc.setDrawColor(212, 175, 55); doc.setLineWidth(1); doc.line(20, y+5, 190, y+5);
-        
-        doc.setTextColor(220, 38, 38); doc.setFontSize(11);
-        doc.text("NOTE: Please bring a printout of this receipt for school verification.", 105, y+15, {align:"center"});
-        
-        doc.setTextColor(14, 30, 96); doc.setFontSize(12);
+        // Note & Footer
+        doc.setDrawColor(212, 175, 55); doc.line(20, y+5, 190, y+5);
+        doc.setTextColor(220, 38, 38); doc.setFontSize(10);
+        doc.text("NOTE: Bring a printout of this receipt for school verification.", 105, y+15, {align:"center"});
+        doc.setTextColor(14, 30, 96);
         doc.text("Helpline: 81550 11811 / 11711", 105, y+25, {align:"center"});
 
         doc.save(`Receipt_${data.studentName}.pdf`);
