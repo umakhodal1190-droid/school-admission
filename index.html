@@ -66,10 +66,10 @@
         
         <div id="receiptActions">
             <button class="btn-submit" style="background: var(--success);" onclick="generatePDF()">📄 રસીદ (Receipt) ડાઉનલોડ કરો</button>
-            <div class="nondh-box">નોંધ: ઓનલાઇન ભરેલ પ્રવેશ ફોર્મની રીસીપ્ટની પ્રિન્ટ સાથે લાવવી.</div>
+            <div class="nondh-box">નોંધ: ઓનલાઇન ભરેલ પ્રવેશ ફોર્મની રીસીપ્ટની પ્રિન્ટ શાળામાં જમા કરવા માટે સાથે લાવવી.</div>
             <button class="btn-submit" style="background: var(--red); margin-top: 10px;" onclick="cancelAdmission()">❌ આ પ્રવેશ રદ કરો</button>
         </div>
-        <p id="redirectMsg" style="display:none; color:var(--red); font-weight:bold; margin-top:20px;">પ્રવેશ રદ થયો છે. થોડીક ક્ષણોમાં તમે હોમ પેજ પર જશો...</p>
+        <p id="redirectMsg" style="display:none; color:var(--red); font-weight:bold; margin-top:20px;">પ્રવેશ રદ થઈ રહ્યો છે... કૃપા કરીને રાહ જુઓ.</p>
     </div>
 
     <div id="formHeader"><img src="https://umakhodal1190-droid.github.io/school-admission/header.jpeg" class="header-img"></div>
@@ -110,13 +110,14 @@
                             <option>ST</option>
                         </select>
                     </div>
-                    <div class="field"><label>આધાર નંબર</label><input type="text" id="uAadhar" maxlength="12" pattern="\d{12}" required></div>
+                    <div class="field"><label>વિદ્યાર્થીનો આધાર નંબર</label><input type="text" id="uAadhar" maxlength="12" pattern="\d{12}" required></div>
                     <div class="field"><label>જન્મ તારીખ</label><input type="text" id="uDob" placeholder="DD/MM/YYYY" required></div>
                 </div>
 
                 <div class="section-bar">૨. વાલી વિગત</div>
                 <div class="grid">
                     <div class="field" style="grid-column: span 3;"><label>પિતાનું નામ</label><input type="text" id="uFather" required></div>
+                    <div class="field" style="grid-column: span 3;"><label>પિતાનો આધાર નંબર</label><input type="text" id="fAadhar" maxlength="12" pattern="\d{12}" required></div>
                     <div class="field" style="grid-column: span 3;"><label>મોબાઈલ નંબર</label><input type="tel" id="uMobile" maxlength="10" pattern="\d{10}" required></div>
                     <div class="field" style="grid-column: span 3;"><label>સરનામું</label><input type="text" id="uAddress" required></div>
                 </div>
@@ -190,11 +191,13 @@
             caste: document.getElementById('uCaste').value,
             studentType: document.getElementById('uType').value,
             aadhar: document.getElementById('uAadhar').value,
+            fatherAadhar: document.getElementById('fAadhar').value, // નવો ડેટા
             fatherName: document.getElementById('uFather').value,
             mobile: document.getElementById('uMobile').value,
             address: document.getElementById('uAddress').value,
             dob: document.getElementById('uDob').value,
-            photoData: document.getElementById('uPhotoData').value
+            photoData: document.getElementById('uPhotoData').value,
+            action: "insert"
         };
 
         fetch(scriptURL, { 
@@ -239,10 +242,16 @@
     function cancelAdmission() {
         if(!confirm("શું તમે આ પ્રવેશ રદ કરવા માંગો છો?")) return;
         const data = JSON.parse(localStorage.getItem("tempData"));
+        
+        // કેન્સલ કરવા માટે સર્વર પર વિનંતી
         fetch(scriptURL, { 
             method: 'POST', 
             mode: 'no-cors',
-            body: JSON.stringify({ studentName: data.studentName, mobile: data.mobile, action: "cancel" }) 
+            body: JSON.stringify({ 
+                studentName: data.studentName, 
+                mobile: data.mobile, 
+                action: "cancel" 
+            }) 
         }).then(() => {
             localStorage.setItem("currentStatus", "Cancelled");
             showSuccessView();
@@ -262,20 +271,20 @@
 
         doc.setTextColor(0); doc.setFontSize(12);
         let y = 65;
-        const row = (l, v) => { doc.setFont("helvetica", "bold"); doc.text(l + ":", 20, y); doc.setFont("helvetica", "normal"); doc.text(String(v), 80, y); y += 12; };
+        const row = (l, v) => { doc.setFont("helvetica", "bold"); doc.text(l + ":", 20, y); doc.setFont("helvetica", "normal"); doc.text(String(v), 80, y); y += 10; };
 
         row("Student Name", data.studentName);
         row("Grade", data.grade);
-        row("Gender", data.gender); // લિંગ ઓપ્શન અહીં ઉમેરાયું
+        row("Gender", data.gender);
         row("Student Type", data.studentType);
         row("Caste", data.caste);
-        row("Aadhar Number", data.aadhar);
+        row("Student Aadhar", data.aadhar);
         row("Father Name", data.fatherName);
+        row("Father Aadhar", data.fatherAadhar); // રસીદમાં ઉમેર્યું
         row("Mobile Number", data.mobile);
         row("Address", data.address);
 
         y += 10; doc.setTextColor(220, 0, 0); doc.setFont("helvetica", "bold");
-        // સૂચના ગુજરાતીમાં બદલી
         doc.text("નોંધ: ઓનલાઇન ભરેલ પ્રવેશ ફોર્મની રીસીપ્ટની પ્રિન્ટ શાળામાં જમા કરવા માટે સાથે લાવવી.", 105, y, {align:"center", maxWidth: 180});
         doc.save(`Receipt_${data.studentName}.pdf`);
     }
