@@ -14,7 +14,6 @@
 
         .pdf-box { width: 100%; max-width: 900px; height: 350px; border-radius: 12px; border: 2px solid #cbd5e1; margin-bottom: 20px; background: white; }
         
-        /* Heading Styles for PDF Section */
         .pdf-title { width: 100%; max-width: 900px; color: var(--primary); background: #e2e8f0; padding: 12px; border-radius: 8px; border-left: 5px solid var(--golden); margin: 20px 0 10px 0; font-size: 1.1rem; font-weight: bold; box-sizing: border-box; }
 
         #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; text-align: center; margin: 40px 0; border: 2px solid var(--golden); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
@@ -28,7 +27,7 @@
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
         .field { display: flex; flex-direction: column; text-align: left; }
         label { font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #444; }
-        input, select { padding: 12px; border: 1px solid #ccc; border-radius: 8px; width: 100%; box-sizing: border-box; }
+        input, select { padding: 12px; border: 1px solid #ccc; border-radius: 8px; width: 100%; box-sizing: border-box; font-size: 16px; }
         .btn-submit { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.3s; }
         
         #preview { width: 110px; height: 130px; background: #eee; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 10px; border-radius: 8px; }
@@ -42,12 +41,11 @@
 
     <div id="mainView" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
         
-        <div class="pdf-title">1. સંસ્થા પરિચય </div>
+        <div class="pdf-title">૧. સંસ્થા પરિચય</div>
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
 
-         <div class="pdf-title">૨. સ્કૂલ એડમિશન માહિતી</div>
+        <div class="pdf-title">૨. સ્કૂલ એડમિશન માહિતી</div>
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
-
 
         <button class="btn-submit" style="max-width: 400px; margin-top: 10px; margin-bottom: 30px;" onclick="showForm()">પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
     </div>
@@ -72,7 +70,7 @@
                     </div>
                     <div class="field" style="grid-column: span 2;">
                         <label>વિદ્યાર્થીનું પૂરું નામ (અટક પ્રથમ)</label>
-                        <input type="text" id="uName" required>
+                        <input type="text" id="uName" placeholder="દા.ત. પટેલ આર્યન રાજેશભાઈ" required>
                     </div>
                 </div>
                 <div class="section-bar">૧. પ્રવેશ વિગતો</div>
@@ -81,14 +79,14 @@
                     <div class="field"><label>લિંગ</label><select id="uGender"><option value="Kumar">કુમાર</option><option value="Kanya">કન્યા</option></select></div>
                     <div class="field"><label>જ્ઞાતિ</label><select id="uCaste"><option>Open</option><option>OBC</option><option>SC</option><option>ST</option></select></div>
                     <div class="field"><label>પ્રવેશ પ્રકાર</label><select id="uType"><option>Local</option><option>Up-Down</option></select></div>
-                    <div class="field"><label>આધાર નંબર</label><input type="text" id="uAadhar" maxlength="12" required></div>
+                    <div class="field"><label>આધાર નંબર</label><input type="text" id="uAadhar" maxlength="12" pattern="\d{12}" title="૧૨ આંકડાનો આધાર નંબર નાખો" required></div>
                     <div class="field"><label>જન્મ તારીખ</label><input type="text" id="uDob" placeholder="DD/MM/YYYY" required></div>
                 </div>
                 <div class="section-bar">૨. વાલી વિગત</div>
                 <div class="grid">
                     <div class="field" style="grid-column: span 2;"><label>પિતાનું નામ</label><input type="text" id="uFather" required></div>
-                    <div class="field"><label>પિતાનો આધાર નંબર</label><input type="text" id="uFatherAadhar" maxlength="12" required></div>
-                    <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" id="uMobile" maxlength="10" required></div>
+                    <div class="field"><label>પિતાનો આધાર નંબર</label><input type="text" id="uFatherAadhar" maxlength="12" pattern="\d{12}" required></div>
+                    <div class="field"><label>મોબાઈલ નંબર</label><input type="tel" id="uMobile" maxlength="10" pattern="\d{10}" title="૧૦ આંકડાનો મોબાઈલ નંબર નાખો" required></div>
                     <div class="field" style="grid-column: span 2;"><label>સરનામું</label><input type="text" id="uAddress" required></div>
                 </div>
                 <input type="hidden" id="uPhotoData">
@@ -106,10 +104,12 @@
         document.getElementById('mainView').style.display = 'none';
         document.getElementById('formHeader').style.display = 'block';
         document.getElementById('formSection').style.display = 'block';
+        window.scrollTo(0,0);
     }
 
     function processImg(e) {
         const file = e.target.files[0];
+        if(!file) return;
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = (ev) => {
@@ -117,11 +117,11 @@
             img.src = ev.target.result;
             img.onload = () => {
                 const canvas = document.createElement('canvas');
-                const maxWidth = 250; 
+                const maxWidth = 300; 
                 const scale = maxWidth / img.width;
                 canvas.width = maxWidth; canvas.height = img.height * scale;
                 canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-                const base64 = canvas.toDataURL('image/jpeg', 0.5); 
+                const base64 = canvas.toDataURL('image/jpeg', 0.6); 
                 document.getElementById('uPhotoData').value = base64;
                 document.getElementById('preview').innerHTML = `<img src="${base64}" style="width:100%;">`;
             };
@@ -131,7 +131,7 @@
     document.getElementById('admissionForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
-        btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે... (રાહ જુઓ)";
+        btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે... ⏳";
         localStorage.removeItem("done");
 
         const data = {
@@ -154,12 +154,12 @@
         const script = document.createElement('script');
         script.src = scriptURL + "?callback=ctrlRes&data=" + encodeURIComponent(JSON.stringify(data));
         
-        setTimeout(() => {
+        const timer = setTimeout(() => {
             if(!localStorage.getItem("done")) {
-                alert("સર્વર પ્રતિસાદ આપી રહ્યું નથી. લિંક અને નેટવર્ક ચેક કરો.");
+                alert("સર્વર પ્રતિસાદ આપી રહ્યું નથી. કૃપા કરીને નેટવર્ક ચેક કરો.");
                 btn.disabled = false; btn.innerHTML = "માહિતી સેવ કરો";
             }
-        }, 20000);
+        }, 25000);
 
         document.body.appendChild(script);
     });
@@ -171,9 +171,11 @@
             document.getElementById('formHeader').style.display = 'none';
             document.getElementById('formSection').style.display = 'none';
             document.getElementById('statusBox').style.display = 'block';
+            window.scrollTo(0,0);
         } else {
             alert("ભૂલ: ડેટા સેવ થયો નથી.");
             document.getElementById('submitBtn').disabled = false;
+            document.getElementById('submitBtn').innerHTML = "માહિતી સેવ કરો";
         }
     };
 
@@ -192,32 +194,54 @@
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         const data = JSON.parse(localStorage.getItem("tempData"));
-        const recNo = localStorage.getItem("currentReceiptNo") || "1";
+        const recNo = localStorage.getItem("currentReceiptNo") || "---";
 
-        doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 40, 'F');
-        doc.setTextColor(255); doc.setFontSize(18); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, {align:"center"});
-        doc.setFontSize(11); doc.text("ADMISSION RECEIPT (2026-27)", 105, 28, {align:"center"});
-        doc.text("Receipt No: " + recNo, 195, 12, {align:"right"});
+        // Background Header
+        doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 45, 'F');
+        
+        // Header Text
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(22); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, {align:"center"});
+        doc.setFontSize(12); doc.text("SHREE SWAMINARAYAN GURUKUL", 105, 26, {align:"center"});
+        doc.setFontSize(14); doc.text("ADMISSION RECEIPT (2026-27)", 105, 36, {align:"center"});
+        
+        doc.setFontSize(10); doc.text("Receipt No: " + recNo, 195, 12, {align:"right"});
 
+        // Student Photo
         if(data.photoData) {
-            try { doc.addImage(data.photoData, 'JPEG', 160, 45, 30, 35); } catch(e) {}
+            try { doc.addImage(data.photoData, 'JPEG', 160, 50, 35, 40); } catch(e) {}
         }
 
-        doc.setTextColor(0); doc.setFontSize(13);
+        // Details Table Style
+        doc.setTextColor(0, 0, 0);
+        doc.setFontSize(12);
         let y = 60;
-        const row = (l, v) => { doc.setFont("helvetica", "bold"); doc.text(l + ":", 20, y); doc.setFont("helvetica", "normal"); doc.text(String(v), 70, y); y += 11; };
+        const row = (label, value) => {
+            doc.setFont("helvetica", "bold"); doc.text(label + " :", 20, y);
+            doc.setFont("helvetica", "normal"); doc.text(String(value), 70, y);
+            y += 12;
+        };
 
         row("Student Name", data.studentName);
-        row("Grade", data.grade);
+        row("Grade / Standard", data.grade);
         row("Gender", data.gender);
         row("Admission Type", data.studentType);
-        row("Caste", data.caste);
-        row("Aadhar No.", data.aadhar);
+        row("Caste / Category", data.caste);
+        row("Student Aadhar", data.aadhar);
         row("Father Name", data.fatherName);
-        row("Mobile", data.mobile);
-        row("Address", data.address);
+        row("Mobile Number", data.mobile);
+        row("Permanent Address", data.address);
+        row("Date of Birth", data.dob);
 
-        doc.save(`Receipt_${recNo}.pdf`);
+        // Footer
+        doc.setDrawColor(200); doc.line(20, 260, 190, 260);
+        doc.setFontSize(9); doc.setTextColor(100);
+        doc.text("Generated on: " + new Date().toLocaleString(), 20, 270);
+        doc.text("Authorized Signature", 190, 270, {align:"right"});
+        doc.setFontSize(10); doc.setTextColor(14, 30, 96);
+        doc.text("Vrundavandham Shree Swaminarayan Gurukul-Khirasara", 105, 285, {align:"center"});
+
+        doc.save(`Admission_Receipt_${data.studentName}.pdf`);
     }
 
     function resetApp() { localStorage.clear(); location.reload(); }
