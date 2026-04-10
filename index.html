@@ -49,8 +49,13 @@
     <div id="mainView" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
         <div class="pdf-title">૧. સંસ્થા પરિચય</div>
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
-        <div class="pdf-title">૨. એડમિશન માહિતી </div>
+        
+        <div class="pdf-title">૨. પ્રવેશના નિયમો અને અન્ય વિગતો</div>
+        <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/DETAILS.pdf&embedded=true" class="pdf-box"></iframe>
+
+        <div class="pdf-title">૩. ફી માળખું (Fees Details)</div>
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
+        
         <button class="btn-submit" style="max-width: 400px; margin-bottom: 40px;" onclick="checkExistingForm()">પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
     </div>
 
@@ -62,7 +67,7 @@
         <div id="receiptActions">
             <button class="btn-submit" style="background: var(--success);" onclick="generatePDF()">📄 રસીદ (Receipt) ડાઉનલોડ કરો</button>
             <div class="nondh-box">નોંધ: ઓનલાઇન ભરેલ પ્રવેશ ફોર્મની રીસીપ્ટની પ્રિન્ટ સાથે લાવવી.</div>
-            <button id="cancelEntryBtn" class="btn-submit" style="background: var(--red); margin-top: 10px;" onclick="cancelAdmission()">❌ આ પ્રવેશ રદ કરો</button>
+            <button class="btn-submit" style="background: var(--red); margin-top: 10px;" onclick="cancelAdmission()">❌ આ પ્રવેશ રદ કરો</button>
         </div>
         <p id="redirectMsg" style="display:none; color:var(--red); font-weight:bold; margin-top:20px;">પ્રવેશ રદ થયો છે. થોડીક ક્ષણોમાં તમે હોમ પેજ પર જશો...</p>
     </div>
@@ -71,16 +76,16 @@
 
     <div id="formSection">
         <div class="p-content">
-            <h3 style="text-align:center; color:var(--primary); margin:0 0 20px 0;">લોકલ અને અપડાઉન એડમિશન ફોર્મ</h3>
+            <h3 style="text-align:center; color:var(--primary); margin:0 0 20px 0;">નવું એડમિશન ફોર્મ</h3>
             <form id="admissionForm">
                 <div class="grid">
                     <div style="text-align: center;">
-                        <div id="preview">વિદ્યાર્થી પાસપોર્ટ સાઇઝનો ફોટો</div>
+                        <div id="preview">વિદ્યાર્થી ફોટો</div>
                         <input type="file" accept="image/*" onchange="processImg(event)" required>
                     </div>
                     <div class="field" style="grid-column: span 2;">
                         <label>વિદ્યાર્થીનું પૂરું નામ (અટક પ્રથમ)</label>
-                        <input type="text" id="uName" placeholder="અટક નામ પિતાનું નામ" required>
+                        <input type="text" id="uName" placeholder="દા.ત. પટેલ આર્યન રાજેશભાઈ" required>
                     </div>
                 </div>
 
@@ -88,7 +93,6 @@
                 <div class="grid">
                     <div class="field"><label>ધોરણ</label><input type="text" id="uGrade" required></div>
                     <div class="field"><label>લિંગ</label><select id="uGender"><option value="Kumar">કુમાર</option><option value="Kanya">કન્યા</option></select></div>
-                    
                     <div class="field">
                         <label>પ્રવેશ પ્રકાર</label>
                         <select id="uType" onchange="filterCaste()">
@@ -97,25 +101,22 @@
                             <option value="Chatralay">Chatralay</option>
                         </select>
                     </div>
-
                     <div class="field">
                         <label>જ્ઞાતિ</label>
                         <select id="uCaste">
-                            <option value="Open">Open</option>
-                            <option value="OBC">OBC</option>
-                            <option value="SC">SC</option>
-                            <option value="ST">ST</option>
+                            <option>Open</option>
+                            <option>OBC</option>
+                            <option>SC</option>
+                            <option>ST</option>
                         </select>
                     </div>
-
-                    <div class="field"><label>વિદ્યાર્થી આધાર નંબર</label><input type="text" id="uAadhar" maxlength="12" pattern="\d{12}" required></div>
+                    <div class="field"><label>આધાર નંબર</label><input type="text" id="uAadhar" maxlength="12" pattern="\d{12}" required></div>
                     <div class="field"><label>જન્મ તારીખ</label><input type="text" id="uDob" placeholder="DD/MM/YYYY" required></div>
                 </div>
 
                 <div class="section-bar">૨. વાલી વિગત</div>
                 <div class="grid">
                     <div class="field" style="grid-column: span 3;"><label>પિતાનું નામ</label><input type="text" id="uFather" required></div>
-                    <div class="field" style="grid-column: span 3;"><label>પિતાનો આધાર નંબર</label><input type="text" id="uFatherAadhar" maxlength="12" pattern="\d{12}" required></div>
                     <div class="field" style="grid-column: span 3;"><label>મોબાઈલ નંબર</label><input type="tel" id="uMobile" maxlength="10" pattern="\d{10}" required></div>
                     <div class="field" style="grid-column: span 3;"><label>સરનામું</label><input type="text" id="uAddress" required></div>
                 </div>
@@ -131,20 +132,14 @@
 
     window.onload = () => { setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 1200); };
 
-    // Chatralay માટે જ્ઞાતિ ફિલ્ટર કરવાનું ફંક્શન
     function filterCaste() {
         const type = document.getElementById('uType').value;
         const casteSelect = document.getElementById('uCaste');
-        
-        // બધા ઓપ્શન ક્લીયર કરવા
         casteSelect.innerHTML = "";
-
         if (type === "Chatralay") {
-            // માત્ર Open અને OBC ઉમેરવા
             casteSelect.add(new Option("Open", "Open"));
             casteSelect.add(new Option("OBC", "OBC"));
         } else {
-            // બધા ઓપ્શન ફરી ઉમેરવા
             casteSelect.add(new Option("Open", "Open"));
             casteSelect.add(new Option("OBC", "OBC"));
             casteSelect.add(new Option("SC", "SC"));
@@ -194,9 +189,8 @@
             gender: document.getElementById('uGender').value,
             caste: document.getElementById('uCaste').value,
             studentType: document.getElementById('uType').value,
-            aadhar: "[Aadhaar Redacted]",
+            aadhar: document.getElementById('uAadhar').value,
             fatherName: document.getElementById('uFather').value,
-            fatherAadhar: "[Aadhaar Redacted]",
             mobile: document.getElementById('uMobile').value,
             address: document.getElementById('uAddress').value,
             dob: document.getElementById('uDob').value,
@@ -209,14 +203,10 @@
             body: JSON.stringify(data) 
         })
         .then(() => {
-            data.receiptNo = "REG-" + Date.now().toString().slice(-4) + "-" + data.mobile.slice(-4); 
             localStorage.setItem("tempData", JSON.stringify(data));
             localStorage.setItem("currentStatus", "Confirmed");
             localStorage.setItem("formSubmitted", "true");
             showSuccessView();
-        }).catch(err => {
-            alert("કનેક્શન એરર! ફરી પ્રયાસ કરો.");
-            btn.disabled = false; btn.innerHTML = "સબમિટ કરો";
         });
     });
 
@@ -231,19 +221,17 @@
         const badge = document.getElementById('statusBadge');
         const title = document.getElementById('statusTitle');
         const actions = document.getElementById('receiptActions');
-        const redirectMsg = document.getElementById('redirectMsg');
 
         if (currentStatus === "Cancelled") {
             badge.className = "status-badge status-cancel"; badge.innerText = "● પ્રવેશ રદ (Canceled)";
             title.innerText = "આ પ્રવેશ રદ કરવામાં આવ્યો છે."; title.style.color = "var(--red)";
             actions.style.display = "none";
-            redirectMsg.style.display = "block";
-            setTimeout(() => { localStorage.clear(); location.reload(); }, 2500);
+            document.getElementById('redirectMsg').style.display = "block";
+            setTimeout(() => { localStorage.clear(); location.reload(); }, 3000);
         } else {
             badge.className = "status-badge status-confirm"; badge.innerText = "● પ્રવેશ કન્ફર્મ (Confirmed)";
-            title.innerText = "ફોર્મ સફળતાપૂર્વક સબમિટ થયું છે!"; title.style.color = "var(--success)";
+            title.innerText = "ફોર્મ સફળતાપૂર્વક સબમિટ થયું છે!";
             actions.style.display = "block";
-            redirectMsg.style.display = "none";
         }
         document.getElementById('statusBox').style.display = 'block';
     }
@@ -251,7 +239,6 @@
     function cancelAdmission() {
         if(!confirm("શું તમે આ પ્રવેશ રદ કરવા માંગો છો?")) return;
         const data = JSON.parse(localStorage.getItem("tempData"));
-        
         fetch(scriptURL, { 
             method: 'POST', 
             mode: 'no-cors',
@@ -275,20 +262,19 @@
 
         doc.setTextColor(0); doc.setFontSize(12);
         let y = 65;
-        const row = (l, v) => { doc.setFont("helvetica", "bold"); doc.text(l + ":", 20, y); doc.setFont("helvetica", "normal"); doc.text(String(v), 75, y); y += 11; };
+        const row = (l, v) => { doc.setFont("helvetica", "bold"); doc.text(l + ":", 20, y); doc.setFont("helvetica", "normal"); doc.text(String(v), 80, y); y += 12; };
 
-        row("Registration ID", data.receiptNo);
         row("Student Name", data.studentName);
         row("Grade", data.grade);
         row("Student Type", data.studentType);
-        row("Student Aadhar", data.aadhar);
+        row("Caste", data.caste);
+        row("Aadhar Number", data.aadhar); // અહીં હવે આખો આધાર નંબર દેખાશે
         row("Father Name", data.fatherName);
-        row("Father Aadhar", data.fatherAadhar);
         row("Mobile Number", data.mobile);
         row("Address", data.address);
 
         y += 10; doc.setTextColor(220, 0, 0); doc.setFont("helvetica", "bold");
-        doc.text("NOTE: Online bharel pravesh form ni receipt ni print sathe lavvi.", 105, y, {align:"center"});
+        doc.text("NOTE: Take a print of this receipt for school submission.", 105, y, {align:"center"});
         doc.save(`Receipt_${data.studentName}.pdf`);
     }
 </script>
