@@ -16,12 +16,12 @@
         .pdf-title { width: 100%; max-width: 900px; color: var(--primary); background: #e2e8f0; padding: 12px; border-radius: 8px; border-left: 5px solid var(--golden); margin: 20px 0 10px 0; font-size: 1.1rem; font-weight: bold; box-sizing: border-box; }
 
         #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; text-align: center; margin: 40px 0; border: 2px solid var(--golden); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .nondh-box { background: #fee2e2; border: 1px dashed var(--red); padding: 10px; border-radius: 8px; color: var(--red); font-weight: bold; margin: 15px 0; font-size: 14px; }
-        
         .status-badge { display: inline-block; padding: 8px 20px; border-radius: 50px; font-weight: bold; margin-bottom: 15px; font-size: 16px; }
         .status-confirm { background: #dcfce7; color: var(--success); border: 2px solid var(--success); }
         .status-cancel { background: #fee2e2; color: var(--red); border: 2px solid var(--red); }
 
+        .nondh-box { background: #fee2e2; border: 1px dashed var(--red); padding: 10px; border-radius: 8px; color: var(--red); font-weight: bold; margin: 15px 0; font-size: 14px; }
+        
         #formHeader { width: 100%; max-width: 900px; text-align: center; background: white; border-radius: 15px 15px 0 0; border: 1px solid #cbd5e1; border-bottom: none; display: none; overflow: hidden; }
         .header-img { width: 100%; height: auto; display: block; }
 
@@ -58,7 +58,7 @@
     </div>
 
     <div id="statusBox">
-        <div id="statusIndicator" class="status-badge status-confirm">● પ્રવેશ કન્ફર્મ (Confirmed)</div>
+        <div id="statusBadge" class="status-badge status-confirm">● પ્રવેશ કન્ફર્મ (Confirmed)</div>
         <h2 id="statusTitle" style="color: var(--success); margin: 0;">ફોર્મ સફળતાપૂર્વક સેવ થયું છે!</h2>
         <p id="userNameDisplay" style="font-weight: bold; font-size: 18px; color: var(--primary); margin: 15px 0;"></p>
         
@@ -81,7 +81,7 @@
             <form id="admissionForm">
                 <div class="grid">
                     <div style="text-align: center;">
-                        <div id="preview">વિદ્યાર્થીનો પાસપોર્ટ સાઇઝનો ફોટો</div>
+                        <div id="preview">વિદ્યાર્થી ફોટો</div>
                         <input type="file" accept="image/*" onchange="processImg(event)" required>
                     </div>
                     <div class="field" style="grid-column: span 2;">
@@ -115,7 +115,7 @@
     </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbyv7bjqOgUIFQAxXB9VDrV_Q7WVlqEjERM07sO45-YJcO1xlO1zk9C1gdEJJ-SvAWB5/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbw26Cb4OPP2GYG_6t7PdyetJ2ZueeZl3I4Jq7-SuAke6z3VtwBv5AdM6iNILCOqUXIJ/exec';
 
     window.onload = () => { setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 1200); };
 
@@ -140,21 +140,20 @@
             img.src = ev.target.result;
             img.onload = () => {
                 const canvas = document.createElement('canvas');
-                const maxWidth = 500;
+                const maxWidth = 400;
                 const scale = maxWidth / img.width;
                 canvas.width = maxWidth; canvas.height = img.height * scale;
                 canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-                const base64 = canvas.toDataURL('image/jpeg', 0.7); 
-                document.getElementById('uPhotoData').value = base64;
-                document.getElementById('preview').innerHTML = `<img src="${base64}" style="width:100%;">`;
+                document.getElementById('uPhotoData').value = canvas.toDataURL('image/jpeg', 0.7);
+                document.getElementById('preview').innerHTML = `<img src="${document.getElementById('uPhotoData').value}" style="width:100%;">`;
             };
         };
     }
 
     document.getElementById('admissionForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        const btn = document.getElementById('submitBtn');
-        btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે... ⏳";
+        document.getElementById('submitBtn').disabled = true;
+        document.getElementById('submitBtn').innerHTML = "સેવ થઈ રહ્યું છે... ⏳";
         
         const data = {
             studentName: document.getElementById('uName').value,
@@ -168,23 +167,17 @@
             mobile: document.getElementById('uMobile').value,
             address: document.getElementById('uAddress').value,
             dob: document.getElementById('uDob').value,
-            photoData: document.getElementById('uPhotoData').value,
-            status: "Confirm"
+            photoData: document.getElementById('uPhotoData').value
         };
 
         localStorage.setItem("tempData", JSON.stringify(data));
-        localStorage.setItem("currentStatus", "Confirm");
+        localStorage.setItem("currentStatus", "Confirmed");
 
-        fetch(scriptURL, {
-            method: 'POST',
-            mode: 'no-cors',
-            body: JSON.stringify(data)
-        })
+        fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) })
         .then(() => {
             localStorage.setItem("formSubmitted", "true");
             showSuccessView();
-        })
-        .catch(() => {
+        }).catch(() => {
             localStorage.setItem("formSubmitted", "true");
             showSuccessView();
         });
@@ -199,37 +192,33 @@
         document.getElementById('mainView').style.display = 'none';
         document.getElementById('userNameDisplay').innerText = "વિદ્યાર્થી: " + data.studentName;
         
-        const indicator = document.getElementById('statusIndicator');
+        const badge = document.getElementById('statusBadge');
         const title = document.getElementById('statusTitle');
         const actions = document.getElementById('receiptActions');
 
         if (currentStatus === "Cancelled") {
-            indicator.className = "status-badge status-cancel";
-            indicator.innerText = "● પ્રવેશ રદ (Cancelled)";
-            title.innerText = "આ એડમિશન રદ કરવામાં આવ્યું છે.";
+            badge.className = "status-badge status-cancel";
+            badge.innerText = "● પ્રવેશ રદ (Canceled)";
+            title.innerText = "આ પ્રવેશ રદ કરવામાં આવ્યો છે.";
             title.style.color = "var(--red)";
             actions.style.display = "none";
         } else {
-            indicator.className = "status-badge status-confirm";
-            indicator.innerText = "● પ્રવેશ કન્ફર્મ (Confirmed)";
+            badge.className = "status-badge status-confirm";
+            badge.innerText = "● પ્રવેશ કન્ફર્મ (Confirmed)";
             title.innerText = "ફોર્મ સફળતાપૂર્વક સેવ થયું છે!";
             title.style.color = "var(--success)";
             actions.style.display = "block";
         }
 
         document.getElementById('statusBox').style.display = 'block';
-        window.scrollTo(0,0);
     }
 
     function cancelAdmission() {
-        if(!confirm("શું તમે ખરેખર આ પ્રવેશ રદ કરવા માંગો છો? આ કર્યા પછી રસીદ ડાઉનલોડ કરી શકાશે નહીં.")) return;
+        if(!confirm("શું તમે આ પ્રવેશ રદ કરવા માંગો છો? શીટમાં પણ ડેટા રદ થઈ જશે.")) return;
         
         const data = JSON.parse(localStorage.getItem("tempData"));
-        data.status = "Cancelled";
-        localStorage.setItem("tempData", JSON.stringify(data));
-        localStorage.setItem("currentStatus", "Cancelled");
-
-        // શીટમાં અપડેટ મોકલવા માટે
+        
+        // શીટમાં 'Canceled' કરવા માટે રિક્વેસ્ટ મોકલે છે
         fetch(scriptURL, {
             method: 'POST',
             mode: 'no-cors',
@@ -240,6 +229,7 @@
             })
         });
 
+        localStorage.setItem("currentStatus", "Cancelled");
         showSuccessView();
     }
 
@@ -252,16 +242,11 @@
         doc.setTextColor(255); doc.setFontSize(22); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, {align:"center"});
         doc.setFontSize(14); doc.text("ADMISSION RECEIPT (2026-27)", 105, 30, {align:"center"});
 
-        if(data.photoData) {
-            try { doc.addImage(data.photoData, 'JPEG', 160, 50, 35, 40); } catch(e) {}
-        }
+        if(data.photoData) { try { doc.addImage(data.photoData, 'JPEG', 160, 50, 35, 40); } catch(e) {} }
 
         doc.setTextColor(0); doc.setFontSize(12);
         let y = 65;
-        const row = (l, v) => { 
-            doc.setFont("helvetica", "bold"); doc.text(l + ":", 20, y); 
-            doc.setFont("helvetica", "normal"); doc.text(String(v), 75, y); y += 11; 
-        };
+        const row = (l, v) => { doc.setFont("helvetica", "bold"); doc.text(l + ":", 20, y); doc.setFont("helvetica", "normal"); doc.text(String(v), 75, y); y += 11; };
 
         row("Student Name", data.studentName);
         row("Grade", data.grade);
@@ -271,16 +256,13 @@
         row("Father Name", data.fatherName);
         row("Address", data.address);
 
-        y += 10;
-        doc.setTextColor(220, 0, 0);
-        doc.setFont("helvetica", "bold");
+        y += 10; doc.setTextColor(220, 0, 0); doc.setFont("helvetica", "bold");
         doc.text("NOTE: Online bharel pravesh form ni receipt ni print sathe lavvi.", 105, y, {align:"center"});
-
         doc.save(`Receipt_${data.studentName}.pdf`);
     }
 
     function resetApp() { 
-        if(confirm("નવું ફોર્મ ભરવા માટે બધો ડેટા સાફ થઈ જશે. શું તમે તૈયાર છો?")) {
+        if(confirm("નવું ફોર્મ ભરવા માટે બધો ડેટા સાફ થઈ જશે. આગળ વધવું છે?")) {
             localStorage.clear(); location.reload(); 
         }
     }
