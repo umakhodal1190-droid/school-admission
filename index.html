@@ -6,11 +6,11 @@
     <title>પ્રવેશ ફોર્મ - VRUNDAVANDHAM KHIRASARA</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        :root { --primary: #0e1e60; --golden: #d4af37; --bg: #f1f5f9; --red: #dc2626; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
+        :root { --primary: #0e1e60; --golden: #d4af37; --bg: #f1f5f9; --red: #dc2626; --success: #16a34a; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
         
         #introOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary); color: white; display: flex; justify-content: center; align-items: center; z-index: 9999; text-align: center; }
-        .intro-text { font-size: 30px; font-weight: bold; }
+        .intro-text { font-size: 28px; font-weight: bold; }
 
         .pdf-box { width: 100%; max-width: 900px; height: 350px; border-radius: 12px; border: 2px solid #cbd5e1; margin-bottom: 20px; background: white; }
         .pdf-title { width: 100%; max-width: 900px; color: var(--primary); background: #e2e8f0; padding: 12px; border-radius: 8px; border-left: 5px solid var(--golden); margin: 20px 0 10px 0; font-size: 1.1rem; font-weight: bold; box-sizing: border-box; }
@@ -28,10 +28,13 @@
         .field { display: flex; flex-direction: column; text-align: left; }
         
         label { font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #444; }
-        input, select { padding: 12px; border: 1px solid #ccc; border-radius: 8px; width: 100%; box-sizing: border-box; font-size: 16px; }
-        .btn-submit { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.3s; }
+        input, select { padding: 12px; border: 1px solid #ccc; border-radius: 8px; width: 100%; box-sizing: border-box; font-size: 16px; outline: none; }
+        input:focus { border-color: var(--primary); }
         
-        #preview { width: 110px; height: 130px; background: #eee; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 10px; border-radius: 8px; }
+        .btn-submit { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.3s; }
+        .btn-submit:disabled { background: #94a3b8; cursor: not-allowed; }
+        
+        #preview { width: 110px; height: 130px; background: #eee; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 10px; border-radius: 8px; font-size: 12px; color: #888; }
         #preview img { width: 100%; height: 100%; object-fit: cover; }
         
         @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
@@ -39,23 +42,25 @@
 </head>
 <body>
 
-    <div id="introOverlay"><div class="intro-text">🙏 જય સ્વામિનારાયણ 🙏</div></div>
+    <div id="introOverlay"><div class="intro-text">🙏 જય સ્વામિનારાયણ 🙏<br><span style="font-size: 18px;">VRUNDAVANDHAM KHIRASARA</span></div></div>
 
     <div id="mainView" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
         <div class="pdf-title">૧. સંસ્થા પરિચય</div>
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
 
-        <div class="pdf-title">૨. સ્કૂલ એડમિશન માહિતી</div>
+        <div class="pdf-title">૨. સ્કૂલ એડમિશન માહિતી (૨૦૨૬-૨૭)</div>
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
 
         <button class="btn-submit" style="max-width: 400px; margin-top: 10px; margin-bottom: 30px;" onclick="checkExistingForm()">પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
     </div>
 
     <div id="statusBox">
-        <h2 style="color: #16a34a;">✅ ફોર્મ સફળતાપૂર્વક સબમિટ થયેલ છે!</h2>
+        <h2 style="color: var(--success);">✅ માહિતી સફળતાપૂર્વક સેવ થઈ ગઈ છે!</h2>
         <p id="userNameDisplay" style="font-weight: bold; font-size: 18px; margin: 15px 0; color: var(--primary);"></p>
-        <button class="btn-submit" style="background: #16a34a;" onclick="generatePDF()">📄 રસીદ (Receipt) ડાઉનલોડ કરો</button>
-        <button id="cancelBtn" class="btn-submit" style="background: var(--red); margin-top: 10px;" onclick="cancelFormAction()">❌ ફોર્મ રદ (Cancel) કરો</button>
+        <div id="receiptLabel" style="font-size: 16px; margin-bottom: 20px; font-weight: bold; color: #444;"></div>
+        
+        <button class="btn-submit" style="background: var(--success);" onclick="generatePDF()">📄 રસીદ (Receipt) ડાઉનલોડ કરો</button>
+        <button id="cancelBtn" class="btn-submit" style="background: var(--red); margin-top: 10px;" onclick="cancelFormAction()">❌ આ પ્રવેશ રદ (Cancel) કરો</button>
         <button class="btn-submit" style="margin-top:20px; background: var(--golden);" onclick="resetApp()">➕ નવું ફોર્મ ભરો</button>
     </div>
 
@@ -63,7 +68,7 @@
 
     <div id="formSection">
         <div class="p-content">
-            <h3 style="text-align:center; color:var(--primary); margin:0 0 20px 0;">લોકલ અને અપડાઉન પ્રવેશ ફોર્મ</h3>
+            <h3 style="text-align:center; color:var(--primary); margin:0 0 20px 0;">એડમિશન ફોર્મ (૨૦૨૬-૨૭)</h3>
             <form id="admissionForm">
                 <div class="grid">
                     <div style="text-align: center;">
@@ -78,7 +83,7 @@
 
                 <div class="section-bar">૧. પ્રવેશ વિગતો</div>
                 <div class="grid">
-                    <div class="field"><label>ધોરણ</label><input type="text" id="uGrade" required></div>
+                    <div class="field"><label>ધોરણ</label><input type="text" id="uGrade" placeholder="દા.ત. 5" required></div>
                     <div class="field"><label>લિંગ</label><select id="uGender"><option value="Kumar">કુમાર</option><option value="Kanya">કન્યા</option></select></div>
                     <div class="field"><label>જ્ઞાતિ</label><select id="uCaste"><option>Open</option><option>OBC</option><option>SC</option><option>ST</option></select></div>
                     <div class="field"><label>પ્રવેશ પ્રકાર</label><select id="uType"><option>Local</option><option>Up-Down</option></select></div>
@@ -95,24 +100,22 @@
                 </div>
                 
                 <input type="hidden" id="uPhotoData">
-                <button type="submit" id="submitBtn" class="btn-submit">માહિતી સેવ કરો</button>
+                <button type="submit" id="submitBtn" class="btn-submit">માહિતી સેવ કરો અને રસીદ મેળવો</button>
             </form>
         </div>
     </div>
 
 <script>
-    // તમારી નવી URL
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbxFLbeTsJGzJLcSCJerpDdYM6z1GesXb3f0S7LO5quHV6wMrvk6V6SN9j37KniACeLp/exec';
+    // તમારી નવી Web App URL
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwFv6FR6Gf0VuUKCnxbTvSdQR9tItHRmksgISCjqIlClLCCfaoH_5SWhmjlWN9N3Fwh/exec';
 
-    window.onload = () => { setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 1200); };
+    window.onload = () => { 
+        setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 1500); 
+    };
 
     function checkExistingForm() {
         if (localStorage.getItem("formSubmitted") === "true") {
-            const data = JSON.parse(localStorage.getItem("tempData"));
-            document.getElementById('mainView').style.display = 'none';
-            document.getElementById('userNameDisplay').innerText = "વિદ્યાર્થી: " + data.studentName;
-            document.getElementById('statusBox').style.display = 'block';
-            window.scrollTo(0,0);
+            showSuccessView();
         } else {
             showForm();
         }
@@ -127,6 +130,7 @@
 
     function processImg(e) {
         const file = e.target.files[0];
+        if(!file) return;
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = (ev) => {
@@ -134,7 +138,7 @@
             img.src = ev.target.result;
             img.onload = () => {
                 const canvas = document.createElement('canvas');
-                const maxWidth = 800; // હાઈ-ક્વોલિટી માટે
+                const maxWidth = 600; // સારી ક્વોલિટી અને સેવ થવામાં સરળતા
                 const scale = maxWidth / img.width;
                 canvas.width = maxWidth; canvas.height = img.height * scale;
                 canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
@@ -148,7 +152,8 @@
     document.getElementById('admissionForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
-        btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે... ⏳";
+        btn.disabled = true; 
+        btn.innerHTML = "ડેટા અને ફોટો સેવ થઈ રહ્યો છે... ⏳ (રાહ જુઓ)";
         
         const data = {
             action: "save",
@@ -167,9 +172,11 @@
         };
 
         localStorage.setItem("tempData", JSON.stringify(data));
-        
+
+        // POST રિક્વેસ્ટ
         fetch(scriptURL, {
             method: 'POST',
+            mode: 'cors',
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify(data)
         })
@@ -178,35 +185,46 @@
             if(res.status === "Success") {
                 localStorage.setItem("formSubmitted", "true");
                 localStorage.setItem("currentReceiptNo", res.receiptNo);
-                showSuccessRow();
+                showSuccessView();
             } else {
-                alert("ભૂલ આવી: " + res.message);
+                alert("ભૂલ: " + res.message);
                 btn.disabled = false; btn.innerHTML = "માહિતી સેવ કરો";
             }
         })
         .catch(error => {
-            alert("નેટવર્ક ધીમું છે. રસીદ ડ્રાઈવમાં સેવ થઈ રહી છે, રાહ જુઓ...");
+            // જો નેટવર્ક બહુ ધીમું હોય અને રિસ્પોન્સમાં એરર આવે તો પણ ડેટા ચેક કરવા માટે
+            console.error(error);
+            alert("નેટવર્ક ધીમું છે, પણ ડેટા મોકલી દેવામાં આવ્યો છે. જો ડ્રાઈવમાં ફોટો આવી ગયો હોય તો પેજ રિફ્રેશ કરો.");
             btn.disabled = false; btn.innerHTML = "માહિતી સેવ કરો";
         });
     });
 
-    function showSuccessRow() {
+    function showSuccessView() {
         const data = JSON.parse(localStorage.getItem("tempData"));
+        const recNo = localStorage.getItem("currentReceiptNo") || "---";
+        
         document.getElementById('formHeader').style.display = 'none';
         document.getElementById('formSection').style.display = 'none';
+        document.getElementById('mainView').style.display = 'none';
+        
         document.getElementById('userNameDisplay').innerText = "વિદ્યાર્થી: " + data.studentName;
+        document.getElementById('receiptLabel').innerText = "રસીદ નંબર: " + recNo;
         document.getElementById('statusBox').style.display = 'block';
         window.scrollTo(0,0);
     }
 
     function cancelFormAction() {
-        if (!confirm("શું તમે આ ફોર્મ રદ કરવા માંગો છો?")) return;
-        const data = { action: "cancel" };
+        if (!confirm("શું તમે આ પ્રવેશ ફોર્મ રદ કરવા માંગો છો?")) return;
+        const cBtn = document.getElementById('cancelBtn');
+        cBtn.disabled = true; cBtn.innerHTML = "રદ થઈ રહ્યું છે...";
+        
         fetch(scriptURL, {
             method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify(data)
-        }).then(() => { alert("ફોર્મ રદ કરવામાં આવ્યું છે."); resetApp(); });
+            body: JSON.stringify({ action: "cancel" })
+        }).then(() => { 
+            alert("પ્રવેશ રદ કરવામાં આવ્યો છે."); 
+            resetApp(); 
+        });
     }
 
     function generatePDF() {
@@ -215,33 +233,47 @@
         const data = JSON.parse(localStorage.getItem("tempData"));
         const recNo = localStorage.getItem("currentReceiptNo") || "---";
 
+        // Header
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 45, 'F');
-        doc.setTextColor(255); doc.setFontSize(20); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, {align:"center"});
-        doc.setFontSize(11); doc.text("ADMISSION RECEIPT (2026-27)", 105, 30, {align:"center"});
-        doc.text("Receipt No: " + recNo, 195, 12, {align:"right"});
+        doc.setTextColor(255); doc.setFontSize(22); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, {align:"center"});
+        doc.setFontSize(12); doc.text("SHREE SWAMINARAYAN GURUKUL", 105, 26, {align:"center"});
+        doc.setFontSize(14); doc.text("ADMISSION RECEIPT (2026-27)", 105, 36, {align:"center"});
+        doc.setFontSize(12); doc.text("Receipt No: " + recNo, 195, 12, {align:"right"});
 
+        // Photo
         if(data.photoData) {
             try { doc.addImage(data.photoData, 'JPEG', 160, 50, 35, 40); } catch(e) {}
         }
 
+        // Content
         doc.setTextColor(0); doc.setFontSize(12);
         let y = 65;
-        const row = (l, v) => { doc.setFont("helvetica", "bold"); doc.text(l + ":", 20, y); doc.setFont("helvetica", "normal"); doc.text(String(v), 70, y); y += 11; };
+        const row = (l, v) => { 
+            doc.setFont("helvetica", "bold"); doc.text(l + ":", 20, y); 
+            doc.setFont("helvetica", "normal"); doc.text(String(v), 80, y); y += 12; 
+        };
 
         row("Student Name", data.studentName);
         row("Grade", data.grade);
         row("Gender", data.gender);
-        row("Admission Type", data.studentType);
         row("Caste", data.caste);
-        row("Aadhar No.", data.aadhar);
+        row("Admission Type", data.studentType);
+        row("Aadhar Number", data.aadhar);
         row("Father Name", data.fatherName);
         row("Father Aadhar", data.fatherAadhar);
-        row("Mobile", data.mobile);
+        row("Mobile Number", data.mobile);
         row("Address", data.address);
-        doc.save(`Receipt_${data.studentName}.pdf`);
+        row("Date of Birth", data.dob);
+
+        doc.save(`Receipt_${recNo}_${data.studentName}.pdf`);
     }
 
-    function resetApp() { localStorage.clear(); location.reload(); }
+    function resetApp() { 
+        if(confirm("નવું ફોર્મ ભરવા માટે જૂનો ડેટા સાફ થઈ જશે. શું તમે તૈયાર છો?")) {
+            localStorage.clear(); 
+            location.reload(); 
+        }
+    }
 </script>
 </body>
 </html>
