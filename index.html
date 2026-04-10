@@ -88,15 +88,26 @@
                 <div class="grid">
                     <div class="field"><label>ધોરણ</label><input type="text" id="uGrade" required></div>
                     <div class="field"><label>લિંગ</label><select id="uGender"><option value="Kumar">કુમાર</option><option value="Kanya">કન્યા</option></select></div>
-                    <div class="field"><label>જ્ઞાતિ</label><select id="uCaste"><option>Open</option><option>OBC</option><option>SC</option><option>ST</option></select></div>
+                    
                     <div class="field">
                         <label>પ્રવેશ પ્રકાર</label>
-                        <select id="uType">
+                        <select id="uType" onchange="filterCaste()">
                             <option value="Local">Local</option>
                             <option value="Up-Down">Up-Down</option>
                             <option value="Chatralay">Chatralay</option>
                         </select>
                     </div>
+
+                    <div class="field">
+                        <label>જ્ઞાતિ</label>
+                        <select id="uCaste">
+                            <option value="Open">Open</option>
+                            <option value="OBC">OBC</option>
+                            <option value="SC">SC</option>
+                            <option value="ST">ST</option>
+                        </select>
+                    </div>
+
                     <div class="field"><label>વિદ્યાર્થી આધાર નંબર</label><input type="text" id="uAadhar" maxlength="12" pattern="\d{12}" required></div>
                     <div class="field"><label>જન્મ તારીખ</label><input type="text" id="uDob" placeholder="DD/MM/YYYY" required></div>
                 </div>
@@ -116,10 +127,30 @@
     </div>
 
 <script>
-    // તમારી નવી URL
     const scriptURL = 'https://script.google.com/macros/s/AKfycbw5TPcjeOg-NMgFRuvj6M8kQXG-w8w6iXeYaAv3uuRgTvGnCCwlTXdOX9J6Elt3hXhX/exec';
 
     window.onload = () => { setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 1200); };
+
+    // Chatralay માટે જ્ઞાતિ ફિલ્ટર કરવાનું ફંક્શન
+    function filterCaste() {
+        const type = document.getElementById('uType').value;
+        const casteSelect = document.getElementById('uCaste');
+        
+        // બધા ઓપ્શન ક્લીયર કરવા
+        casteSelect.innerHTML = "";
+
+        if (type === "Chatralay") {
+            // માત્ર Open અને OBC ઉમેરવા
+            casteSelect.add(new Option("Open", "Open"));
+            casteSelect.add(new Option("OBC", "OBC"));
+        } else {
+            // બધા ઓપ્શન ફરી ઉમેરવા
+            casteSelect.add(new Option("Open", "Open"));
+            casteSelect.add(new Option("OBC", "OBC"));
+            casteSelect.add(new Option("SC", "SC"));
+            casteSelect.add(new Option("ST", "ST"));
+        }
+    }
 
     function checkExistingForm() {
         if (localStorage.getItem("formSubmitted") === "true") { showSuccessView(); } 
@@ -163,9 +194,9 @@
             gender: document.getElementById('uGender').value,
             caste: document.getElementById('uCaste').value,
             studentType: document.getElementById('uType').value,
-            aadhar: document.getElementById('uAadhar').value,
+            aadhar: "[Aadhaar Redacted]",
             fatherName: document.getElementById('uFather').value,
-            fatherAadhar: document.getElementById('uFatherAadhar').value,
+            fatherAadhar: "[Aadhaar Redacted]",
             mobile: document.getElementById('uMobile').value,
             address: document.getElementById('uAddress').value,
             dob: document.getElementById('uDob').value,
@@ -178,7 +209,6 @@
             body: JSON.stringify(data) 
         })
         .then(() => {
-            // Register ID માટે સમય અને મોબાઈલના આધારે યુનિક નંબર
             data.receiptNo = "REG-" + Date.now().toString().slice(-4) + "-" + data.mobile.slice(-4); 
             localStorage.setItem("tempData", JSON.stringify(data));
             localStorage.setItem("currentStatus", "Confirmed");
