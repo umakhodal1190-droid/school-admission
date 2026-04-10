@@ -10,12 +10,13 @@
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
         
         #introOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary); color: white; display: flex; justify-content: center; align-items: center; z-index: 9999; text-align: center; }
-        .intro-text { font-size: 28px; font-weight: bold; }
+        .intro-text { font-size: 26px; font-weight: bold; line-height: 1.5; }
 
         .pdf-box { width: 100%; max-width: 900px; height: 350px; border-radius: 12px; border: 2px solid #cbd5e1; margin-bottom: 20px; background: white; }
         .pdf-title { width: 100%; max-width: 900px; color: var(--primary); background: #e2e8f0; padding: 12px; border-radius: 8px; border-left: 5px solid var(--golden); margin: 20px 0 10px 0; font-size: 1.1rem; font-weight: bold; box-sizing: border-box; }
 
         #statusBox { display: none; width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; text-align: center; margin: 40px 0; border: 2px solid var(--golden); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .nondh-box { background: #fee2e2; border: 1px dashed var(--red); padding: 10px; border-radius: 8px; color: var(--red); font-weight: bold; margin: 15px 0; font-size: 14px; }
         
         #formHeader { width: 100%; max-width: 900px; text-align: center; background: white; border-radius: 15px 15px 0 0; border: 1px solid #cbd5e1; border-bottom: none; display: none; overflow: hidden; }
         .header-img { width: 100%; height: auto; display: block; }
@@ -26,7 +27,6 @@
         
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
         .field { display: flex; flex-direction: column; text-align: left; }
-        
         label { font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #444; }
         input, select { padding: 12px; border: 1px solid #ccc; border-radius: 8px; width: 100%; box-sizing: border-box; font-size: 16px; outline: none; }
         
@@ -41,24 +41,25 @@
 </head>
 <body>
 
-    <div id="introOverlay"><div class="intro-text">🙏 જય સ્વામિનારાયણ 🙏<br><span style="font-size: 16px;">VRUNDAVANDHAM KHIRASARA</span></div></div>
+    <div id="introOverlay"><div class="intro-text">🙏 જય સ્વામિનારાયણ 🙏<br>VRUNDAVANDHAM KHIRASARA</div></div>
 
     <div id="mainView" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
-        <div class="pdf-title">૧. સંસ્થા પરિચય</div>
-        <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/VSGK.pdf&embedded=true" class="pdf-box"></iframe>
-
-        <div class="pdf-title">૨. સ્કૂલ એડમિશન માહિતી (૨૦૨૬-૨૭)</div>
+        <div class="pdf-title">૧. સંસ્થા પરિચય અને એડમિશન માહિતી (૨૦૨૬-૨૭)</div>
         <iframe src="https://docs.google.com/viewer?url=https://umakhodal1190-droid.github.io/school-admission/Fees.pdf&embedded=true" class="pdf-box"></iframe>
-
-        <button class="btn-submit" style="max-width: 400px; margin-top: 10px; margin-bottom: 30px;" onclick="checkExistingForm()">પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
+        <button class="btn-submit" style="max-width: 400px; margin-bottom: 30px;" onclick="checkExistingForm()">પ્રવેશ ફોર્મ ભરવા અહીં ક્લિક કરો</button>
     </div>
 
     <div id="statusBox">
-        <h2 style="color: var(--success);">✅ ફોર્મ સફળતાપૂર્વક સબમિટ થયું છે!</h2>
-        <p id="userNameDisplay" style="font-weight: bold; font-size: 18px; margin: 15px 0; color: var(--primary);"></p>
-        <p id="receiptDisplay" style="font-size: 16px; color: #444; margin-bottom: 20px;"></p>
+        <h2 style="color: var(--success);">✅ ફોર્મ સફળતાપૂર્વક સેવ થયું છે!</h2>
+        <p id="userNameDisplay" style="font-weight: bold; font-size: 18px; color: var(--primary); margin: 10px 0;"></p>
+        <p id="receiptNoDisplay" style="font-weight: bold; color: #334155; margin-bottom: 15px;"></p>
         
         <button class="btn-submit" style="background: var(--success);" onclick="generatePDF()">📄 રસીદ (Receipt) ડાઉનલોડ કરો</button>
+        
+        <div class="nondh-box">
+            નોંધ: ઓનલાઇન ભરેલ પ્રવેશ ફોર્મની રીસીપ્ટની પ્રિન્ટ સાથે લાવવી.
+        </div>
+
         <button id="cancelBtn" class="btn-submit" style="background: var(--red); margin-top: 10px;" onclick="cancelFormAction()">❌ આ પ્રવેશ રદ કરો</button>
         <button class="btn-submit" style="margin-top:20px; background: var(--golden);" onclick="resetApp()">➕ નવું ફોર્મ ભરો</button>
     </div>
@@ -105,16 +106,13 @@
     </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwOHAJPuV7iCfO9a_Y4owJxsbRBiFT7wku04s2uGQLvWjW4fHYI8rIjcUApiYqFzLhS/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyv7bjqOgUIFQAxXB9VDrV_Q7WVlqEjERM07sO45-YJcO1xlO1zk9C1gdEJJ-SvAWB5/exec';
 
     window.onload = () => { setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 1200); };
 
     function checkExistingForm() {
-        if (localStorage.getItem("formSubmitted") === "true") {
-            showSuccessView();
-        } else {
-            showForm();
-        }
+        if (localStorage.getItem("formSubmitted") === "true") { showSuccessView(); } 
+        else { showForm(); }
     }
 
     function showForm() {
@@ -133,7 +131,7 @@
             img.src = ev.target.result;
             img.onload = () => {
                 const canvas = document.createElement('canvas');
-                const maxWidth = 500; // કમ્પ્રેશન જેથી ફાસ્ટ અપલોડ થાય
+                const maxWidth = 500;
                 const scale = maxWidth / img.width;
                 canvas.width = maxWidth; canvas.height = img.height * scale;
                 canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
@@ -150,7 +148,6 @@
         btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે... (રાહ જુઓ) ⏳";
         
         const data = {
-            action: "save",
             studentName: document.getElementById('uName').value,
             grade: document.getElementById('uGrade').value,
             gender: document.getElementById('uGender').value,
@@ -169,18 +166,15 @@
 
         fetch(scriptURL, {
             method: 'POST',
-            mode: 'no-cors', // નેટવર્ક એરર ઘટાડવા માટે no-cors
+            mode: 'no-cors',
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify(data)
         })
         .then(() => {
-            // mode: no-cors માં રિસ્પોન્સ રીડ નથી થતો, એટલે આપણે સીધું સેવ માની લઈશું
             localStorage.setItem("formSubmitted", "true");
-            localStorage.setItem("currentReceiptNo", "Pending/Saved"); 
             showSuccessView();
         })
-        .catch(error => {
-            alert("નેટવર્ક બહુ ધીમું છે, પણ ડેટા મોકલવામાં આવ્યો છે.");
+        .catch(() => {
             localStorage.setItem("formSubmitted", "true");
             showSuccessView();
         });
@@ -188,20 +182,12 @@
 
     function showSuccessView() {
         const data = JSON.parse(localStorage.getItem("tempData"));
-        const recNo = localStorage.getItem("currentReceiptNo") || "Saved";
         document.getElementById('formHeader').style.display = 'none';
         document.getElementById('formSection').style.display = 'none';
         document.getElementById('mainView').style.display = 'none';
         document.getElementById('userNameDisplay').innerText = "વિદ્યાર્થી: " + data.studentName;
-        document.getElementById('receiptDisplay').innerText = "રસીદ સ્થિતિ: " + recNo;
         document.getElementById('statusBox').style.display = 'block';
         window.scrollTo(0,0);
-    }
-
-    function cancelFormAction() {
-        if (!confirm("શું તમે આ પ્રવેશ રદ કરવા માંગો છો?")) return;
-        fetch(scriptURL, { method: 'POST', body: JSON.stringify({ action: "cancel" }) });
-        alert("વિનંતી મોકલી દીધી છે."); resetApp();
     }
 
     function generatePDF() {
@@ -209,30 +195,53 @@
         const doc = new jsPDF();
         const data = JSON.parse(localStorage.getItem("tempData"));
 
-        doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 40, 'F');
-        doc.setTextColor(255); doc.setFontSize(20); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 15, {align:"center"});
-        doc.setFontSize(12); doc.text("ADMISSION RECEIPT (2026-27)", 105, 25, {align:"center"});
+        // Design
+        doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 45, 'F');
+        doc.setTextColor(255); doc.setFontSize(22); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, {align:"center"});
+        doc.setFontSize(14); doc.text("ADMISSION RECEIPT (2026-27)", 105, 30, {align:"center"});
 
         if(data.photoData) {
-            try { doc.addImage(data.photoData, 'JPEG', 160, 45, 35, 40); } catch(e) {}
+            try { doc.addImage(data.photoData, 'JPEG', 160, 50, 35, 40); } catch(e) {}
         }
 
         doc.setTextColor(0); doc.setFontSize(12);
-        let y = 60;
-        const row = (l, v) => { doc.setFont("helvetica", "bold"); doc.text(l + ":", 20, y); doc.setFont("helvetica", "normal"); doc.text(String(v), 70, y); y += 12; };
+        let y = 65;
+        const row = (l, v) => { 
+            doc.setFont("helvetica", "bold"); doc.text(l + ":", 20, y); 
+            doc.setFont("helvetica", "normal"); doc.text(String(v), 70, y); y += 11; 
+        };
 
         row("Student Name", data.studentName);
         row("Grade", data.grade);
+        row("Gender", data.gender);
         row("Admission Type", data.studentType);
+        row("Caste", data.caste);
         row("Aadhar Number", data.aadhar);
         row("Father Name", data.fatherName);
         row("Mobile Number", data.mobile);
         row("Address", data.address);
+        row("Date of Birth", data.dob);
 
-        doc.save(`Admission_Receipt_${data.studentName}.pdf`);
+        // PDF માં ખાસ નોંધ
+        y += 10;
+        doc.setTextColor(220, 0, 0);
+        doc.setFontSize(13);
+        doc.setFont("helvetica", "bold");
+        doc.text("NOTE: Online bharel pravesh form ni receipt ni print sathe lavvi.", 105, y, {align:"center"});
+
+        doc.save(`Receipt_${data.studentName}.pdf`);
     }
 
-    function resetApp() { localStorage.clear(); location.reload(); }
+    function cancelFormAction() {
+        if (!confirm("શું તમે આ પ્રવેશ રદ કરવા માંગો છો?")) return;
+        localStorage.clear(); location.reload();
+    }
+
+    function resetApp() { 
+        if(confirm("નવું ફોર્મ ભરવા માટે જૂનો ડેટા સાફ થશે. આગળ વધવું છે?")) {
+            localStorage.clear(); location.reload(); 
+        }
+    }
 </script>
 </body>
 </html>
