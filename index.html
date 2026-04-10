@@ -44,7 +44,7 @@
 </head>
 <body>
 
-    <div id="introOverlay"><div class="intro-text">🙏 જય સ્વામિનારાયણ 🙏<br>VRUNDAVANDHAM KHIRASARA</div></div>
+    <div id="introOverlay"><div class="intro-text">🙏 જય સ્વામિનારાયણ 🙏<br>Welcome</div></div>
 
     <div id="mainView" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
         <div class="pdf-title">૧. સંસ્થા પરિચય</div>
@@ -56,7 +56,7 @@
 
     <div id="statusBox">
         <div id="statusBadge" class="status-badge status-confirm">● પ્રવેશ કન્ફર્મ (Confirmed)</div>
-        <h2 id="statusTitle" style="color: var(--success); margin: 0;">ફોર્મ સફળતાપૂર્વક સેવ થયું છે!</h2>
+        <h2 id="statusTitle" style="color: var(--success); margin: 0;">ફોર્મ સફળતાપૂર્વક સબમિટ થયું છે!</h2>
         <p id="userNameDisplay" style="font-weight: bold; font-size: 18px; color: var(--primary); margin: 15px 0;"></p>
         
         <div id="receiptActions">
@@ -64,7 +64,7 @@
             <div class="nondh-box">નોંધ: ઓનલાઇન ભરેલ પ્રવેશ ફોર્મની રીસીપ્ટની પ્રિન્ટ સાથે લાવવી.</div>
             <button id="cancelEntryBtn" class="btn-submit" style="background: var(--red); margin-top: 10px;" onclick="cancelAdmission()">❌ આ પ્રવેશ રદ કરો</button>
         </div>
-        <button class="btn-submit" style="margin-top:20px; background: var(--golden);" onclick="resetApp()">➕ નવું ફોર્મ ભરો</button>
+        <p id="redirectMsg" style="display:none; color:var(--red); font-weight:bold; margin-top:20px;">પ્રવેશ રદ થયો છે. થોડીક ક્ષણોમાં તમે હોમ પેજ પર જશો...</p>
     </div>
 
     <div id="formHeader"><img src="https://umakhodal1190-droid.github.io/school-admission/header.jpeg" class="header-img"></div>
@@ -75,7 +75,7 @@
             <form id="admissionForm">
                 <div class="grid">
                     <div style="text-align: center;">
-                        <div id="preview">વિદ્યાર્થી ફોટો</div>
+                        <div id="preview">વિદ્યાર્થી પાસપોર્ટ સાઇઝનો ફોટો</div>
                         <input type="file" accept="image/*" onchange="processImg(event)" required>
                     </div>
                     <div class="field" style="grid-column: span 2;">
@@ -103,7 +103,7 @@
                 </div>
                 
                 <input type="hidden" id="uPhotoData">
-                <button type="submit" id="submitBtn" class="btn-submit">માહિતી સેવ કરો અને રસીદ મેળવો</button>
+                <button type="submit" id="submitBtn" class="btn-submit">Submit</button>
             </form>
         </div>
     </div>
@@ -147,7 +147,7 @@
     document.getElementById('admissionForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
-        btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે... ⏳";
+        btn.disabled = true; btn.innerHTML = "સબમિટ થઈ રહ્યું છે... ⏳";
         
         const data = {
             studentName: document.getElementById('uName').value,
@@ -192,15 +192,21 @@
         const badge = document.getElementById('statusBadge');
         const title = document.getElementById('statusTitle');
         const actions = document.getElementById('receiptActions');
+        const redirectMsg = document.getElementById('redirectMsg');
 
         if (currentStatus === "Cancelled") {
             badge.className = "status-badge status-cancel"; badge.innerText = "● પ્રવેશ રદ (Canceled)";
             title.innerText = "આ પ્રવેશ રદ કરવામાં આવ્યો છે."; title.style.color = "var(--red)";
             actions.style.display = "none";
+            redirectMsg.style.display = "block";
+            
+            // ઓટોમેટિક રિડાયરેક્ટ - ૨ સેકન્ડમાં
+            setTimeout(() => { localStorage.clear(); location.reload(); }, 2000);
         } else {
             badge.className = "status-badge status-confirm"; badge.innerText = "● પ્રવેશ કન્ફર્મ (Confirmed)";
             title.innerText = "ફોર્મ સફળતાપૂર્વક સેવ થયું છે!"; title.style.color = "var(--success)";
             actions.style.display = "block";
+            redirectMsg.style.display = "none";
         }
         document.getElementById('statusBox').style.display = 'block';
     }
@@ -231,19 +237,15 @@
         row("Receipt No", data.receiptNo || "N/A");
         row("Student Name", data.studentName);
         row("Grade", data.grade);
-        row("Student Aadhar", "[Aadhaar Redacted]");
+        row("Student Aadhar", data.aadhar); // હવે અહીં સાચો આધાર નંબર દેખાશે
         row("Father Name", data.fatherName);
-        row("Father Aadhar", "[Aadhaar Redacted]");
+        row("Father Aadhar", data.fatherAadhar); // અહીં પિતાનો સાચો આધાર નંબર દેખાશે
         row("Mobile Number", data.mobile);
         row("Address", data.address);
 
         y += 10; doc.setTextColor(220, 0, 0); doc.setFont("helvetica", "bold");
         doc.text("NOTE: Online bharel pravesh form ni receipt ni print sathe lavvi.", 105, y, {align:"center"});
         doc.save(`Receipt_${data.studentName}.pdf`);
-    }
-
-    function resetApp() { 
-        if(confirm("નવું ફોર્મ ભરવા માટે બધો ડેટા સાફ થઈ જશે. આગળ વધવું છે?")) { localStorage.clear(); location.reload(); }
     }
 </script>
 </body>
