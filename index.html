@@ -129,8 +129,8 @@
     </div>
 
 <script>
-    // તમારી નવી URL
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbyeynN1JG32Ry7Eeu1iAYAspvkunb0QajWnp97vPJZOLGHn1wePi-7QJOh7rHzMLPPo/exec';
+    // તમારી નવી URL અપડેટ કરી દીધી છે
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwP-qiuwJO1BZ55RIgDWjHA17rDmsriPgxlggC3TTuKGvSX6QOSJnU6XhgHFc8yEl_y/exec';
 
     window.onload = () => { setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 1200); };
 
@@ -249,7 +249,6 @@
 
         const data = JSON.parse(localStorage.getItem("tempData"));
         
-        // કેન્સલ વિનંતી મોકલી રહ્યા છીએ
         fetch(scriptURL, { 
             method: 'POST', 
             mode: 'no-cors',
@@ -262,7 +261,7 @@
             localStorage.setItem("currentStatus", "Cancelled");
             showSuccessView();
         }).catch(err => {
-            alert("ભૂલ આવી છે, ફરી પ્રયત્ન કરો.");
+            alert("કોઈ ભૂલ આવી છે. કૃપા કરીને ફરી પ્રયાસ કરો.");
             cancelBtn.disabled = false;
             cancelBtn.innerHTML = "❌ આ પ્રવેશ રદ કરો";
         });
@@ -273,12 +272,15 @@
         const doc = new jsPDF();
         const data = JSON.parse(localStorage.getItem("tempData"));
 
+        // હેડર
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 45, 'F');
         doc.setTextColor(255); doc.setFontSize(22); doc.text("VRUNDAVANDHAM KHIRASARA GURUKUL", 105, 18, {align:"center"});
         doc.setFontSize(14); doc.text("ADMISSION RECEIPT", 105, 30, {align:"center"});
 
+        // ફોટો ઉમેરવો
         if(data.photoData) { try { doc.addImage(data.photoData, 'JPEG', 160, 50, 35, 40); } catch(e) {} }
 
+        // વિગતો
         doc.setTextColor(0); doc.setFontSize(12);
         let y = 65;
         const row = (l, v) => { doc.setFont("helvetica", "bold"); doc.text(l + ":", 20, y); doc.setFont("helvetica", "normal"); doc.text(String(v), 80, y); y += 10; };
@@ -297,6 +299,7 @@
 
         y += 10; doc.setTextColor(220, 0, 0); doc.setFont("helvetica", "bold");
         doc.text("નોંધ: ઓનલાઇન ભરેલ પ્રવેશ ફોર્મની રીસીપ્ટની પ્રિન્ટ શાળામાં જમા કરવા માટે સાથે લાવવી.", 105, y, {align:"center", maxWidth: 180});
+        
         doc.save(`Receipt_${data.studentName}.pdf`);
     }
 </script>
