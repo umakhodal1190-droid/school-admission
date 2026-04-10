@@ -241,6 +241,16 @@
         doc.setFontSize(12); doc.text("Online Admission Receipt (2026-27)", 105, 28, {align:"center"});
         doc.setFontSize(15); doc.text("Receipt No: " + (data.receiptNo || "1001"), 105, 40, {align:"center"});
 
+        // Student Photo (જમણી બાજુ ઉપર)
+        if (data.photoData) {
+            try {
+                // JPEG ફોર્મેટમાં બેઝ-64 ઈમેજ ઉમેરો (x, y, width, height)
+                doc.addImage(data.photoData, 'JPEG', 155, 50, 35, 42);
+                // ફોટોની આસપાસ બોર્ડર
+                doc.setDrawColor(200, 200, 200); doc.rect(155, 50, 35, 42);
+            } catch (e) { console.error("Photo Error:", e); }
+        }
+
         // Student Data
         doc.setTextColor(0, 0, 0); doc.setFontSize(12);
         let y = 60;
@@ -254,15 +264,21 @@
             ["Admission Type:", data.studentType],
             ["Student Aadhar:", data.aadhar],
             ["Father Aadhar:", data.fatherAadhar],
-            ["Date of Birth:", data.dob],
-            ["Address:", data.address]
+            ["Date of Birth:", data.dob]
         ];
 
+        // સરનામાં સિવાયનો ડેટા (જગ્યા બચાવવા માટે ફોટાની ડાબી બાજુ)
         fields.forEach(f => {
             doc.setFont("helvetica", "bold"); doc.text(f[0], 25, y);
-            doc.setFont("helvetica", "normal"); doc.text(f[1], 75, y);
+            // લાંબા નામ માટે maxWidth સેટ કરો
+            doc.setFont("helvetica", "normal"); doc.text(f[1], 70, y, { maxWidth: 80 });
             y += 10;
         });
+
+        // સરનામું (ફોટાની નીચે આખા પેજમાં)
+        doc.setFont("helvetica", "bold"); doc.text("Address:", 25, y);
+        doc.setFont("helvetica", "normal"); doc.text(data.address, 70, y, { maxWidth: 120 });
+        y += 15;
 
         // Bottom Line & Contact
         doc.setDrawColor(212, 175, 55); doc.setLineWidth(1); doc.line(20, y+5, 190, y+5);
