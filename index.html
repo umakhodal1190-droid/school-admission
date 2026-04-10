@@ -66,7 +66,7 @@
         
         <div id="receiptActions">
             <button class="btn-submit" style="background: var(--success);" onclick="generatePDF()">📄 રસીદ (Receipt) ડાઉનલોડ કરો</button>
-            <div class="nondh-box">નોંધ: ઓનલાઇન ભરેલ પ્રવેશ ફોર્મની રીસીપ્ટની પ્રિન્ટ શાળામાં જમા કરાવવા માટે સાથે લાવવી.</div>
+            <div class="nondh-box">નોંધ: ઓનલાઇન ભરેલ પ્રવેશ ફોર્મની રીસીપ્ટની પ્રિન્ટ સાથે લાવવી.</div>
             <button id="cancelBtn" class="btn-submit" style="background: var(--red); margin-top: 10px;" onclick="cancelAdmission()">❌ આ પ્રવેશ રદ કરો</button>
         </div>
         <p id="redirectMsg" style="display:none; color:var(--red); font-weight:bold; margin-top:20px;">પ્રવેશ રદ થઈ રહ્યો છે... કૃપા કરીને રાહ જુઓ.</p>
@@ -129,8 +129,7 @@
     </div>
 
 <script>
-    // તમારી નવી URL
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbxRc1bz2oZXNusTJEozNbtixxHHze4rA2Q59c7Z2_axHdD1oNxm8IFoEgOOhLDCURBH/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbySTw4mHwB40SbZJdRY1fiUM87SYxRw-wW-UVVwcCRDdR6axpSOvK-yFQYoy2DipbtF/exec';
 
     window.onload = () => { setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 1200); };
 
@@ -201,17 +200,24 @@
             action: "insert"
         };
 
-        fetch(scriptURL, { 
-            method: 'POST', 
-            mode: 'no-cors', 
-            body: JSON.stringify(data) 
-        })
-        .then(() => {
+        // AJAX (XMLHttpRequest) for better compatibility
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", scriptURL, true);
+        xhr.setRequestHeader("Content-Type", "text/plain;charset=utf-8");
+        
+        xhr.onload = function() {
             localStorage.setItem("tempData", JSON.stringify(data));
             localStorage.setItem("currentStatus", "Confirmed");
             localStorage.setItem("formSubmitted", "true");
             showSuccessView();
-        });
+        };
+
+        xhr.onerror = function() {
+            alert("કનેક્શનમાં ભૂલ છે! ફરી પ્રયાસ કરો.");
+            btn.disabled = false; btn.innerHTML = "સબમિટ કરો";
+        };
+
+        xhr.send(JSON.stringify(data));
     });
 
     function showSuccessView() {
@@ -242,29 +248,18 @@
 
     function cancelAdmission() {
         if(!confirm("શું તમે આ પ્રવેશ રદ કરવા માંગો છો?")) return;
-        
         const cancelBtn = document.getElementById('cancelBtn');
-        cancelBtn.disabled = true;
-        cancelBtn.innerHTML = "રદ થઈ રહ્યું છે... ⏳";
-
+        cancelBtn.disabled = true; cancelBtn.innerHTML = "રદ થઈ રહ્યું છે... ⏳";
         const data = JSON.parse(localStorage.getItem("tempData"));
         
-        fetch(scriptURL, { 
-            method: 'POST', 
-            mode: 'no-cors',
-            body: JSON.stringify({ 
-                studentName: data.studentName, 
-                mobile: data.mobile, 
-                action: "cancel" 
-            }) 
-        }).then(() => {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", scriptURL, true);
+        xhr.setRequestHeader("Content-Type", "text/plain;charset=utf-8");
+        xhr.onload = function() {
             localStorage.setItem("currentStatus", "Cancelled");
             showSuccessView();
-        }).catch(err => {
-            alert("ભૂલ આવી! ફરી પ્રયાસ કરો.");
-            cancelBtn.disabled = false;
-            cancelBtn.innerHTML = "❌ આ પ્રવેશ રદ કરો";
-        });
+        };
+        xhr.send(JSON.stringify({ studentName: data.studentName, mobile: data.mobile, action: "cancel" }));
     }
 
     function generatePDF() {
@@ -272,15 +267,15 @@
         const doc = new jsPDF();
         const data = JSON.parse(localStorage.getItem("tempData"));
 
-        // Header Section
+        // Header
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 45, 'F');
         doc.setTextColor(255); doc.setFontSize(22); doc.text("VRUNDAVANDHAM KHIRASARA GURUKUL", 105, 18, {align:"center"});
         doc.setFontSize(14); doc.text("ADMISSION RECEIPT", 105, 30, {align:"center"});
 
-        // Student Photo
+        // Image
         if(data.photoData) { try { doc.addImage(data.photoData, 'JPEG', 160, 50, 35, 40); } catch(e) {} }
 
-        // Content Display
+        // Details
         doc.setTextColor(0); doc.setFontSize(12);
         let y = 65;
         const row = (l, v) => { doc.setFont("helvetica", "bold"); doc.text(l + ":", 20, y); doc.setFont("helvetica", "normal"); doc.text(String(v), 80, y); y += 10; };
@@ -297,21 +292,13 @@
         row("Address", data.address);
         row("Date of Birth", data.dob);
 
-        // Instruction Note
         y += 10; doc.setTextColor(220, 0, 0); doc.setFont("helvetica", "bold");
         doc.text("Note: Online Bharel Pravesh Form Ni Print Sathe Lavvi.", 105, y, {align:"center", maxWidth: 180});
 
-        // Signature Section
-        y += 40; 
-        doc.setTextColor(0); doc.setFont("helvetica", "bold");
-        
-        // Left Side: Parent Signature
-        doc.line(20, y, 80, y); 
-        doc.text("Parent's Signature", 50, y + 7, {align:"center"});
-        
-        // Right Side: Principal Signature
-        doc.line(130, y, 190, y); 
-        doc.text("Principal's Signature", 160, y + 7, {align:"center"});
+        // Signatures
+        y += 40; doc.setTextColor(0);
+        doc.line(20, y, 80, y); doc.text("Parent's Signature", 50, y + 7, {align:"center"});
+        doc.line(130, y, 190, y); doc.text("Principal's Signature", 160, y + 7, {align:"center"});
         
         doc.save(`Receipt_${data.studentName}.pdf`);
     }
