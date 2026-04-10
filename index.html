@@ -204,7 +204,7 @@
             setTimeout(() => { localStorage.clear(); location.reload(); }, 2000);
         } else {
             badge.className = "status-badge status-confirm"; badge.innerText = "● પ્રવેશ કન્ફર્મ (Confirmed)";
-            title.innerText = "ફોર્મ સફળતાપૂર્વક સેવ થયું છે!"; title.style.color = "var(--success)";
+            title.innerText = "ફોર્મ સફળતાપૂર્વક SUBMIT થયું છે!"; title.style.color = "var(--success)";
             actions.style.display = "block";
             redirectMsg.style.display = "none";
         }
@@ -225,8 +225,8 @@
         const data = JSON.parse(localStorage.getItem("tempData"));
 
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 45, 'F');
-        doc.setTextColor(255); doc.setFontSize(22); doc.text("VRUNDAVANDHAM KHIRASARA", 105, 18, {align:"center"});
-        doc.setFontSize(14); doc.text("ADMISSION RECEIPT (2026-27)", 105, 30, {align:"center"});
+        doc.setTextColor(255); doc.setFontSize(22); doc.text("VRUNDAVANDHAM KHIRASARA GURUKUL", 105, 18, {align:"center"});
+        doc.setFontSize(14); doc.text("ADMISSION RECEIPT", 105, 30, {align:"center"});
 
         if(data.photoData) { try { doc.addImage(data.photoData, 'JPEG', 160, 50, 35, 40); } catch(e) {} }
 
@@ -244,7 +244,7 @@
         row("Address", data.address);
 
         y += 10; doc.setTextColor(220, 0, 0); doc.setFont("helvetica", "bold");
-        doc.text("NOTE: Online bharel pravesh form ni receipt ni print sathe lavvi.", 105, y, {align:"center"});
+        doc.text("નોંધ: ઓનલાઇન ભરેલ પ્રવેશ ફોર્મની રીસીપ્ટની પ્રિન્ટ સાથે લાવવી.", 105, y, {align:"center"});
         doc.save(`Receipt_${data.studentName}.pdf`);
     }
 </script>
