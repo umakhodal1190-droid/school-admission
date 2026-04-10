@@ -103,8 +103,8 @@
     </div>
 
 <script>
-    // તમારી નવી URL
-    const scriptURL = 'https://script.google.com/macros/s/AKfycby-A9xHAmdOCfGWg9r-e71F-Iw2Jk8D5TOtn4Rj5G8-jTM481SPaEgOMwfxryq42P2y/exec';
+    // તમારી નવી Deployment URL અહીં મૂકો
+    const scriptURL = 'https://script.google.com/macros/s/AKfycby3IRajD8gPfZjv1MRNZDYrhBGMiCFHGfkH_UV7pU2n5l7GuncdZUHNZgKZqiMMFVhZ/exec';
 
     window.onload = () => { 
         setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 1200); 
@@ -130,9 +130,16 @@
         window.scrollTo(0,0);
     }
 
+    // ફોટાને પ્રોસેસ કરવાનું સુધારેલું ફંક્શન (હાઈ-ક્વોલિટી માટે)
     function processImg(e) {
         const file = e.target.files[0];
         if(!file) return;
+        
+        // જો ફોટો બહુ મોટો (>5MB) હોય તો ચેતવણી આપો (વૈકલ્પિક)
+        if(file.size > 5 * 1024 * 1024) {
+            alert("ફોટો બહુ મોટો છે. સેવ થવામાં સમય લાગી શકે છે.");
+        }
+
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = (ev) => {
@@ -140,23 +147,29 @@
             img.src = ev.target.result;
             img.onload = () => {
                 const canvas = document.createElement('canvas');
-                const maxWidth = 180; // ઓછી સાઈઝ જેથી ફાસ્ટ અપલોડ થાય
+                // હાઈ-ક્વોલિટી માટે સાઈઝ વધારી (800px)
+                const maxWidth = 800; 
                 const scale = maxWidth / img.width;
                 canvas.width = maxWidth; canvas.height = img.height * scale;
-                canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-                const base64 = canvas.toDataURL('image/jpeg', 0.5); 
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                
+                // ક્વોલિટી 0.8 (80%) રાખી જેથી ક્વોલિટી સારી રહે
+                const base64 = canvas.toDataURL('image/jpeg', 0.8); 
                 document.getElementById('uPhotoData').value = base64;
                 document.getElementById('preview').innerHTML = `<img src="${base64}" style="width:100%;">`;
             };
         };
     }
 
+    // ફોર્મ સબમિટ કરવાનું સુધારેલું ફંક્શન (POST પદ્ધતિ)
     document.getElementById('admissionForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
-        btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે... ⏳";
+        btn.disabled = true; btn.innerHTML = "સેવ થઈ રહ્યું છે... (રાહ જુઓ) ⏳";
         
         const data = {
+            action: "save",
             studentName: document.getElementById('uName').value,
             grade: document.getElementById('uGrade').value,
             gender: document.getElementById('uGender').value,
@@ -168,64 +181,77 @@
             mobile: document.getElementById('uMobile').value,
             address: document.getElementById('uAddress').value,
             dob: document.getElementById('uDob').value,
-            photoData: document.getElementById('uPhotoData').value
+            photoData: document.getElementById('uPhotoData').value // હાઈ-ક્વોલિટી ફોટો ડેટા
         };
 
-        // ડેટા લોકલ સેવ કરો
+        // ડેટા લોકલ સેવ કરો (રસીદ માટે)
         localStorage.setItem("tempData", JSON.stringify(data));
         
-        const script = document.createElement('script');
-        script.src = scriptURL + "?callback=ctrlRes&data=" + encodeURIComponent(JSON.stringify(data));
-        
-        // Timeout handling for slow network
-        const timeout = setTimeout(() => {
-            if (localStorage.getItem("formSubmitted") !== "true") {
-                alert("નેટવર્ક ધીમું છે અથવા સર્વર વ્યસ્ત છે. કૃપા કરીને થોડીવાર પછી ફરી પ્રયાસ કરો.");
-                btn.disabled = false; btn.innerHTML = "માહિતી સેવ કરો";
-            }
-        }, 35000);
-
-        document.body.appendChild(script);
+        // POST પદ્ધતિથી ડેટા મોકલો (ગમે તેટલો મોટો ડેટા સેવ થશે)
+        fetch(scriptURL, {
+            method: 'POST',
+            mode: 'no-cors', // CORS એરર ટાળવા માટે
+            cache: 'no-cache',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(() => {
+            // mode: 'no-cors' માં રિસ્પોન્સ નથી મળતો, પણ ડેટા સેવ થઈ જાય છે.
+            // આપણે એવું માની લઈએ કે જો ભૂલ ન આવી તો ડેટા સેવ થઈ ગયો છે.
+            // રસીદ નંબર માટે આપણે લોકલ મેમરીનો ઉપયોગ કરીશું (અથવા પછીથી અપડેટ કરીશું)
+            localStorage.setItem("formSubmitted", "true");
+            // mode: no-cors માં રસીદ નંબર પાછો નથી મળતો, તેથી આપણે હમણાં '---' બતાવીશું
+            localStorage.setItem("currentReceiptNo", "---"); 
+            
+            showSuccessRow();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert("નેટવર્ક ધીમું છે અથવા કોઈ ભૂલ આવી છે. કૃપા કરીને થોડીવાર પછી ફરી પ્રયાસ કરો.");
+            btn.disabled = false; btn.innerHTML = "માહિતી સેવ કરો";
+        });
     });
 
-    window.ctrlRes = function(res) {
-        if(res && res.status === "Success") {
-            localStorage.setItem("formSubmitted", "true");
-            localStorage.setItem("currentReceiptNo", res.receiptNo);
-            
-            const data = JSON.parse(localStorage.getItem("tempData"));
-            document.getElementById('formHeader').style.display = 'none';
-            document.getElementById('formSection').style.display = 'none';
-            document.getElementById('userNameDisplay').innerText = "વિદ્યાર્થી: " + data.studentName;
-            document.getElementById('statusBox').style.display = 'block';
-            window.scrollTo(0,0);
-        } else {
-            alert("ભૂલ: ડેટા સેવ થયો નથી. ફરી પ્રયાસ કરો.");
-            document.getElementById('submitBtn').disabled = false;
-            document.getElementById('submitBtn').innerHTML = "માહિતી સેવ કરો";
-        }
-    };
+    function showSuccessRow() {
+        const data = JSON.parse(localStorage.getItem("tempData"));
+        document.getElementById('formHeader').style.display = 'none';
+        document.getElementById('formSection').style.display = 'none';
+        document.getElementById('userNameDisplay').innerText = "વિદ્યાર્થી: " + data.studentName;
+        document.getElementById('statusBox').style.display = 'block';
+        window.scrollTo(0,0);
+    }
 
+    // ફોર્મ રદ (Cancel) કરવાનું સુધારેલું ફંક્શન (POST પદ્ધતિ)
     function cancelFormAction() {
-        if (!confirm("શું તમે આ ફોર્મ રદ (Cancel) કરવા માંગો છો?")) return;
+        if (!confirm("શું તમે ખરેખર આ ફોર્મ રદ (Cancel) કરવા માંગો છો?")) return;
         const cBtn = document.getElementById('cancelBtn');
         cBtn.disabled = true; cBtn.innerHTML = "રદ થઈ રહ્યું છે...";
         
-        const script = document.createElement('script');
-        script.src = scriptURL + "?callback=cancelRes&action=cancel&data=" + encodeURIComponent(JSON.stringify({}));
-        document.body.appendChild(script);
-    }
+        const data = { action: "cancel" };
 
-    window.cancelRes = function() { 
-        alert("ફોર્મ સફળતાપૂર્વક રદ કરવામાં આવ્યું છે."); 
-        resetApp(); 
-    };
+        fetch(scriptURL, {
+            method: 'POST',
+            mode: 'no-cors',
+            cache: 'no-cache',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(() => {
+            alert("ફોર્મ સફળતાપૂર્વક રદ કરવામાં આવ્યું છે."); 
+            resetApp();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert("ફોર્મ રદ કરવામાં કોઈ ભૂલ આવી છે.");
+            cBtn.disabled = false; cBtn.innerHTML = "❌ ફોર્મ રદ (Cancel) કરો";
+        });
+    }
 
     function generatePDF() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         const data = JSON.parse(localStorage.getItem("tempData"));
-        const recNo = localStorage.getItem("currentReceiptNo") || "1";
+        const recNo = localStorage.getItem("currentReceiptNo") || "---";
 
         // Header Style
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 45, 'F');
@@ -234,7 +260,7 @@
         doc.setFontSize(13); doc.text("ADMISSION RECEIPT (2026-27)", 105, 36, {align:"center"});
         doc.text("Receipt No: " + recNo, 195, 12, {align:"right"});
 
-        // Photo on Receipt
+        // Photo on Receipt (હાઈ-ક્વોલિટી)
         if(data.photoData) {
             try { doc.addImage(data.photoData, 'JPEG', 160, 50, 35, 40); } catch(e) {}
         }
@@ -253,15 +279,9 @@
         row("Caste", data.caste);
         row("Student Aadhar", data.aadhar);
         row("Father Name", data.fatherName);
-        row("Father Aadhar", data.fatherAadhar);
         row("Mobile Number", data.mobile);
         row("Address", data.address);
         row("Date of Birth", data.dob);
-
-        // Footer
-        doc.setFontSize(10); doc.setTextColor(100);
-        doc.text("Authorized Signature: __________________", 20, 260);
-        doc.text("Generated on: " + new Date().toLocaleString(), 20, 270);
 
         doc.save(`Admission_Receipt_${data.studentName}.pdf`);
     }
