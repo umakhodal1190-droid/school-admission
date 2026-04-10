@@ -266,15 +266,17 @@
 
         row("Student Name", data.studentName);
         row("Grade", data.grade);
+        row("Gender", data.gender); // લિંગ ઓપ્શન અહીં ઉમેરાયું
         row("Student Type", data.studentType);
         row("Caste", data.caste);
-        row("Aadhar Number", data.aadhar); // અહીં હવે આખો આધાર નંબર દેખાશે
+        row("Aadhar Number", data.aadhar);
         row("Father Name", data.fatherName);
         row("Mobile Number", data.mobile);
         row("Address", data.address);
 
         y += 10; doc.setTextColor(220, 0, 0); doc.setFont("helvetica", "bold");
-        doc.text("NOTE: Take a print of this receipt for school submission.", 105, y, {align:"center"});
+        // સૂચના ગુજરાતીમાં બદલી
+        doc.text("નોંધ: ઓનલાઇન ભરેલ પ્રવેશ ફોર્મની રીસીપ્ટની પ્રિન્ટ શાળામાં જમા કરવા માટે સાથે લાવવી.", 105, y, {align:"center", maxWidth: 180});
         doc.save(`Receipt_${data.studentName}.pdf`);
     }
 </script>
