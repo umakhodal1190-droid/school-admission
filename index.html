@@ -78,7 +78,7 @@
             <form id="admissionForm">
                 <div class="grid">
                     <div style="text-align: center;">
-                        <div id="preview">વિદ્યાર્થી ફોટો</div>
+                        <div id="preview">વિદ્યાર્થીનો પાસપોર્ટ સાઇઝનો ફોટો</div>
                         <input type="file" id="uPhotoInput" accept="image/*" onchange="processImg(event)" required>
                     </div>
                     <div class="field" style="grid-column: span 2;">
@@ -241,7 +241,7 @@
         doc.setFillColor(14, 30, 96); doc.rect(0, 0, 210, 45, 'F');
         doc.setTextColor(255, 255, 255);
         doc.setFontSize(18); doc.text("VRUNDAVANDHAM KHIRASARA GURUKUL", 105, 18, {align:"center"});
-        doc.setFontSize(12); doc.text("Online Admission Receipt (2026-27)", 105, 28, {align:"center"});
+        doc.setFontSize(12); doc.text("Online Admission Receipt", 105, 28, {align:"center"});
         doc.setFontSize(14); doc.text("Receipt No: " + (data.receiptNo || "1001"), 105, 40, {align:"center"});
 
         // Photo
@@ -287,7 +287,7 @@
         doc.setTextColor(220, 38, 38); doc.setFontSize(10);
         doc.text("NOTE: Online Bharel Pravesh FormnI Recieptni Print Sathe Lavvi", 105, y+10, {align:"center"});
         doc.setTextColor(14, 30, 96);
-        doc.text("Helpline: 81550 11811 / 11711", 105, y+18, {align:"center"});
+        doc.text("Helpline: 81550 11811 / 81550 11711", 105, y+18, {align:"center"});
 
         doc.save(`Receipt_${data.studentName}.pdf`);
     }
